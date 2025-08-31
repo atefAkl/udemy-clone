@@ -1,0 +1,128 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\CourseController;
+use App\Http\Controllers\Instructor\InstructorController;
+use App\Http\Controllers\HomeController;
+use Illuminate\Support\Facades\Auth;
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+*/
+
+// Home page
+Route::get('/', [HomeController::class, 'index'])->name('home');
+
+// Language switching
+Route::get('/lang/{locale}', function ($locale) {
+    if (in_array($locale, array_keys(config('app.supported_locales')))) {
+        session(['locale' => $locale]);
+
+        // Update user preference if logged in
+        if (auth()->check()) {
+            auth()->user()->update(['preferred_language' => $locale]);
+        }
+    }
+
+    return redirect()->back();
+})->name('lang.switch');
+
+// Authentication Routes
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [AuthController::class, 'login']);
+    Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+    Route::post('/register', [AuthController::class, 'register']);
+});
+
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
+
+// Password Reset Routes
+Route::middleware('guest')->group(function () {
+    Route::get('/forgot-password', function () {
+        return view('auth.forgot-password');
+    })->name('password.request');
+
+    Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('password.email');
+
+    Route::get('/reset-password/{token}', function ($token) {
+        return view('auth.reset-password', ['token' => $token]);
+    })->name('password.reset');
+
+    Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
+});
+
+// Course Routes (Public)
+Route::prefix('courses')->name('courses.')->group(function () {
+    Route::get('/', [CourseController::class, 'index'])->name('index');
+    Route::get('/search', [CourseController::class, 'search'])->name('courses.search');
+    Route::get('/{course:slug}', [CourseController::class, 'show'])->name('show');
+
+    // Protected course routes
+    Route::middleware('auth')->group(function () {
+        Route::post('/{course:slug}/enroll', [CourseController::class, 'enroll'])->name('enroll');
+        Route::get('/{course:slug}/learn', [CourseController::class, 'learn'])->name('learn');
+    });
+});
+
+// Global Search Route
+Route::get('/search', [CourseController::class, 'search'])->name('search');
+
+// Student Dashboard
+Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', function () {
+        // Redirect based on user role
+        if (Auth::user()->role === 'instructor') {
+            return redirect()->route('instructor.dashboard');
+        } elseif (Auth::user()->role === 'admin') {
+            return redirect()->route('admin.dashboard');
+        }
+
+        // Default to student dashboard
+        return view('dashboard.student');
+    })->name('dashboard');
+
+    // Mark welcome message as shown
+    Route::post('/dashboard/welcome-shown', function () {
+        session(['welcome_shown' => true]);
+        return response()->json(['success' => true]);
+    })->name('dashboard.welcome.shown');
+});
+
+// Instructor Routes
+Route::prefix('instructor')->name('instructor.')->middleware(['auth', 'instructor'])->group(function () {
+    Route::get('/dashboard', [InstructorController::class, 'dashboard'])->name('dashboard');
+
+    // Course Management
+    Route::prefix('courses')->name('courses.')->group(function () {
+        Route::get('/', [InstructorController::class, 'courses'])->name('index');
+        Route::get('/create', [InstructorController::class, 'createCourse'])->name('create');
+        Route::post('/', [InstructorController::class, 'storeCourse'])->name('store');
+        Route::get('/{course}', [InstructorController::class, 'showCourse'])->name('show');
+        Route::get('/{course}/edit', [InstructorController::class, 'editCourse'])->name('edit');
+        Route::put('/{course}', [InstructorController::class, 'updateCourse'])->name('update');
+        Route::delete('/{course}', [InstructorController::class, 'deleteCourse'])->name('delete');
+        Route::patch('/{course}/publish', [InstructorController::class, 'publishCourse'])->name('publish');
+    });
+
+    // Categories Management
+    Route::prefix('categories')->name('categories.')->group(function () {
+        Route::get('/', [InstructorController::class, 'categories'])->name('index');
+        Route::get('/create', [InstructorController::class, 'createCategory'])->name('create');
+        Route::post('/', [InstructorController::class, 'storeCategory'])->name('store');
+        Route::get('/{category}', [InstructorController::class, 'showCategory'])->name('show');
+        Route::get('/{category}/edit', [InstructorController::class, 'editCategory'])->name('edit');
+        Route::put('/{category}', [InstructorController::class, 'updateCategory'])->name('update');
+        Route::delete('/{category}', [InstructorController::class, 'deleteCategory'])->name('destroy');
+    });
+});
+
+// Admin Routes (will be added later)
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('admin.dashboard');
+    })->name('dashboard');
+});
