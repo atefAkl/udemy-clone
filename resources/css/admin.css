@@ -1,0 +1,303 @@
+/* Admin Panel Styles */
+
+/* Welcome Section */
+.welcome-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 10px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+/* Statistics Cards */
+.stats-card {
+    transition: transform 0.2s;
+    border: none;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1.5rem;
+}
+
+.stats-card:hover {
+    transform: translateY(-2px);
+}
+
+.stats-card .card-body {
+    padding: 1.5rem;
+}
+
+.stats-value {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.stats-label {
+    color: #6c757d;
+    font-size: 0.875rem;
+}
+
+.stats-icon {
+    font-size: 2.5rem;
+}
+
+/* RTL Support for Stats Icons */
+[dir="rtl"] .stats-icon {
+    margin-left: 1rem;
+}
+
+[dir="ltr"] .stats-icon {
+    margin-right: 1rem;
+}
+
+/* Charts */
+.chart-container {
+    height: 300px;
+}
+
+/* Activity Feed */
+.recent-activity {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.activity-item {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.activity-item:last-child {
+    border-bottom: none;
+}
+
+.activity-time {
+    font-size: 0.875rem;
+    color: #6c757d;
+}
+
+/* Users Management */
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* RTL Support for User Avatar */
+[dir="rtl"] .user-avatar {
+    margin-left: 0.75rem;
+}
+
+[dir="ltr"] .user-avatar {
+    margin-right: 0.75rem;
+}
+
+.role-badge {
+    font-size: 0.75rem;
+}
+
+.search-filters {
+    margin-bottom: 1.5rem;
+}
+
+.user-row {
+    transition: background-color 0.2s;
+}
+
+.user-row:hover {
+    background-color: #f8f9fa;
+}
+
+.status-active {
+    color: #28a745;
+}
+
+.status-inactive {
+    color: #dc3545;
+}
+
+.user-actions .btn {
+    margin: 0 0.125rem;
+}
+
+/* RTL Support for User Actions */
+[dir="rtl"] .user-actions .btn {
+    margin-right: 0.25rem;
+}
+
+[dir="ltr"] .user-actions .btn {
+    margin-left: 0.25rem;
+}
+
+/* Courses Management */
+.course-thumbnail {
+    width: 60px;
+    height: 40px;
+    border-radius: 5px;
+    object-fit: cover;
+}
+
+/* RTL Support for Course Thumbnail */
+[dir="rtl"] .course-thumbnail {
+    margin-left: 0.75rem;
+}
+
+[dir="ltr"] .course-thumbnail {
+    margin-right: 0.75rem;
+}
+
+/* Categories Management */
+.category-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 1px solid #e3e6f0;
+}
+
+.category-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.category-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+/* Reviews Management */
+.review-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 1px solid #e3e6f0;
+    margin-bottom: 1rem;
+}
+
+.review-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.review-text {
+    line-height: 1.6;
+    color: #495057;
+}
+
+.review-actions .btn {
+    margin: 0 0.125rem;
+}
+
+.rating {
+    font-size: 0.875rem;
+}
+
+.rating-breakdown .progress {
+    height: 8px;
+    border-radius: 4px;
+}
+
+/* Table RTL Support */
+[dir="rtl"] .table th,
+[dir="rtl"] .table td {
+    text-align: right;
+}
+
+[dir="ltr"] .table th,
+[dir="ltr"] .table td {
+    text-align: left;
+}
+
+/* General Admin Styles */
+.admin-header {
+    margin-bottom: 2rem;
+}
+
+.admin-card {
+    border: none;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    border-radius: 0.5rem;
+}
+
+.admin-card-header {
+    background-color: #fff;
+    border-bottom: 1px solid #e9ecef;
+    font-weight: 600;
+}
+
+/* Widget Styles */
+.widget {
+    background: #fff;
+    border-radius: 0.5rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    margin-bottom: 1.5rem;
+}
+
+.widget-header {
+    padding: 1rem 1.25rem 0.5rem;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.widget-body {
+    padding: 1rem 1.25rem;
+}
+
+/* Progress bars */
+.progress {
+    height: 4px;
+    border-radius: 2px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .stats-card {
+        margin-bottom: 1rem;
+    }
+
+    .welcome-section {
+        padding: 1.5rem;
+    }
+
+    .user-actions,
+    .review-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.25rem;
+    }
+
+    .user-actions .btn,
+    .review-actions .btn {
+        margin: 0;
+    }
+
+    .course-thumbnail {
+        width: 50px;
+        height: 35px;
+    }
+
+    .category-card {
+        margin-bottom: 1rem;
+    }
+}
+
+/* Dark Mode Support (Future Enhancement) */
+@media (prefers-color-scheme: dark) {
+
+    .admin-card,
+    .widget {
+        background-color: #2d3748;
+        color: #e2e8f0;
+    }
+
+    .stats-label {
+        color: #a0aec0;
+    }
+
+    .review-card {
+        background-color: #2d3748;
+        border-color: #4a5568;
+    }
+
+    .category-card {
+        background-color: #2d3748;
+        border-color: #4a5568;
+    }
+}

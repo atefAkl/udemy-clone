@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\Instructor\InstructorController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ResourceController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -68,6 +69,18 @@ Route::prefix('courses')->name('courses.')->group(function () {
     });
 });
 
+// Lesson Resource Routes
+Route::middleware('auth')->group(function () {
+    Route::prefix('lessons/{lesson}/resources')->name('lessons.resources.')->group(function () {
+        Route::get('/', [ResourceController::class, 'index'])->name('index');
+        Route::post('/', [ResourceController::class, 'upload'])->name('upload');
+        Route::get('/{resource}/download', [ResourceController::class, 'download'])->name('download');
+        Route::put('/{resource}', [ResourceController::class, 'update'])->name('update');
+        Route::delete('/{resource}', [ResourceController::class, 'destroy'])->name('destroy');
+        Route::post('/reorder', [ResourceController::class, 'reorder'])->name('reorder');
+    });
+});
+
 // Global Search Route
 Route::get('/search', [CourseController::class, 'search'])->name('search');
 
@@ -120,9 +133,41 @@ Route::prefix('instructor')->name('instructor.')->middleware(['auth', 'instructo
     });
 });
 
-// Admin Routes (will be added later)
+// Admin Routes
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [App\Http\Controllers\Admin\AdminController::class, 'dashboard'])->name('dashboard');
+
+    // User Management
+    Route::prefix('users')->name('users.')->group(function () {
+        Route::get('/', [App\Http\Controllers\Admin\AdminController::class, 'users'])->name('index');
+        Route::get('/create', [App\Http\Controllers\Admin\AdminController::class, 'createUser'])->name('create');
+        Route::post('/', [App\Http\Controllers\Admin\AdminController::class, 'storeUser'])->name('store');
+        Route::get('/{user}', [App\Http\Controllers\Admin\AdminController::class, 'showUser'])->name('show');
+        Route::get('/{user}/edit', [App\Http\Controllers\Admin\AdminController::class, 'editUser'])->name('edit');
+        Route::put('/{user}', [App\Http\Controllers\Admin\AdminController::class, 'updateUser'])->name('update');
+        Route::delete('/{user}', [App\Http\Controllers\Admin\AdminController::class, 'deleteUser'])->name('delete');
+        Route::post('/{id}/restore', [App\Http\Controllers\Admin\AdminController::class, 'restoreUser'])->name('restore');
+    });
+
+    // Instructors Management
+    Route::get('/instructors', [App\Http\Controllers\Admin\AdminController::class, 'instructors'])->name('instructors.index');
+
+    // Students Management
+    Route::get('/students', [App\Http\Controllers\Admin\AdminController::class, 'students'])->name('students.index');
+
+    // Course Management
+    Route::prefix('courses')->name('courses.')->group(function () {
+        Route::get('/', [App\Http\Controllers\Admin\AdminController::class, 'courses'])->name('index');
+        Route::get('/{course}', [App\Http\Controllers\Admin\AdminController::class, 'showCourse'])->name('show');
+        Route::patch('/{course}/status', [App\Http\Controllers\Admin\AdminController::class, 'updateCourseStatus'])->name('update-status');
+    });
+
+    // Categories Management
+    Route::get('/categories', [App\Http\Controllers\Admin\AdminController::class, 'categories'])->name('categories.index');
+
+    // Reviews Management
+    Route::prefix('reviews')->name('reviews.')->group(function () {
+        Route::get('/', [App\Http\Controllers\Admin\AdminController::class, 'reviews'])->name('index');
+        Route::delete('/{review}', [App\Http\Controllers\Admin\AdminController::class, 'deleteReview'])->name('delete');
+    });
 });

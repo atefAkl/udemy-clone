@@ -16,16 +16,20 @@ return new class extends Migration
             $table->string('name');
             $table->string('slug')->unique();
             $table->text('description')->nullable();
-            $table->unsignedBigInteger('parent_id')->nullable();
             $table->string('icon')->nullable();
-            $table->string('color', 7)->default('#0d6efd');
-            $table->boolean('is_active')->default(true);
+            $table->string('color', 7)->default('#007bff');
+            $table->enum('status', ['published', 'draft'])->default('published');
+            $table->boolean('is_featured')->default(false);
             $table->integer('sort_order')->default(0);
+            $table->string('meta_title')->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->text('meta_description')->nullable();
+            $table->dateTime('deleted_at')->nullable();
+            $table->foreignId('parent_id')->nullable()->constrained('categories')->onDelete('cascade');
             $table->timestamps();
-            $table->softDeletes();
 
-            $table->foreign('parent_id')->references('id')->on('categories')->onDelete('cascade');
-            $table->index(['parent_id', 'is_active']);
+            $table->index(['status', 'is_featured']);
+            $table->index(['parent_id', 'sort_order']);
         });
     }
 

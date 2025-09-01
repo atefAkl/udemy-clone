@@ -12,25 +12,44 @@ class Lesson extends Model
 
     protected $fillable = [
         'course_id',
+        'module_id',
         'title',
         'slug',
         'description',
+        'content_type',
+        'content_data',
         'video_url',
+        'video_file',
         'video_duration',
+        'article_content',
+        'downloadable_resources',
         'sort_order',
         'is_free',
         'is_published',
-        'resources',
+        'estimated_duration',
+        'learning_objectives',
         'transcript',
+        'notes',
     ];
 
     protected $casts = [
         'is_free' => 'boolean',
         'is_published' => 'boolean',
         'video_duration' => 'integer',
+        'estimated_duration' => 'integer',
         'sort_order' => 'integer',
-        'resources' => 'array',
+        'content_data' => 'array',
+        'downloadable_resources' => 'array',
+        'learning_objectives' => 'array',
     ];
+
+    // Content Type Constants
+    const TYPE_VIDEO = 'video';
+    const TYPE_ARTICLE = 'article';
+    const TYPE_QUIZ = 'quiz';
+    const TYPE_ASSIGNMENT = 'assignment';
+    const TYPE_DOWNLOAD = 'download';
+    const TYPE_LIVE_SESSION = 'live_session';
 
     /**
      * Course relationship
@@ -41,11 +60,51 @@ class Lesson extends Model
     }
 
     /**
+     * Module relationship
+     */
+    public function module()
+    {
+        return $this->belongsTo(Module::class);
+    }
+
+    /**
      * User progress for this lesson
      */
     public function progress()
     {
         return $this->hasMany(LessonProgress::class);
+    }
+
+    /**
+     * Quiz questions (if lesson is a quiz)
+     */
+    public function quizQuestions()
+    {
+        return $this->hasMany(QuizQuestion::class);
+    }
+
+    /**
+     * Assignment submissions (if lesson is an assignment)
+     */
+    public function submissions()
+    {
+        return $this->hasMany(AssignmentSubmission::class);
+    }
+
+    /**
+     * Lesson resources relationship
+     */
+    public function resources()
+    {
+        return $this->hasMany(LessonResource::class)->orderBy('sort_order');
+    }
+
+    /**
+     * Downloadable resources only
+     */
+    public function downloadableResources()
+    {
+        return $this->hasMany(LessonResource::class)->where('is_downloadable', true)->orderBy('sort_order');
     }
 
     /**
@@ -65,6 +124,46 @@ class Lesson extends Model
     }
 
     /**
+     * Check if lesson is a video
+     */
+    public function isVideo(): bool
+    {
+        return $this->content_type === self::TYPE_VIDEO;
+    }
+
+    /**
+     * Check if lesson is an article
+     */
+    public function isArticle(): bool
+    {
+        return $this->content_type === self::TYPE_ARTICLE;
+    }
+
+    /**
+     * Check if lesson is a quiz
+     */
+    public function isQuiz(): bool
+    {
+        return $this->content_type === self::TYPE_QUIZ;
+    }
+
+    /**
+     * Check if lesson is an assignment
+     */
+    public function isAssignment(): bool
+    {
+        return $this->content_type === self::TYPE_ASSIGNMENT;
+    }
+
+    /**
+     * Check if lesson is a download
+     */
+    public function isDownload(): bool
+    {
+        return $this->content_type === self::TYPE_DOWNLOAD;
+    }
+
+    /**
      * Get lesson video URL
      */
     public function getVideoUrlAttribute($value): ?string
@@ -79,7 +178,19 @@ class Lesson extends Model
         }
 
         // Otherwise, assume it's a storage path
-        return asset('storage/lessons/' . $value);
+        return asset('storage/lessons/videos/' . $value);
+    }
+
+    /**
+     * Get video file URL
+     */
+    public function getVideoFileUrlAttribute(): ?string
+    {
+        if (!$this->video_file) {
+            return null;
+        }
+
+        return asset('storage/lessons/videos/' . $this->video_file);
     }
 
     /**
@@ -98,14 +209,48 @@ class Lesson extends Model
      */
     public function getFormattedDurationAttribute(): string
     {
-        if (!$this->video_duration) {
+        $duration = $this->video_duration ?: $this->estimated_duration;
+
+        if (!$duration) {
             return '0:00';
         }
 
-        $minutes = floor($this->video_duration / 60);
-        $seconds = $this->video_duration % 60;
+        $minutes = floor($duration / 60);
+        $seconds = $duration % 60;
 
         return sprintf('%d:%02d', $minutes, $seconds);
+    }
+
+    /**
+     * Get content type icon
+     */
+    public function getContentTypeIconAttribute(): string
+    {
+        return match ($this->content_type) {
+            self::TYPE_VIDEO => 'fas fa-play-circle',
+            self::TYPE_ARTICLE => 'fas fa-file-alt',
+            self::TYPE_QUIZ => 'fas fa-question-circle',
+            self::TYPE_ASSIGNMENT => 'fas fa-tasks',
+            self::TYPE_DOWNLOAD => 'fas fa-download',
+            self::TYPE_LIVE_SESSION => 'fas fa-video',
+            default => 'fas fa-file'
+        };
+    }
+
+    /**
+     * Get content type label
+     */
+    public function getContentTypeLabelAttribute(): string
+    {
+        return match ($this->content_type) {
+            self::TYPE_VIDEO => __('app.video'),
+            self::TYPE_ARTICLE => __('app.article'),
+            self::TYPE_QUIZ => __('app.quiz'),
+            self::TYPE_ASSIGNMENT => __('app.assignment'),
+            self::TYPE_DOWNLOAD => __('app.download'),
+            self::TYPE_LIVE_SESSION => __('app.live_session'),
+            default => __('app.content')
+        };
     }
 
     /**
@@ -159,6 +304,26 @@ class Lesson extends Model
             [
                 'is_completed' => true,
                 'completed_at' => now(),
+                'completion_percentage' => 100,
+            ]
+        );
+    }
+
+    /**
+     * Update lesson progress for user
+     */
+    public function updateProgress(User $user, int $percentage, array $data = []): void
+    {
+        LessonProgress::updateOrCreate(
+            [
+                'user_id' => $user->id,
+                'lesson_id' => $this->id,
+            ],
+            [
+                'completion_percentage' => $percentage,
+                'progress_data' => $data,
+                'is_completed' => $percentage >= 100,
+                'completed_at' => $percentage >= 100 ? now() : null,
             ]
         );
     }
@@ -175,6 +340,18 @@ class Lesson extends Model
     }
 
     /**
+     * Get user progress percentage
+     */
+    public function getProgressPercentage(User $user): int
+    {
+        $progress = $this->progress()
+            ->where('user_id', $user->id)
+            ->first();
+
+        return $progress ? $progress->completion_percentage : 0;
+    }
+
+    /**
      * Scope for published lessons
      */
     public function scopePublished($query)
@@ -188,5 +365,13 @@ class Lesson extends Model
     public function scopeFree($query)
     {
         return $query->where('is_free', true);
+    }
+
+    /**
+     * Scope by content type
+     */
+    public function scopeByType($query, string $type)
+    {
+        return $query->where('content_type', $type);
     }
 }

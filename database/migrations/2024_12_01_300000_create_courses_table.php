@@ -23,21 +23,24 @@ return new class extends Migration
             $table->foreignId('category_id')->constrained()->onDelete('cascade');
             $table->string('thumbnail')->nullable();
             $table->string('preview_video')->nullable();
+            $table->enum('status', ['draft', 'published', 'archived'])->default('draft');
             $table->enum('level', ['beginner', 'intermediate', 'advanced'])->default('beginner');
-            $table->string('language', 10)->default('en');
-            $table->integer('duration')->default(0); // in minutes
-            $table->enum('status', ['draft', 'pending', 'published', 'rejected'])->default('draft');
-            $table->boolean('is_featured')->default(false);
-            $table->json('requirements')->nullable();
-            $table->json('what_you_learn')->nullable();
-            $table->string('meta_title')->nullable();
-            $table->text('meta_description')->nullable();
+            $table->string('language', 5)->default('ar');
+            $table->dateTime('deleted_at')->nullable();
+            $table->date('launch_date')->nullable();
+            $table->boolean('is_featured')->nullable();
+            $table->time('launch_time')->nullable();
+            $table->json('objectives')->nullable();
+            $table->json('table_of_contents')->nullable();
+            $table->boolean('has_certificate')->default(false);
+            $table->enum('access_duration_type', ['lifetime', 'limited'])->default('lifetime');
+            $table->integer('access_duration_value')->nullable();
+            $table->enum('target_level', ['beginner', 'intermediate', 'advanced', 'all'])->default('all');
             $table->timestamps();
-            $table->softDeletes();
 
-            $table->index(['status', 'is_featured']);
-            $table->index(['category_id', 'status']);
+            $table->index(['status', 'created_at']);
             $table->index(['instructor_id', 'status']);
+            $table->index(['category_id', 'status']);
         });
     }
 

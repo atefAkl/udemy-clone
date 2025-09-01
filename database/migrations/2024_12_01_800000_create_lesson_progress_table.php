@@ -16,8 +16,9 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('lesson_id')->constrained()->onDelete('cascade');
             $table->boolean('is_completed')->default(false);
-            $table->integer('watch_time')->default(0); // in seconds
-            $table->timestamp('completed_at')->nullable();
+            $table->integer('completion_percentage')->default(0);
+            $table->json('progress_data')->nullable();
+            $table->timestamp('last_accessed_at')->nullable();
             $table->timestamps();
 
             $table->unique(['user_id', 'lesson_id']);

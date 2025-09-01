@@ -12,12 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->enum('role', ['student', 'instructor', 'admin'])->default('student')->after('email');
-            $table->string('avatar')->nullable()->after('password');
-            $table->text('bio')->nullable()->after('avatar');
-            $table->string('phone')->nullable()->after('bio');
-            $table->date('date_of_birth')->nullable()->after('phone');
-            $table->boolean('is_active')->default(true)->after('date_of_birth');
+            $table->string('role')->default('student')->after('email_verified_at');
+            $table->string('phone')->nullable()->after('role');
+            $table->text('bio')->nullable()->after('phone');
+            $table->string('avatar')->nullable()->after('bio');
+            $table->boolean('is_active')->default(true)->after('avatar');
+            $table->string('preferred_language', 5)->default('ar')->after('is_active');
         });
     }
 
@@ -29,11 +29,11 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn([
                 'role',
-                'avatar',
-                'bio',
                 'phone',
-                'date_of_birth',
-                'is_active'
+                'bio',
+                'avatar',
+                'is_active',
+                'preferred_language'
             ]);
         });
     }

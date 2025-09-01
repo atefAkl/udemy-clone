@@ -30,10 +30,20 @@ class Course extends Model
         'what_you_learn',
         'meta_title',
         'meta_description',
+        // New fields for enhanced course structure
+        'launch_date',
+        'launch_time',
+        'objectives',
+        'table_of_contents',
+        'has_certificate',
+        'access_duration_type',
+        'access_duration_value',
+        'target_level',
     ];
 
     protected $casts = [
         'price' => 'decimal:2',
+        // No discount, there's coupons to manage discounts
         'discount_price' => 'decimal:2',
         'is_featured' => 'boolean',
         'requirements' => 'array',

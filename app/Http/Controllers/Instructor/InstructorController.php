@@ -77,23 +77,24 @@ class InstructorController extends Controller
      */
     public function storeCourse(Request $request)
     {
-        //return $request->all();
         $request->validate([
-            'title' => 'required|string|max:255',
-            'short_description' => 'nullable|string|max:500',
-            'description' => 'required|string',
-            'category_id' => 'required|exists:categories,id',
-            'level' => 'required|in:beginner,intermediate,advanced',
-            //'language' => 'required|string|max:10',
-            'price' => 'required|numeric|min:0',
-            'discount_price' => 'nullable|numeric|min:0|lt:price',
-            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'requirements' => 'nullable|array',
-            'what_you_learn' => 'nullable|array',
+            'title'                 => 'required|string|max:100',
+            'short_description'     => 'required|string|max:160',
+            'description'           => 'required|string|max:500',
+            'category_id'           => 'required|exists:categories,id',
+            'language'              => 'required|in:ar,en',
+            'target_level'          => 'required|in:beginner,intermediate,advanced,professional',
+            'price'                 => 'required|numeric|min:0',
+            'launch_date'           => 'nullable|date|after_or_equal:today',
+            'launch_time'           => 'nullable|date',
+            'thumbnail'             => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120', // 5MB max
+            'preview_video'         => 'nullable|file|mimes:mp4,mov,avi,wmv|max:102400', // 100MB max
+            'requirements'          => 'nullable|string|max:1000',
+            'objectives'            => 'nullable|string|max:1000',
+            'has_certificate'       => 'boolean',
+            'access_duration_type'  => 'required|in:unlimited,limited',
+            'access_duration_value' => 'nullable|integer|min:1|required_if:access_duration_type,limited',
         ]);
-
-        // default value for language
-        $request->language = $request->language ?? 'en';
 
         $course = new Course();
         $course->title = $request->title;
@@ -101,18 +102,29 @@ class InstructorController extends Controller
         $course->short_description = $request->short_description;
         $course->description = $request->description;
         $course->category_id = $request->category_id;
-        $course->level = $request->level;
         $course->language = $request->language;
+        $course->target_level = $request->target_level;
         $course->price = $request->price;
-        $course->discount_price = $request->discount_price;
         $course->instructor_id = Auth::id();
-        $course->requirements = $request->requirements ?? [];
-        $course->what_you_learn = $request->what_you_learn ?? [];
+        $course->launch_date = $request->launch_date;
+        $course->launch_time = $request->launch_time;
+        $course->requirements = $request->requirements;
+        $course->objectives = $request->objectives;
+        $course->has_certificate = $request->boolean('has_certificate');
+        $course->access_duration_type = $request->access_duration_type;
+        $course->access_duration_value = $request->access_duration_type === 'limited' ? $request->access_duration_value : null;
+        $course->status = Course::STATUS_DRAFT;
 
         // Handle thumbnail upload
         if ($request->hasFile('thumbnail')) {
-            $thumbnailPath = $request->file('thumbnail')->store('courses', 'public');
+            $thumbnailPath = $request->file('thumbnail')->store('courses/thumbnails', 'public');
             $course->thumbnail = basename($thumbnailPath);
+        }
+
+        // Handle preview video upload
+        if ($request->hasFile('preview_video')) {
+            $videoPath = $request->file('preview_video')->store('courses/videos', 'public');
+            $course->preview_video = basename($videoPath);
         }
 
         $course->save();

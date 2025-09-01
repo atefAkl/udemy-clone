@@ -1,4 +1,4 @@
-@extends('layouts.dashboard')
+@extends('layouts.instructor-simple')
 
 @section('title', __('app.create_category'))
 

@@ -18,6 +18,7 @@
 
     <!-- Cairo Font for Arabic -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="{{ asset('css/admin.css') }}" rel="stylesheet">
 
     @if(session('locale', 'ar') === 'ar')
     <style>
@@ -227,89 +228,7 @@
     </style>
     @endif
 
-    <style>
-        /* Common styles for both directions */
-        .dashboard-sidebar .nav-link {
-            padding: 8px 20px;
-            border-radius: 0;
-            color: #495057;
-            transition: all 0.2s;
-            margin-bottom: 2px;
-            font-size: 14px;
-        }
 
-        .dashboard-sidebar .nav-link:hover {
-            background-color: #f8f9fa;
-            color: #007bff;
-        }
-
-        .dashboard-sidebar .nav-link.active {
-            background-color: #007bff;
-            color: white;
-        }
-
-        /* Toggle Buttons Common Styles */
-        .sidebar-toggle,
-        .widgets-toggle {
-            position: fixed;
-            top: 20px;
-            z-index: 1001;
-            background: #007bff;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: none;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Overlay for mobile */
-        .sidebar-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 996;
-            display: none;
-        }
-
-        .sidebar-overlay.show {
-            display: block;
-        }
-
-        /* Sidebar Brand */
-        .sidebar-brand {
-            padding: 20px;
-            border-bottom: 1px solid #dee2e6;
-            text-align: center;
-        }
-
-        .sidebar-brand h5 {
-            margin: 0;
-            color: #007bff;
-            font-weight: 600;
-        }
-
-        /* Sidebar User */
-        .sidebar-user {
-            padding: 15px 20px;
-            border-bottom: 1px solid #dee2e6;
-        }
-
-        .sidebar-user img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            margin-inline-end: 10px;
-        }
-
-        /* Sidebar Header */
-        .sidebar-header {
-            background: #f8f9fa;
-        }
     </style>
 </head>
 
@@ -351,7 +270,7 @@
             <h6 class="mb-0 text-muted">{{ __('app.navigation') }}</h6>
         </div>
         <nav class="nav flex-column p-2">
-            @yield('sidebar-nav')
+            @include('includes.sidebar')
         </nav>
 
         <!-- Sidebar Footer -->

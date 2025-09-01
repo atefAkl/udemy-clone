@@ -15,13 +15,12 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('course_id')->constrained()->onDelete('cascade');
-            $table->tinyInteger('rating')->unsigned(); // 1-5 stars
+            $table->integer('rating'); // 1-5
             $table->text('comment')->nullable();
-            $table->boolean('is_approved')->default(false);
             $table->timestamps();
 
             $table->unique(['user_id', 'course_id']);
-            $table->index(['course_id', 'is_approved', 'rating']);
+            $table->index(['course_id', 'rating']);
         });
     }
 
