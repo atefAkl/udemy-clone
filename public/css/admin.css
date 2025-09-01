@@ -1,4 +1,121 @@
 /* Admin Panel Styles */
+
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+    overflow-x: hidden;
+}
+
+[dir=rtl] body {
+    font-family: "Cairo", sans-serif;
+
+}
+
+/* Fixed Sidebar - LTR */
+.dashboard-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 250px;
+    background: #fff;
+    border-right: 1px solid #dee2e6;
+    z-index: 997;
+    overflow-y: auto;
+    transition: transform 0.3s ease;
+}
+
+[dir=rtl] .dashboard-sidebar {
+    right: 0;
+    left: auto;
+}
+
+.dashboard-sidebar.collapsed {
+    transform: translateX(-100%);
+}
+
+/* Main Content Area - LTR */
+.dashboard-main {
+    margin-left: 250px;
+    margin-right: 300px;
+    min-height: 100vh;
+    transition: margin 0.3s ease;
+}
+
+/* Fixed Widgets Column - LTR */
+.widgets-sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: 300px;
+    background: #f8f9fa;
+    border-left: 1px solid #dee2e6;
+    z-index: 998;
+    overflow-y: auto;
+    padding: 20px;
+    transition: transform 0.3s ease;
+}
+
+[dir=rtl] .widgets-sidebar {
+    right: auto;
+    left: 0;
+}
+
+.widgets-sidebar.collapsed {
+    transform: translateX(100%);
+}
+
+/* Toggle Buttons - LTR */
+.sidebar-toggle {
+    left: 10px;
+}
+
+[dir=rtl] .sidebar-toggle {
+    left: auto;
+    right: 10px;
+}
+
+.widgets-toggle {
+    right: 10px;
+    background: #6c757d;
+}
+
+[dir=rtl] .widgets-toggle {
+    right: auto;
+    left: 10px;
+    background: #6c757d;
+}
+
+/* Mobile responsive - LTR */
+@media (max-width: 1200px) {
+    .widgets-sidebar {
+        transform: translateX(100%);
+    }
+
+    .dashboard-main {
+        margin-right: 0;
+    }
+
+    .widgets-toggle {
+        display: block;
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-sidebar {
+        transform: translateX(-100%);
+    }
+
+    .dashboard-main {
+        margin-left: 0;
+    }
+
+    .sidebar-toggle {
+        display: block;
+    }
+}
+
 /* Fieldsets & Legends */
 fieldset {
     position: relative;
@@ -7,10 +124,9 @@ fieldset {
 }
 
 legend {
-    padding: 0.3rem 1rem;
+    padding: 0.1rem 0.5rem;
     border: 1px solid #ccc;
     position: absolute;
-    margin-inline-start: 1.5rem;
     width: auto;
     top: -1rem;
     background-color: #ccc;
@@ -21,7 +137,7 @@ legend span,
 legend button,
 legend a {
     margin: 0 0.3rem;
-    padding: 0 0.2rem;
+    padding: 0 0.1rem;
 }
 
 /* Common styles for both directions */
