@@ -40,7 +40,7 @@ class AuthController extends Controller
             } elseif ($user->isInstructor()) {
                 return redirect()->intended('/instructor/dashboard');
             } else {
-                return redirect()->intended('/student');
+                return redirect()->intended('/student/dashboard');
             }
         }
 

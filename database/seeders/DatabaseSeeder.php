@@ -14,7 +14,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             AdminSeeder::class,
             UserSeeder::class,
-            CategorySeeder::class,
+            // Comment out the old CategorySeeder if you want to use Udemy categories instead
+            // CategorySeeder::class,
+            UdemyCategorySeeder::class,
         ]);
     }
 }

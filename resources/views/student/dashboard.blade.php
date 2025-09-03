@@ -1,58 +1,12 @@
-@extends('layouts.instructor')
+@extends('layouts.student')
 
-@section('title', __('instructor.instructor_dashboard'))
-
-@section('sidebar-nav')
-<div class="nav-header">
-    <h6 class="text-muted mb-3">{{ __('app.instructor') }}</h6>
-</div>
-<ul class="nav nav-pills flex-column">
-    <li class="nav-item">
-        <a class="nav-link active" href="{{ route('instructor.dashboard') }}">
-            <i class="bi bi-speedometer2 {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
-            {{ __('app.dashboard') }}
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('instructor.courses.index') }}">
-            <i class="bi bi-book {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
-            {{ __('instructor.my_courses') }}
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="#">
-            <i class="bi bi-people {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
-            {{ __('instructor.total_students') }}
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="#">
-            <i class="bi bi-bar-chart {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
-            {{ __('instructor.analytics') }}
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="#">
-            <i class="bi bi-cash-coin {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
-            {{ __('instructor.earnings') }}
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="#">
-            <i class="bi bi-gear {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
-            {{ __('instructor.account_settings') }}
-        </a>
-    </li>
-</ul>
+@section('title', __('student.student_dashboard'))
+@section ('breadcrumb')
+<li class="breadcrumb-item text-light active" aria-current="page">{{ __('student.student_dashboard') }}</li>
 @endsection
-
 @section('content')
-<!-- Breadcrumb -->
-<nav aria-label="breadcrumb" class="mb-4">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item active" aria-current="page">{{ __('instructor.instructor_dashboard') }}</li>
-    </ol>
-</nav>
+
+
 
 <!-- Welcome Section -->
 <div class="row mb-4">
@@ -61,11 +15,11 @@
             <div class="card-body">
                 <div class="row align-items-center">
                     <div class="col-md-8">
-                        <h2 class="mb-2">{{ __('instructor.welcome_instructor') }}, {{ Auth::user()->name }}!</h2>
-                        <p class="mb-0 opacity-75">{{ __('instructor.instructor_welcome_message') }}</p>
+                        <h2 class="mb-2">{{ __('student.welcome_student') }}, {{ Auth::user()->name }}!</h2>
+                        <p class="mb-0 opacity-75">{{ __('student.student_welcome_message') }}</p>
                     </div>
                     <div class="col-md-4 text-{{ session('locale', 'ar') === 'ar' ? 'start' : 'end' }}">
-                        <i class="bi bi-person-workspace" style="font-size: 4rem; opacity: 0.5;"></i>
+                        <i class="bi bi-mortarboard" style="font-size: 4rem; opacity: 0.5;"></i>
                     </div>
                 </div>
             </div>
@@ -76,75 +30,71 @@
 <!-- Statistics Cards -->
 <div class="row mb-4">
     <div class="col-md-3 col-sm-6 mb-3">
-        <div class="card border-0 shadow-sm">
+        <div class="card border-0 shadow-sm h-100">
             <div class="card-body text-center">
                 <div class="d-flex align-items-center justify-content-center mb-3">
                     <div class="bg-primary bg-opacity-10 rounded-circle p-3">
-                        <i class="bi bi-book text-primary fs-2"></i>
+                        <i class="bi bi-journal-bookmark text-primary fs-2"></i>
                     </div>
                 </div>
-                <h3 class="fw-bold text-primary mb-1">{{ $stats['total_courses'] ?? 8 }}</h3>
-                <p class="text-muted mb-0">{{ __('instructor.total_courses') }}</p>
+                <h3 class="fw-bold text-primary mb-1">{{ count($enrolledCourses) }}</h3>
+                <p class="text-muted mb-0">{{ __('student.enrolled_courses') }}</p>
             </div>
         </div>
     </div>
     <div class="col-md-3 col-sm-6 mb-3">
-        <div class="card border-0 shadow-sm">
+        <div class="card border-0 shadow-sm h-100">
             <div class="card-body text-center">
                 <div class="d-flex align-items-center justify-content-center mb-3">
                     <div class="bg-success bg-opacity-10 rounded-circle p-3">
                         <i class="bi bi-check-circle text-success fs-2"></i>
                     </div>
                 </div>
-                <h3 class="fw-bold text-success mb-1">{{ $stats['published_courses'] ?? 5 }}</h3>
-                <p class="text-muted mb-0">{{ __('instructor.published_courses') }}</p>
+                <h3 class="fw-bold text-success mb-1">{{ count($completedCourses) }}</h3>
+                <p class="text-muted mb-0">{{ __('student.completed_courses') }}</p>
             </div>
         </div>
     </div>
     <div class="col-md-3 col-sm-6 mb-3">
-        <div class="card border-0 shadow-sm">
+        <div class="card border-0 shadow-sm h-100">
             <div class="card-body text-center">
                 <div class="d-flex align-items-center justify-content-center mb-3">
                     <div class="bg-info bg-opacity-10 rounded-circle p-3">
-                        <i class="bi bi-people text-info fs-2"></i>
+                        <i class="bi bi-hourglass-split text-info fs-2"></i>
                     </div>
                 </div>
-                <h3 class="fw-bold text-info mb-1">{{ $stats['total_students'] ?? 156 }}</h3>
-                <p class="text-muted mb-0">{{ __('instructor.total_students') }}</p>
+                <h3 class="fw-bold text-info mb-1">{{ count($inProgressCourses) }}</h3>
+                <p class="text-muted mb-0">{{ __('student.in_progress') }}</p>
             </div>
         </div>
     </div>
     <div class="col-md-3 col-sm-6 mb-3">
-        <div class="card border-0 shadow-sm">
+        <div class="card border-0 shadow-sm h-100">
             <div class="card-body text-center">
                 <div class="d-flex align-items-center justify-content-center mb-3">
                     <div class="bg-warning bg-opacity-10 rounded-circle p-3">
-                        <i class="bi bi-cash-coin text-warning fs-2"></i>
+                        <i class="bi bi-award text-warning fs-2"></i>
                     </div>
                 </div>
-                <h3 class="fw-bold text-warning mb-1">${{ $stats['total_revenue'] ?? 2450 }}</h3>
-                <p class="text-muted mb-0">{{ __('instructor.total_revenue') }}</p>
+                <h3 class="fw-bold text-warning mb-1">{{ $certificatesCount }}</h3>
+                <p class="text-muted mb-0">{{ __('student.certificates') }}</p>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Recent Courses -->
+<!-- My Courses -->
 <div class="card border-0 shadow-sm mb-4">
     <div class="card-header bg-white border-0">
         <div class="d-flex justify-content-between align-items-center">
             <h5 class="mb-0">
                 <i class="bi bi-book-half text-primary {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
-                {{ __('instructor.my_recent_courses') }}
+                {{ __('student.my_courses') }}
             </h5>
             <div>
-                <a href="{{ route('instructor.courses.create') }}" class="btn btn-primary btn-sm {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}">
-                    <i class="bi bi-plus {{ session('locale', 'ar') === 'ar' ? 'ms-1' : 'me-1' }}"></i>
-                    {{ __('instructor.new_course') }}
-                </a>
-                <a href="{{ route('instructor.courses.index') }}" class="btn btn-outline-primary btn-sm">
+                <a href="{{ route('student.courses') }}" class="btn btn-outline-primary btn-sm">
                     <i class="bi bi-list {{ session('locale', 'ar') === 'ar' ? 'ms-1' : 'me-1' }}"></i>
-                    {{ __('instructor.all_courses') }}
+                    {{ __('student.view_all_courses') }}
                 </a>
             </div>
         </div>

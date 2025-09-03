@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', __('app.reviews_management'))
+@section('title', __('admin.reviews_management'))
 
 @section('breadcrumb')
 <nav aria-label="breadcrumb">
@@ -18,7 +18,7 @@ $marginEnd = $isRTL ? 'ms-2' : 'me-2';
 @endphp
 
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>{{ __('app.reviews_management') }}</h2>
+    <h2>{{ __('admin.reviews_management') }}</h2>
 </div>
 
 <!-- Search and Filters -->
@@ -31,14 +31,14 @@ $marginEnd = $isRTL ? 'ms-2' : 'me-2';
                         <label for="search" class="form-label">{{ __('app.search') }}</label>
                         <input type="text" class="form-control" id="search" name="search"
                             value="{{ request('search') }}"
-                            placeholder="{{ __('app.search_reviews_placeholder') }}">
+                            placeholder="{{ __('admin.search_reviews_placeholder') }}">
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="mb-3">
                         <label for="rating" class="form-label">{{ __('app.rating') }}</label>
                         <select class="form-select" id="rating" name="rating">
-                            <option value="">{{ __('app.all_ratings') }}</option>
+                            <option value="">{{ __('admin.all_ratings') }}</option>
                             <option value="5" {{ request('rating') === '5' ? 'selected' : '' }}>5 ⭐</option>
                             <option value="4" {{ request('rating') === '4' ? 'selected' : '' }}>4 ⭐</option>
                             <option value="3" {{ request('rating') === '3' ? 'selected' : '' }}>3 ⭐</option>
@@ -51,7 +51,7 @@ $marginEnd = $isRTL ? 'ms-2' : 'me-2';
                     <div class="mb-3">
                         <label for="status" class="form-label">{{ __('app.status') }}</label>
                         <select class="form-select" id="status" name="status">
-                            <option value="">{{ __('app.all_statuses') }}</option>
+                            <option value="">{{ __('admin.all_courses') }}</option>
                             <option value="approved" {{ request('status') === 'approved' ? 'selected' : '' }}>{{ __('app.approved') }}</option>
                             <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>{{ __('app.pending') }}</option>
                             <option value="rejected" {{ request('status') === 'rejected' ? 'selected' : '' }}>{{ __('app.rejected') }}</option>

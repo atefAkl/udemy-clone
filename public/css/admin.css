@@ -8,7 +8,168 @@ body {
 
 [dir=rtl] body {
     font-family: "Cairo", sans-serif;
+}
 
+/* Interactive Sidebar Navigation */
+.sidebar-header h6 {
+    padding: 6px 12px;
+    background-color: #3d3d3d;
+    color: white;
+    font: bold 1.3rem / 1.4 Cairo, sans-serif;
+}
+
+.nav-header-collapsible {
+    display: flex;
+    align-items: center;
+    padding: 4px 12px;
+    cursor: pointer;
+    margin-bottom: 2px;
+    transition: all 0.3s ease;
+    background-color: #f8f9fa;
+    border: 1px solid transparent;
+}
+
+.nav-header-collapsible:hover {
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+}
+
+.nav-header-collapsible.active {
+    background-color: #007bff;
+    color: white;
+    border-color: #0056b3;
+}
+
+.nav-header-collapsible .collapse-icon {
+    transition: transform 0.3s ease;
+    font-size: 12px;
+}
+
+.nav-header-collapsible[aria-expanded="true"] .collapse-icon {
+    transform: rotate(180deg);
+}
+
+.nav-submenu {
+    background-color: #cfe6fd;
+    padding-inline-start: 20px;
+}
+
+.nav-submenu .nav-link {
+    padding-block: 3px;
+    transition: all 0.2s ease;
+    border-inline-start: 3px solid transparent;
+}
+
+.nav-submenu a.nav-link i {
+    padding-inline-end: 0.5rem;
+}
+
+.nav-submenu .nav-link:hover {
+    background-color: #f8f9fa;
+    border-inline-start-color: #007bff;
+}
+
+.nav-submenu .nav-link.active {
+    background-color: #007bff;
+    color: white;
+    border-inline-start-color: #0056b3;
+}
+
+.nav-section {
+    border-bottom: 1px solid #dee2e6;
+}
+
+/* Categories Tree View */
+.categories-tree {
+    padding: 20px;
+}
+
+.category-item {
+    margin-bottom: 15px;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.category-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.category-header:hover {
+    background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+}
+
+.category-header .expand-icon {
+    transition: transform 0.3s ease;
+    font-size: 14px;
+    color: #6c757d;
+}
+
+.category-header .category-icon {
+    font-size: 18px;
+}
+
+.category-name {
+    font-weight: 600;
+    font-size: 16px;
+    color: #495057;
+}
+
+.subcategories {
+    background: #f8f9fa;
+    padding: 10px 0;
+}
+
+.subcategory-item {
+    padding: 12px 40px;
+    border-bottom: 1px solid #e9ecef;
+    transition: background-color 0.2s ease;
+}
+
+.subcategory-item:last-child {
+    border-bottom: none;
+}
+
+.subcategory-item:hover {
+    background-color: #e9ecef;
+}
+
+.subcategory-name {
+    font-weight: 500;
+    color: #495057;
+}
+
+.category-actions,
+.subcategory-actions {
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+}
+
+.category-item:hover .category-actions,
+.subcategory-item:hover .subcategory-actions {
+    opacity: 1;
+}
+
+/* RTL Support for Categories Tree */
+[dir="rtl"] .category-header .expand-icon {
+    margin-left: 8px;
+    margin-right: 0;
+}
+
+[dir="rtl"] .category-header .category-icon {
+    margin-left: 8px;
+    margin-right: 0;
+}
+
+[dir="rtl"] .subcategory-item {
+    padding: 12px 40px 12px 20px;
 }
 
 /* Fixed Sidebar - LTR */
@@ -17,12 +178,13 @@ body {
     top: 0;
     left: 0;
     height: 100vh;
-    width: 250px;
+    width: 280px;
     background: #fff;
-    border-right: 1px solid #dee2e6;
+    border-inline-end: 1px solid #dee2e6;
     z-index: 997;
     overflow-y: auto;
     transition: transform 0.3s ease;
+    /* box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1); */
 }
 
 [dir=rtl] .dashboard-sidebar {
@@ -36,10 +198,10 @@ body {
 
 /* Main Content Area - LTR */
 .dashboard-main {
-    margin-left: 250px;
-    margin-right: 300px;
+    margin-inline-start: 280px;
+    margin-inline-end: 300px;
     min-height: 100vh;
-    transition: margin 0.3s ease;
+    transition: all 0.3s ease;
 }
 
 /* Fixed Widgets Column - LTR */
@@ -120,6 +282,7 @@ body {
 fieldset {
     position: relative;
     border: 1px solid #ccc;
+    background-color: #f4f4f4;
     padding: 1rem;
 }
 
@@ -142,7 +305,7 @@ legend a {
 
 /* Common styles for both directions */
 .dashboard-sidebar .nav-link {
-    padding: 8px 20px;
+    padding: 3px 10px;
     border-radius: 0;
     color: #495057;
     transition: all 0.2s;
@@ -221,6 +384,14 @@ legend a {
 /* Sidebar Header */
 .sidebar-header {
     background: #f8f9fa;
+}
+
+.quick-actions {
+    position: fixed;
+    bottom: 20px;
+    z-index: 1001;
+    padding: 20px;
+    border-radius: 10px;
 }
 
 /* Welcome Section */

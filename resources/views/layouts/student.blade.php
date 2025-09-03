@@ -33,13 +33,13 @@
     </button>
 
     <!-- Sidebar -->
-    @include('includes.sidebar')
+    @include('includes.student-sidebar')
     <!-- End of sidebar -->
 
     <!-- Main Content -->
     <div class="dashboard-main" id="dashboardMain">
         <!-- Header -->
-        <div class="dashboard-header px-4 py-3">
+        <div class="dashboard-header px-4 py-3  bg-dark">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
                     <nav aria-label="breadcrumb">
@@ -89,7 +89,7 @@
     </div>
 
     <!-- Widgets Sidebar -->
-    <div class="widgets-sidebar" id="widgetsSidebar">
+    <div class="widgets-sidebar shadow" id="widgetsSidebar">
         @yield('widgets')
     </div>
 

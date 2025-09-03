@@ -1,11 +1,14 @@
 <?php
 
+use App\Http\Controllers\Admin\CategoryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\Instructor\InstructorController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ResourceController;
+use App\Http\Controllers\Student\StudentController;
+use App\Http\Controllers\Student\CourseController as StudentCourseController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -92,10 +95,9 @@ Route::middleware('auth')->group(function () {
             return redirect()->route('instructor.dashboard');
         } elseif (Auth::user()->role === 'admin') {
             return redirect()->route('admin.dashboard');
+        } elseif (Auth::user()->role === 'student') {
+            return redirect()->route('student.dashboard');
         }
-
-        // Default to student dashboard
-        return view('dashboard.student');
     })->name('dashboard');
 
     // Mark welcome message as shown
@@ -105,8 +107,31 @@ Route::middleware('auth')->group(function () {
     })->name('dashboard.welcome.shown');
 });
 
+// Student Routes
+Route::prefix('student')->name('student.')->middleware('auth')->group(function () {
+    Route::get('/dashboard', [StudentController::class, 'dashboard'])
+        ->middleware('role:student')
+        ->name('dashboard');
+        
+    Route::get('/courses', [StudentCourseController::class, 'courses'])
+        ->middleware('role:student')
+        ->name('courses');
+        
+    Route::get('/wishlist', [StudentCourseController::class, 'wishlist'])
+        ->middleware('role:student')
+        ->name('wishlist');
+        
+    Route::get('/certificates', [StudentCourseController::class, 'certificates'])
+        ->middleware('role:student')
+        ->name('certificates');
+        
+    Route::get('/courses/{course}', [StudentController::class, 'showCourse'])
+        ->middleware('role:student')
+        ->name('courses.show');
+});
+
 // Instructor Routes
-Route::prefix('instructor')->name('instructor.')->middleware(['auth', 'instructor'])->group(function () {
+Route::prefix('instructor')->name('instructor.')->middleware(['auth', 'role:instructor'])->group(function () {
     Route::get('/dashboard', [InstructorController::class, 'dashboard'])->name('dashboard');
 
     // Course Management
@@ -123,13 +148,13 @@ Route::prefix('instructor')->name('instructor.')->middleware(['auth', 'instructo
 
     // Categories Management
     Route::prefix('categories')->name('categories.')->group(function () {
-        Route::get('/', [InstructorController::class, 'categories'])->name('index');
-        Route::get('/create', [InstructorController::class, 'createCategory'])->name('create');
-        Route::post('/', [InstructorController::class, 'storeCategory'])->name('store');
-        Route::get('/{category}', [InstructorController::class, 'showCategory'])->name('show');
-        Route::get('/{category}/edit', [InstructorController::class, 'editCategory'])->name('edit');
-        Route::put('/{category}', [InstructorController::class, 'updateCategory'])->name('update');
-        Route::delete('/{category}', [InstructorController::class, 'deleteCategory'])->name('destroy');
+        Route::get('/',                 [InstructorController::class, 'categories'])->name('index');
+        Route::get('/create',           [InstructorController::class, 'createCategory'])->name('create');
+        Route::post('/',                [InstructorController::class, 'storeCategory'])->name('store');
+        Route::get('/{category}',       [InstructorController::class, 'showCategory'])->name('show');
+        Route::get('/{category}/edit',  [InstructorController::class, 'editCategory'])->name('edit');
+        Route::put('/{category}',       [InstructorController::class, 'updateCategory'])->name('update');
+        Route::delete('/{category}',    [InstructorController::class, 'deleteCategory'])->name('destroy');
     });
 });
 
@@ -163,7 +188,15 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->grou
     });
 
     // Categories Management
-    Route::get('/categories', [App\Http\Controllers\Admin\AdminController::class, 'categories'])->name('categories.index');
+    Route::prefix('categories')->name('categories.')->group(function () {
+        Route::get('/',                             [CategoryController::class, 'index'])->name('index');
+        Route::post('/',                            [CategoryController::class, 'store'])->name('store');
+        Route::put('/{category}',                   [CategoryController::class, 'update'])->name('update');
+        Route::delete('/{category}',                [CategoryController::class, 'destroy'])->name('destroy');
+        Route::get('/{category}/courses',           [CategoryController::class, 'courses'])->name('courses');
+        Route::patch('/{category}/toggle-status',   [CategoryController::class, 'toggleStatus'])->name('toggle-status');
+        Route::post('/update-order',                [CategoryController::class, 'updateOrder'])->name('update-order');
+    });
 
     // Reviews Management
     Route::prefix('reviews')->name('reviews.')->group(function () {

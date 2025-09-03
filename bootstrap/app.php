@@ -18,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'role' => \App\Http\Middleware\CheckRole::class,
             'instructor' => \App\Http\Middleware\CheckInstructor::class,
+            'student' => \App\Http\Middleware\CheckRole::class.':student',
         ]);
     })
     ->withProviders([

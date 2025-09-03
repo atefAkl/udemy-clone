@@ -1,11 +1,11 @@
 @extends('layouts.dashboard')
 
-@section('title', __('app.student_dashboard'))
+@section('title', __('student.student_dashboard'))
 
-@section('page-title', __('app.student_dashboard'))
+@section('page-title', __('student.student_dashboard'))
 
 @section('breadcrumb')
-<li class="breadcrumb-item active">{{ __('app.student_dashboard') }}</li>
+<li class="breadcrumb-item active">{{ __('student.student_dashboard') }}</li>
 @endsection
 
 @section('sidebar-nav')
@@ -13,31 +13,31 @@
 <li class="nav-item">
     <a class="nav-link" href="{{ route('dashboard') }}">
         <i class="fas fa-tachometer-alt" style="margin-inline-end: 10px;"></i>
-        {{ __('app.my_dashboard') }}
+        {{ __('app.dashboard') }}
     </a>
 </li>
 <li class="nav-item">
     <a class="nav-link" href="{{ route('courses.index') }}">
         <i class="fas fa-book-open" style="margin-inline-end: 10px;"></i>
-        {{ __('app.my_courses') }}
+        {{ __('student.my_courses') }}
     </a>
 </li>
 <li class="nav-item">
     <a class="nav-link" href="#">
         <i class="fas fa-chart-line" style="margin-inline-end: 10px;"></i>
-        {{ __('app.my_progress') }}
+        {{ __('student.my_progress') }}
     </a>
 </li>
 <li class="nav-item">
     <a class="nav-link" href="#">
         <i class="fas fa-certificate" style="margin-inline-end: 10px;"></i>
-        {{ __('app.my_certificates') }}
+        {{ __('student.my_certificates') }}
     </a>
 </li>
 <li class="nav-item">
     <a class="nav-link" href="#">
         <i class="fas fa-cog" style="margin-inline-end: 10px;"></i>
-        {{ __('app.account_settings') }}
+        {{ __('student.account_settings') }}
     </a>
 </li>
 @endsection
@@ -51,8 +51,8 @@
             <i class="fas fa-graduation-cap fa-2x"></i>
         </div>
         <div class="flex-grow-1">
-            <h5 class="alert-heading mb-1">{{ __('app.welcome_student', ['name' => Auth::user()->name]) }}</h5>
-            <p class="mb-0">{{ __('app.continue_learning_journey') }}</p>
+            <h5 class="alert-heading mb-1">{{ __('student.welcome_student') }}, {{ Auth::user()->name }}!</h5>
+            <p class="mb-0">{{ __('student.continue_learning') }}</p>
         </div>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
@@ -69,11 +69,11 @@
         <div class="d-flex justify-content-between align-items-center">
             <h5 class="mb-0">
                 <i class="fas fa-play-circle text-primary" style="margin-inline-end: 10px;"></i>
-                {{ __('app.current_courses') }}
+                {{ __('student.current_courses') }}
             </h5>
             <a href="{{ route('courses.index') }}" class="btn btn-outline-primary btn-sm">
                 <i class="fas fa-plus" style="margin-inline-end: 10px;"></i>
-                {{ __('app.browse_more') }}
+                {{ __('student.browse_more') }}
             </a>
         </div>
     </div>
@@ -124,18 +124,18 @@
                     <div class="progress-bar" role="progressbar" style="width: {{ $course['progress'] }}%"></div>
                 </div>
                 <small class="text-muted">
-                    {{ $course['completed_lessons'] }}/{{ $course['total_lessons'] }} {{ __('app.lessons_completed') }} ({{ $course['progress'] }}%)
+                    {{ $course['completed_lessons'] }}/{{ $course['total_lessons'] }} {{ __('student.lessons_completed') }} ({{ $course['progress'] }}%)
                 </small>
                 <p class="small text-primary mb-0 mt-1">
-                    <i class="fas fa-play" style="margin-inline-end: 10px;"></i>{{ __('app.next_lesson') }}: {{ $course['next_lesson'] }}
+                    <i class="fas fa-play" style="margin-inline-end: 10px;"></i>{{ __('student.next_lesson') }}: {{ $course['next_lesson'] }}
                 </p>
             </div>
             <div class="col-md-3 text-end">
                 <a href="#" class="btn btn-primary btn-sm mb-2 w-100">
-                    <i class="fas fa-play" style="margin-inline-end: 10px;"></i>{{ __('app.continue_learning_btn') }}
+                    <i class="fas fa-play" style="margin-inline-end: 10px;"></i>{{ __('student.continue_learning_btn') }}
                 </a>
                 <a href="#" class="btn btn-outline-secondary btn-sm w-100">
-                    <i class="fas fa-info-circle" style="margin-inline-end: 10px;"></i>{{ __('app.course_details') }}
+                    <i class="fas fa-info-circle" style="margin-inline-end: 10px;"></i>{{ __('student.course_details') }}
                 </a>
             </div>
         </div>
@@ -148,7 +148,7 @@
     <div class="card-header bg-white border-0">
         <h5 class="mb-0">
             <i class="fas fa-trophy text-success" style="margin-inline-end: 10px;"></i>
-            {{ __('app.completed_courses') }}
+            {{ __('student.completed_courses') }}
         </h5>
     </div>
     <div class="card-body">
@@ -189,12 +189,12 @@
                                 @endfor
                         </div>
                         <p class="small text-muted mb-2">
-                            <i class="fas fa-calendar" style="margin-inline-end: 10px;"></i>{{ __('app.completed_on') }} {{ $course['completed_date'] }}
+                            <i class="fas fa-calendar" style="margin-inline-end: 10px;"></i>{{ __('student.completed_on') }} {{ $course['completed_date'] }}
                         </p>
                         @if($course['certificate'])
                         <div class="d-grid">
                             <a href="#" class="btn btn-success btn-sm">
-                                <i class="fas fa-download" style="margin-inline-end: 10px;"></i>{{ __('app.download_certificate') }}
+                                <i class="fas fa-download" style="margin-inline-end: 10px;"></i>{{ __('student.download_certificate') }}
                             </a>
                         </div>
                         @endif
@@ -262,7 +262,7 @@
     <div class="card-header bg-white border-0">
         <h6 class="mb-0">
             <i class="fas fa-chart-bar text-primary" style="margin-inline-end: 10px;"></i>
-            {{ __('app.statistics') }}
+            {{ __('student.statistics') }}
         </h6>
     </div>
     <div class="card-body">
@@ -274,7 +274,7 @@
                     </div>
                     <div>
                         <h4 class="fw-bold text-primary mb-0">{{ $enrolledCourses ?? 5 }}</h4>
-                        <small class="text-muted">{{ __('app.enrolled_courses') }}</small>
+                        <small class="text-muted">{{ __('student.enrolled_courses') }}</small>
                     </div>
                 </div>
             </div>
@@ -285,7 +285,7 @@
                     </div>
                     <div>
                         <h4 class="fw-bold text-success mb-0">{{ count($completedCourses) ?? 2 }}</h4>
-                        <small class="text-muted">{{ __('app.completed_courses') }}</small>
+                        <small class="text-muted">{{ __('student.completed_courses') }}</small>
                     </div>
                 </div>
             </div>
@@ -296,7 +296,7 @@
                     </div>
                     <div>
                         <h4 class="fw-bold text-warning mb-0">{{ $totalHours ?? 45 }}</h4>
-                        <small class="text-muted">{{ __('app.learning_hours') }}</small>
+                        <small class="text-muted">{{ __('student.learning_hours') }}</small>
                     </div>
                 </div>
             </div>
@@ -307,7 +307,7 @@
                     </div>
                     <div>
                         <h4 class="fw-bold text-info mb-0">{{ $certificates ?? 2 }}</h4>
-                        <small class="text-muted">{{ __('app.certificates_earned') }}</small>
+                        <small class="text-muted">{{ __('student.certificates_earned') }}</small>
                     </div>
                 </div>
             </div>
@@ -320,7 +320,7 @@
     <div class="card-header bg-white border-0">
         <h6 class="mb-0">
             <i class="fas fa-history text-success" style="margin-inline-end: 10px;"></i>
-            {{ __('app.recent_activity') }}
+            {{ __('student.recent_activity') }}
         </h6>
     </div>
     <div class="card-body">
@@ -370,7 +370,7 @@
     <div class="card-header bg-white border-0">
         <h6 class="mb-0">
             <i class="fas fa-bell text-info" style="margin-inline-end: 10px;"></i>
-            {{ __('app.notifications') }}
+            {{ __('student.notifications') }}
         </h6>
     </div>
     <div class="card-body">
@@ -426,7 +426,7 @@
 
         <div class="text-center mt-3">
             <a href="#" class="btn btn-outline-primary btn-sm">
-                <i class="fas fa-eye" style="margin-inline-end: 10px;"></i>{{ __('app.view_all_notifications') }}
+                <i class="fas fa-eye" style="margin-inline-end: 10px;"></i>{{ __('student.view_all_notifications') }}
             </a>
         </div>
     </div>
@@ -437,22 +437,22 @@
     <div class="card-header bg-white border-0">
         <h6 class="mb-0">
             <i class="fas fa-bolt text-warning" style="margin-inline-end: 10px;"></i>
-            {{ __('app.quick_actions') }}
+            {{ __('student.quick_actions') }}
         </h6>
     </div>
     <div class="card-body">
         <div class="d-grid gap-2">
             <a href="{{ route('courses.index') }}" class="btn btn-outline-primary">
-                <i class="fas fa-search" style="margin-inline-end: 10px;"></i>{{ __('app.browse_courses') }}
+                <i class="fas fa-search" style="margin-inline-end: 10px;"></i>{{ __('student.browse_courses') }}
             </a>
             <a href="#" class="btn btn-outline-success">
-                <i class="fas fa-download" style="margin-inline-end: 10px;"></i>{{ __('app.download_certificates') }}
+                <i class="fas fa-download" style="margin-inline-end: 10px;"></i>{{ __('student.download_certificates') }}
             </a>
             <a href="#" class="btn btn-outline-info">
-                <i class="fas fa-user-edit" style="margin-inline-end: 10px;"></i>{{ __('app.update_profile') }}
+                <i class="fas fa-user-edit" style="margin-inline-end: 10px;"></i>{{ __('student.update_profile') }}
             </a>
             <a href="#" class="btn btn-outline-secondary">
-                <i class="fas fa-cog" style="margin-inline-end: 10px;"></i>{{ __('app.account_settings') }}
+                <i class="fas fa-cog" style="margin-inline-end: 10px;"></i>{{ __('student.account_settings') }}
             </a>
         </div>
     </div>

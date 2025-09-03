@@ -5,7 +5,7 @@
             <i class="fas fa-graduation-cap" style="margin-inline-end: 10px;"></i>
             {{ __('app.app_name') }}
         </h5>
-        <small class="opacity-75 text-white">Dashboard</small>
+        <small class="opacity-75 text-white">Instructor Dashboard</small>
     </div>
 
     <!-- User Info -->
@@ -36,24 +36,24 @@
                 data-bs-target="#userManagementMenu"
                 aria-expanded="{{ $isUserManagementActive ? 'true' : 'false' }}">
                 <i class="fa fa-users me-2"></i>
-                <span>{{ __('sidebar.user_management') }}</span>
+                <span>{{ __('instructor.courses_management') }}</span>
                 <i class="fa fa-chevron-down collapse-icon ms-auto"></i>
             </div>
             <div class="collapse {{ $isUserManagementActive ? 'show' : '' }}" id="userManagementMenu">
                 <ul class="nav flex-column nav-submenu">
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('admin.users.index') && !request('role') ? 'active' : '' }}" href="{{ route('admin.users.index') }}">
-                            <i class="fa fa-users"></i>{{ __('sidebar.all_users') }}
+                            <i class="fa fa-users"></i>{{ __('instructor.my_courses') }}
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('admin.users.index') && request('role') === 'instructor' ? 'active' : '' }}" href="{{ route('admin.users.index', ['search'=>'', 'role'=>'instructor']) }}">
-                            <i class="fa fa-user-tie"></i>{{ __('sidebar.instructors') }}
+                            <i class="fa fa-user-tie"></i>{{ __('instructor.incoming_exams') }}
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('admin.users.index') && request('role') === 'student' ? 'active' : '' }}" href="{{ route('admin.users.index', ['search'=>'','role'=>'student']) }}">
-                            <i class="fa fa-user-graduate"></i>{{ __('sidebar.students') }}
+                            <i class="fa fa-user-graduate"></i>{{ __('instructor.certificates') }}
                         </a>
                     </li>
                 </ul>
@@ -67,24 +67,24 @@
                 data-bs-target="#contentManagementMenu"
                 aria-expanded="{{ $isContentManagementActive ? 'true' : 'false' }}">
                 <i class="fa fa-book me-2"></i>
-                <span>{{ __('sidebar.content_management') }}</span>
+                <span>{{ __('instructor.account') }}</span>
                 <i class="fa fa-chevron-down collapse-icon ms-auto"></i>
             </div>
             <div class="collapse {{ $isContentManagementActive ? 'show' : '' }}" id="contentManagementMenu">
                 <ul class="nav flex-column nav-submenu">
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('admin.courses.index') ? 'active' : '' }}" href="{{ route('admin.courses.index') }}">
-                            <i class="fa fa-book"></i>{{ __('sidebar.all_courses') }}
+                            <i class="fa fa-book"></i>{{ __('instructor.earnings') }}
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('admin.categories.*') ? 'active' : '' }}" href="{{ route('admin.categories.index') }}">
-                            <i class="fa fa-tags"></i>{{ __('sidebar.categories') }}
+                            <i class="fa fa-tags"></i>{{ __('instructor.coupons') }}
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('admin.reviews.*') ? 'active' : '' }}" href="{{ route('admin.reviews.index') }}">
-                            <i class="fa fa-star"></i>{{ __('sidebar.reviews') }}
+                            <i class="fa fa-star"></i>{{ __('instructor.reviews') }}
                         </a>
                     </li>
                 </ul>

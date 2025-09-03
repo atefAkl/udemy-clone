@@ -278,7 +278,9 @@ class AdminController extends Controller
     // Categories Management
     public function categories(Request $request)
     {
-        $query = Category::query();
+        $query = Category::with(['children' => function ($q) {
+            $q->withCount('courses')->orderBy('sort_order');
+        }]);
 
         if ($request->filled('search')) {
             $search = $request->search;
@@ -289,10 +291,18 @@ class AdminController extends Controller
         }
 
         $categories = $query->withCount('courses')
+            ->orderBy('sort_order')
             ->orderBy('created_at', 'desc')
-            ->paginate(20);
+            ->get();
 
-        return view('admin.categories.index', compact('categories'));
+        $stats = [
+            'total_categories' => Category::count(),
+            'active_categories' => Category::where('is_active', true)->count(),
+            'inactive_categories' => Category::where('is_active', false)->count(),
+            'root_categories' => Category::whereNull('parent_id')->count(),
+        ];
+
+        return view('admin.categories.index', compact('categories', 'stats'));
     }
 
     // Reviews Management

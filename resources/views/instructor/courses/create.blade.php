@@ -1,27 +1,27 @@
 @extends('layouts.instructor-simple')
 
-@section('title', __('app.create_course'))
+@section('title', __('instructor.create_course'))
 
 @section('sidebar-nav')
 <a href="{{ route('instructor.dashboard') }}" class="nav-link">
     <i class="fas fa-tachometer-alt" style="margin-inline-end: 10px;"></i>
-    {{ __('app.dashboard') }}
+    {{ __('instructor.dashboard') }}
 </a>
 <a href="{{ route('instructor.courses.index') }}" class="nav-link">
     <i class="fas fa-book" style="margin-inline-end: 10px;"></i>
-    {{ __('app.my_courses') }}
+    {{ __('instructor.my_courses') }}
 </a>
 <a href="{{ route('instructor.courses.create') }}" class="nav-link active">
     <i class="fas fa-plus-circle" style="margin-inline-end: 10px;"></i>
-    {{ __('app.create_course') }}
+    {{ __('instructor.create_course') }}
 </a>
 <a href="#" class="nav-link">
     <i class="fas fa-chart-line" style="margin-inline-end: 10px;"></i>
-    {{ __('app.analytics') }}
+    {{ __('instructor.analytics') }}
 </a>
 <a href="#" class="nav-link">
     <i class="fas fa-dollar-sign" style="margin-inline-end: 10px;"></i>
-    {{ __('app.earnings') }}
+    {{ __('instructor.earnings') }}
 </a>
 <a href="#" class="nav-link">
     <i class="fas fa-cog" style="margin-inline-end: 10px;"></i>
@@ -35,24 +35,24 @@
     <nav aria-label="breadcrumb" class="mb-4">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
-                <a href="{{ route('instructor.dashboard') }}">{{ __('app.dashboard') }}</a>
+                <a href="{{ route('instructor.dashboard') }}">{{ __('instructor.dashboard') }}</a>
             </li>
             <li class="breadcrumb-item">
-                <a href="{{ route('instructor.courses.index') }}">{{ __('app.my_courses') }}</a>
+                <a href="{{ route('instructor.courses.index') }}">{{ __('instructor.my_courses') }}</a>
             </li>
-            <li class="breadcrumb-item active">{{ __('app.create_course') }}</li>
+            <li class="breadcrumb-item active">{{ __('instructor.create_course') }}</li>
         </ol>
     </nav>
 
     <!-- Page Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h2 class="mb-1">{{ __('app.create_new_course') }}</h2>
-            <p class="text-muted">{{ __('app.create_course_description') }}</p>
+            <h2 class="mb-1">{{ __('instructor.create_new_course') }}</h2>
+            <p class="text-muted">{{ __('instructor.create_course_description') }}</p>
         </div>
         <a href="{{ route('instructor.courses.index') }}" class="btn btn-outline-secondary">
             <i class="fas fa-arrow-left" style="margin-inline-end: 8px;"></i>
-            {{ __('app.back_to_courses') }}
+            {{ __('instructor.back_to_courses') }}
         </a>
     </div>
 
@@ -67,35 +67,35 @@
                     <div class="card-header bg-white border-0 py-3">
                         <h5 class="mb-0">
                             <i class="fas fa-info-circle text-primary" style="margin-inline-end: 10px;"></i>
-                            {{ __('app.basic_information') }}
+                            {{ __('courses.basic_information') }}
                         </h5>
                     </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-12 mb-3">
-                                <label for="title" class="form-label">{{ __('app.course_title') }} <span class="text-danger">*</span></label>
+                                <label for="title" class="form-label">{{ __('courses.course_title') }} <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control @error('title') is-invalid @enderror"
                                     id="title" name="title" value="{{ old('title') }}" maxlength="100"
-                                    placeholder="{{ __('app.enter_course_title') }}" required>
-                                <div class="form-text">{{ __('app.title_max_100_chars') }}</div>
+                                    placeholder="{{ __('courses.enter_course_title') }}" required>
+                                <div class="form-text">{{ __('courses.title_max_100_chars') }}</div>
                                 @error('title')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
 
                             <div class="col-md-12 mb-3">
-                                <label for="short_description" class="form-label">{{ __('app.short_description') }} <span class="text-danger">*</span></label>
+                                <label for="short_description" class="form-label">{{ __('courses.short_description') }} <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control @error('short_description') is-invalid @enderror"
                                     id="short_description" name="short_description" value="{{ old('short_description') }}" maxlength="160"
-                                    placeholder="{{ __('app.enter_short_description') }}" required>
-                                <div class="form-text">{{ __('app.short_description_max_160_chars') }}</div>
+                                    placeholder="{{ __('courses.enter_short_description') }}" required>
+                                <div class="form-text">{{ __('courses.short_description_max_160_chars') }}</div>
                                 @error('short_description')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
 
                             <div class="col-md-12 mb-3">
-                                <label for="description" class="form-label">{{ __('app.course_description') }} <span class="text-danger">*</span></label>
+                                <label for="description" class="form-label">{{ __('courses.course_description') }} <span class="text-danger">*</span></label>
                                 <textarea class="form-control @error('description') is-invalid @enderror"
                                     id="description" name="description" rows="4" maxlength="500"
                                     placeholder="{{ __('app.enter_course_description') }}" required>{{ old('description') }}</textarea>

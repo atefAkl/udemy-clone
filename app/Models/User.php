@@ -61,6 +61,21 @@ class User extends Authenticatable
     const ROLE_ADMIN = 'admin';
 
     /**
+     * Check if user has any of the given roles
+     *
+     * @param array|string $roles
+     * @return bool
+     */
+    public function hasAnyRole($roles): bool
+    {
+        if (!is_array($roles)) {
+            $roles = [$roles];
+        }
+        
+        return in_array($this->role, $roles);
+    }
+
+    /**
      * Check if user is student
      */
     public function isStudent(): bool
