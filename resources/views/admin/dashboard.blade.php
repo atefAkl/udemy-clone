@@ -11,10 +11,7 @@
 @endsection
 
 @section('content')
-<div class="welcome-section">
-    <h2>{{ __('admin.welcome_admin', ['name' => auth()->user()->name]) }}</h2>
-    <p>{{ __('admin.admin_welcome_message') }}</p>
-</div>
+@include('components.welcome-message')
 
 <!-- Statistics Cards -->
 <div class="row mb-4">
@@ -151,15 +148,24 @@
         new Chart(ctx, {
             type: 'line',
             data: {
-                labels: ['{{ __('admin.jan') }}', '{{ __('admin.feb') }}', '{{ __('admin.mar') }}', '{{ __('admin.apr') }}', '{{ __('admin.may') }}', '{{ __('admin.jun') }}'],
+                labels: ['{{ __('
+                    admin.jan ') }}', '{{ __('
+                    admin.feb ') }}', '{{ __('
+                    admin.mar ') }}', '{{ __('
+                    admin.apr ') }}', '{{ __('
+                    admin.may ') }}', '{{ __('
+                    admin.jun ') }}'
+                ],
                 datasets: [{
-                    label: '{{ __('admin.new_users') }}',
+                    label: '{{ __('
+                    admin.new_users ') }}',
                     data: [65, 59, 80, 81, 56, 55],
                     borderColor: 'rgb(75, 192, 192)',
                     backgroundColor: 'rgba(75, 192, 192, 0.1)',
                     tension: 0.1
                 }, {
-                    label: '{{ __('admin.course_enrollments') }}',
+                    label: '{{ __('
+                    admin.course_enrollments ') }}',
                     data: [28, 48, 40, 19, 86, 27],
                     borderColor: 'rgb(255, 99, 132)',
                     backgroundColor: 'rgba(255, 99, 132, 0.1)',

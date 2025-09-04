@@ -9,37 +9,37 @@
 <ul class="nav nav-pills flex-column">
     <li class="nav-item">
         <a class="nav-link active" href="{{ route('instructor.dashboard') }}">
-            <i class="bi bi-speedometer2 {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
+            <i class="fa fa-speedometer2 {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
             {{ __('app.dashboard') }}
         </a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="{{ route('instructor.courses.index') }}">
-            <i class="bi bi-book {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
+            <i class="fa fa-book {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
             {{ __('instructor.my_courses') }}
         </a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="#">
-            <i class="bi bi-people {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
+            <i class="fa fa-people {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
             {{ __('instructor.total_students') }}
         </a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="#">
-            <i class="bi bi-bar-chart {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
+            <i class="fa fa-bar-chart {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
             {{ __('instructor.analytics') }}
         </a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="#">
-            <i class="bi bi-cash-coin {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
+            <i class="fa fa-cash-coin {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
             {{ __('instructor.earnings') }}
         </a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="#">
-            <i class="bi bi-gear {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
+            <i class="fa fa-gear {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
             {{ __('instructor.account_settings') }}
         </a>
     </li>
@@ -65,7 +65,7 @@
                         <p class="mb-0 opacity-75">{{ __('instructor.instructor_welcome_message') }}</p>
                     </div>
                     <div class="col-md-4 text-{{ session('locale', 'ar') === 'ar' ? 'start' : 'end' }}">
-                        <i class="bi bi-person-workspace" style="font-size: 4rem; opacity: 0.5;"></i>
+                        <i class="fa fa-person-workspace" style="font-size: 4rem; opacity: 0.5;"></i>
                     </div>
                 </div>
             </div>
@@ -80,7 +80,7 @@
             <div class="card-body text-center">
                 <div class="d-flex align-items-center justify-content-center mb-3">
                     <div class="bg-primary bg-opacity-10 rounded-circle p-3">
-                        <i class="bi bi-book text-primary fs-2"></i>
+                        <i class="fa fa-book text-primary fs-2"></i>
                     </div>
                 </div>
                 <h3 class="fw-bold text-primary mb-1">{{ $stats['total_courses'] ?? 8 }}</h3>
@@ -93,7 +93,7 @@
             <div class="card-body text-center">
                 <div class="d-flex align-items-center justify-content-center mb-3">
                     <div class="bg-success bg-opacity-10 rounded-circle p-3">
-                        <i class="bi bi-check-circle text-success fs-2"></i>
+                        <i class="fa fa-check-circle text-success fs-2"></i>
                     </div>
                 </div>
                 <h3 class="fw-bold text-success mb-1">{{ $stats['published_courses'] ?? 5 }}</h3>
@@ -106,7 +106,7 @@
             <div class="card-body text-center">
                 <div class="d-flex align-items-center justify-content-center mb-3">
                     <div class="bg-info bg-opacity-10 rounded-circle p-3">
-                        <i class="bi bi-people text-info fs-2"></i>
+                        <i class="fa fa-people text-info fs-2"></i>
                     </div>
                 </div>
                 <h3 class="fw-bold text-info mb-1">{{ $stats['total_students'] ?? 156 }}</h3>
@@ -119,7 +119,7 @@
             <div class="card-body text-center">
                 <div class="d-flex align-items-center justify-content-center mb-3">
                     <div class="bg-warning bg-opacity-10 rounded-circle p-3">
-                        <i class="bi bi-cash-coin text-warning fs-2"></i>
+                        <i class="fa fa-cash-coin text-warning fs-2"></i>
                     </div>
                 </div>
                 <h3 class="fw-bold text-warning mb-1">${{ $stats['total_revenue'] ?? 2450 }}</h3>
@@ -134,16 +134,16 @@
     <div class="card-header bg-white border-0">
         <div class="d-flex justify-content-between align-items-center">
             <h5 class="mb-0">
-                <i class="bi bi-book-half text-primary {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
+                <i class="fa fa-book-half text-primary {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
                 {{ __('instructor.my_recent_courses') }}
             </h5>
             <div>
                 <a href="{{ route('instructor.courses.create') }}" class="btn btn-primary btn-sm {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}">
-                    <i class="bi bi-plus {{ session('locale', 'ar') === 'ar' ? 'ms-1' : 'me-1' }}"></i>
+                    <i class="fa fa-plus {{ session('locale', 'ar') === 'ar' ? 'ms-1' : 'me-1' }}"></i>
                     {{ __('instructor.new_course') }}
                 </a>
                 <a href="{{ route('instructor.courses.index') }}" class="btn btn-outline-primary btn-sm">
-                    <i class="bi bi-list {{ session('locale', 'ar') === 'ar' ? 'ms-1' : 'me-1' }}"></i>
+                    <i class="fa fa-list {{ session('locale', 'ar') === 'ar' ? 'ms-1' : 'me-1' }}"></i>
                     {{ __('instructor.all_courses') }}
                 </a>
             </div>
@@ -212,7 +212,7 @@
                         <small class="text-muted d-block">{{ __('app.rating') }}</small>
                         <strong>
                             @if($course['rating'] > 0)
-                            <i class="bi bi-star-fill text-warning"></i> {{ $course['rating'] }}
+                            <i class="fa fa-star-fill text-warning"></i> {{ $course['rating'] }}
                             @else
                             <span class="text-muted">{{ __('app.no_rating') }}</span>
                             @endif
@@ -223,11 +223,11 @@
             <div class="col-md-3 text-{{ session('locale', 'ar') === 'ar' ? 'start' : 'end' }}">
                 <div class="btn-group-vertical w-100" role="group">
                     <a href="{{ route('instructor.courses.show', $course['id']) }}" class="btn btn-outline-primary btn-sm mb-1">
-                        <i class="bi bi-eye {{ session('locale', 'ar') === 'ar' ? 'ms-1' : 'me-1' }}"></i>
+                        <i class="fa fa-eye {{ session('locale', 'ar') === 'ar' ? 'ms-1' : 'me-1' }}"></i>
                         {{ __('app.view') }}
                     </a>
                     <a href="{{ route('instructor.courses.edit', $course['id']) }}" class="btn btn-outline-secondary btn-sm">
-                        <i class="bi bi-pencil {{ session('locale', 'ar') === 'ar' ? 'ms-1' : 'me-1' }}"></i>
+                        <i class="fa fa-pencil {{ session('locale', 'ar') === 'ar' ? 'ms-1' : 'me-1' }}"></i>
                         {{ __('app.edit') }}
                     </a>
                 </div>
@@ -235,11 +235,11 @@
         </div>
         @empty
         <div class="text-center py-4">
-            <i class="bi bi-book text-muted" style="font-size: 4rem;"></i>
+            <i class="fa fa-book text-muted" style="font-size: 4rem;"></i>
             <h5 class="text-muted mt-3">{{ __('instructor.no_courses_yet') }}</h5>
             <p class="text-muted">{{ __('instructor.create_first_course_message') }}</p>
             <a href="{{ route('instructor.courses.create') }}" class="btn btn-primary">
-                <i class="bi bi-plus {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
+                <i class="fa fa-plus {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
                 {{ __('instructor.create_first_course') }}
             </a>
         </div>
@@ -251,7 +251,7 @@
 <div class="card border-0 shadow-sm">
     <div class="card-header bg-white border-0">
         <h5 class="mb-0">
-            <i class="bi bi-graph-up text-primary {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
+            <i class="fa fa-graph-up text-primary {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
             {{ __('instructor.course_performance') }}
         </h5>
     </div>
@@ -278,7 +278,7 @@
                         <h6 class="mb-1">{{ $course['name'] }}</h6>
                         <small class="text-muted">
                             {{ $course['students'] }} {{ __('app.student') }} •
-                            {{ $course['rating'] }} <i class="bi bi-star-fill text-warning"></i>
+                            {{ $course['rating'] }} <i class="fa fa-star-fill text-warning"></i>
                         </small>
                     </div>
                 </div>
@@ -294,7 +294,7 @@
 <div class="card border-0 shadow-sm mb-4">
     <div class="card-header bg-white">
         <h6 class="mb-0">
-            <i class="bi bi-speedometer text-success {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
+            <i class="fa fa-speedometer text-success {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
             {{ __('instructor.quick_stats') }}
         </h6>
     </div>
@@ -328,7 +328,7 @@
 <div class="card border-0 shadow-sm mb-4">
     <div class="card-header bg-white">
         <h6 class="mb-0">
-            <i class="bi bi-activity text-info {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
+            <i class="fa fa-activity text-info {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
             {{ __('app.recent_activity') }}
         </h6>
     </div>
@@ -339,25 +339,25 @@
         'type' => 'new_enrollment',
         'message' => __('app.new_student_enrolled'),
         'time' => __('app.one_hour_ago'),
-        'icon' => 'bi bi-person-plus text-success'
+        'icon' => 'fa fa-person-plus text-success'
         ],
         [
         'type' => 'new_review',
         'message' => __('app.new_five_star_review'),
         'time' => __('app.three_hours_ago'),
-        'icon' => 'bi bi-star text-warning'
+        'icon' => 'fa fa-star text-warning'
         ],
         [
         'type' => 'course_completed',
         'message' => __('app.student_completed_course'),
         'time' => __('app.yesterday'),
-        'icon' => 'bi bi-trophy text-primary'
+        'icon' => 'fa fa-trophy text-primary'
         ],
         [
         'type' => 'question',
         'message' => __('app.new_question_posted'),
         'time' => __('app.two_days_ago'),
-        'icon' => 'bi bi-question-circle text-info'
+        'icon' => 'fa fa-question-circle text-info'
         ]
         ];
         @endphp
@@ -380,30 +380,30 @@
 <div class="card border-0 shadow-sm">
     <div class="card-header bg-white">
         <h6 class="mb-0">
-            <i class="bi bi-lightning text-warning {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
+            <i class="fa fa-lightning text-warning {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
             {{ __('app.quick_actions') }}
         </h6>
     </div>
     <div class="card-body">
         <div class="d-grid gap-2">
             <a href="{{ route('instructor.courses.create') }}" class="btn btn-primary">
-                <i class="bi bi-plus {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
+                <i class="fa fa-plus {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
                 {{ __('instructor.create_new_course') }}
             </a>
             <a href="{{ route('instructor.courses.index') }}" class="btn btn-outline-primary">
-                <i class="bi bi-list {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
+                <i class="fa fa-list {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
                 {{ __('instructor.manage_courses_btn') }}
             </a>
             <a href="#" class="btn btn-outline-success">
-                <i class="bi bi-bar-chart {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
+                <i class="fa fa-bar-chart {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
                 {{ __('instructor.performance_reports') }}
             </a>
             <a href="#" class="btn btn-outline-info">
-                <i class="bi bi-chat-dots {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
+                <i class="fa fa-chat-dots {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
                 {{ __('instructor.student_messages') }}
             </a>
             <a href="#" class="btn btn-outline-secondary">
-                <i class="bi bi-gear {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
+                <i class="fa fa-gear {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
                 {{ __('app.profile_settings') }}
             </a>
         </div>
@@ -504,3 +504,5 @@
         });
     });
 </script>
+
+@include('components.welcome-message')

@@ -2,6 +2,7 @@
 
 return [
     // Student Dashboard
+    'my_learning' => 'My Learning',
     'student_dashboard' => 'Student Dashboard',
     'welcome_student' => 'Welcome',
     'continue_learning' => 'Continue your learning journey and discover more knowledge',

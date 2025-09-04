@@ -2,6 +2,7 @@
 
 return [
     // Student Dashboard
+    'my_learning' => 'رحلتي التعليمية',
     'student_dashboard' => 'لوحة تحكم الطالب',
     'welcome_student' => 'مرحباً',
     'continue_learning' => 'تابع رحلة التعلم واكتشف المزيد من المعرفة',
