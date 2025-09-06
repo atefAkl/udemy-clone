@@ -2,6 +2,7 @@
 
 return [
     // Authentication
+    'not_authorized' => 'غير مصرح لك بالدخول إلى هذا المورد',
     'sign_in' => 'تسجيل الدخول',
     'sign_up' => 'إنشاء حساب',
     'welcome_back' => 'مرحباً بعودتك',

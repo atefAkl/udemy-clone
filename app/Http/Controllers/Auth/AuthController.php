@@ -32,7 +32,12 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
 
+            // Ensure the returned user is an instance of App\Models\User
             $user = Auth::user();
+            if (!$user instanceof User) {
+                // fallback: fetch from the users table explicitly
+                $user = User::find(Auth::id());
+            }
 
             // Redirect based on user role
             if ($user->isAdmin()) {

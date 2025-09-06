@@ -2,6 +2,7 @@
 
 return [
     // Authentication
+    'not_authorized' => 'You are not authorized to access this resource',
     'sign_in' => 'Sign In',
     'sign_up' => 'Sign Up',
     'welcome_back' => 'Welcome Back',
