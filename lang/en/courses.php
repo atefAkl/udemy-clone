@@ -1,6 +1,9 @@
 <?php
 
 return [
+    // Tiltes & Headings
+    'explore_courses_title' => 'Explore Courses',
+    'explore_courses_description' => 'Discover thousands of courses from expert instructors',
     // Course Management
     'courses' => 'Courses',
     'all_courses' => 'All Courses',
@@ -98,6 +101,7 @@ return [
     // Course Messages
     'no_courses_found' => 'No courses found',
     'no_courses_yet' => 'No courses yet',
+    'no_enrollments' => 'No enrollments yet.',
     'start_creating_courses' => 'Start creating your first courses',
     'create_first_course' => 'Create First Course',
     'create_first_course_message' => 'You haven\'t created any courses yet. Start by creating your first course to share your knowledge with the world.',

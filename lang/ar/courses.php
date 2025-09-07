@@ -1,6 +1,9 @@
 <?php
 
 return [
+    // Tiltes & Headings
+    'explore_courses_title' => 'استكشف الدورات',
+    'explore_courses_description' => 'اكتشف آلاف الدورات من المدربين المختصين',
     // Course Management
     'courses' => 'الدورات',
     'all_courses' => 'جميع الدورات',
@@ -97,7 +100,9 @@ return [
 
     // Course Messages
     'no_courses_found' => 'لم يتم العثور على دورات',
-    'no_courses_yet' => 'لا توجد دورات بعد',
+    'no_enrollments' => 'لا يوجد دورات مسجل بها حتى الأن',
+    'see_more_courses' => 'بادر بالاطلاع على دوراتنا، واحجز دورتك المفضلة مع أمهر المدرسين لدينا من هنا',
+    'view_courses' => 'قائمة الدورات',
     'start_creating_courses' => 'ابدأ في إنشاء دوراتك الأولى',
     'create_first_course' => 'إنشاء أول دورة',
     'create_first_course_message' => 'لم تقم بإنشاء أي دورات بعد. ابدأ بإنشاء دورتك الأولى لمشاركة معرفتك مع العالم.',

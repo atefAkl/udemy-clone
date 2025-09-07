@@ -9,6 +9,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\Student\StudentController;
 use App\Http\Controllers\Student\CourseController as StudentCourseController;
+use App\Http\Controllers\Student\ProfileController as StudentProfileController;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -24,10 +26,11 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/lang/{locale}', function ($locale) {
     if (in_array($locale, array_keys(config('app.supported_locales')))) {
         session(['locale' => $locale]);
-
+        $user = User::find(Auth::id());
         // Update user preference if logged in
-        if (auth()->check()) {
-            auth()->user()->update(['preferred_language' => $locale]);
+        if ($user) {
+            $user->preferred_language = $locale;
+            $user->save();
         }
     }
 
@@ -108,25 +111,26 @@ Route::middleware('auth')->group(function () {
 });
 
 // Student Routes
-Route::prefix('student')->name('student.')->middleware('auth')->group(function () {
-    Route::get('/dashboard', [StudentController::class, 'dashboard'])
-        ->middleware('role:student')
+Route::prefix('student')->name('student.')->middleware('auth', 'role:student')->group(function () {
+    Route::get('/dashboard', [StudentProfileController::class, 'index'])
         ->name('dashboard');
-        
-    Route::get('/courses', [StudentCourseController::class, 'courses'])
-        ->middleware('role:student')
-        ->name('courses');
-        
-    Route::get('/wishlist', [StudentCourseController::class, 'wishlist'])
-        ->middleware('role:student')
-        ->name('wishlist');
-        
-    Route::get('/certificates', [StudentCourseController::class, 'certificates'])
-        ->middleware('role:student')
-        ->name('certificates');
-        
+
+    Route::get('/profile', [StudentProfileController::class, 'index'])
+        ->name('profile');
+
+    Route::get('/courses/lists', [StudentCourseController::class, 'lists'])
+        ->name('courses.lists');
+
+    Route::get('/courses/all', [StudentCourseController::class, 'all'])
+        ->name('courses.all');
+
+    Route::get('/courses/wishlist', [StudentCourseController::class, 'wishlist'])
+        ->name('courses.wishlist');
+
+    Route::get('/courses/certificates', [StudentCourseController::class, 'certificates'])
+        ->name('courses.certificates');
+
     Route::get('/courses/{course}', [StudentController::class, 'showCourse'])
-        ->middleware('role:student')
         ->name('courses.show');
 });
 

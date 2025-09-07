@@ -107,11 +107,11 @@
                     <li><a href="#"><i class="fab fa-instagram"></i></a></li>
                 </ul>
                 <ul>
-                    <li><button class="btn btn-outline-light btn-sm"><i class="fa-solid fa-globe"></i> {{ session('locale', 'ar') === 'ar' ? 'العربية' : 'English' }}</button></li>
+                    <li><button class="btn btn-outline-light btn-sm"><a href="{{ route('lang.switch', session('locale', 'ar') === 'ar' ? 'en' : 'ar') }}"><i class="fa-solid fa-globe"></i> {{ session('locale', 'ar') === 'ar' ? 'العربية' : 'English' }}</a></button></li>
                 </ul>
             </div>
             <div class="footer-bottom">
-                &copy; 2025 {{ config('app.name') }}
+                &copy; 2025 {{ __('app.app_name') }}
             </div>
         </div>
     </footer>

@@ -1,6 +1,6 @@
 {{-- جميع الدورات المسجلة للطالب --}}
 <div class="tab-pane fade show active" id="all-courses" role="tabpanel" aria-labelledby="all-courses-tab">
-    <h4 class="mb-4">{{ __('student.all_courses') }}</h4>
+    <h4 class="mb-4">{{ __('courses.all_courses') }}</h4>
     @if(isset($enrolledCourses) && $enrolledCourses->count())
     <div class="row">
         @foreach($enrolledCourses as $course)
@@ -17,6 +17,11 @@
         @endforeach
     </div>
     @else
-    <div class="alert alert-info">{{ __('student.no_enrollments') }}</div>
+    <div>
+        <b>{{ __('courses.no_enrollments') }}</b>
+        <br>
+        {{ __('courses.see_more_courses') }} -
+        <a href="{{ route('courses.index') }}" class="btn btn-primary btn-sm">{{ __('courses.view_courses') }}</a>
+    </div>
     @endif
 </div>

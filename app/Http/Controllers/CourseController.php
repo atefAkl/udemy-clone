@@ -34,23 +34,12 @@ class CourseController extends Controller
             $query->where('level', $request->level);
         }
 
-        // Price filter
-        if ($request->filled('price_range')) {
-            switch ($request->price_range) {
-                case 'free':
-                    $query->where('price', 0);
-                    break;
-                case 'paid':
-                    $query->where('price', '>', 0);
-                    break;
-                case 'under_50':
-                    $query->where('price', '<=', 50);
-                    break;
-                case 'under_100':
-                    $query->where('price', '<=', 100);
-                    break;
-            }
-        }
+        // Price range filter
+        $minPrice = $request->input('min_price', 0);
+        $maxPrice = $request->input('max_price', 1000);
+        
+        // Apply price range filter
+        $query->whereBetween('price', [$minPrice, $maxPrice]);
 
         // Sorting
         $sortBy = $request->get('sort', 'created_at');
@@ -74,7 +63,7 @@ class CourseController extends Controller
 
         $vars = [
             'courses' => $query->paginate(12),
-            'courses_categories' => Category::parents()->get(),
+            'categories' => Category::parents()->get(),
         ];
 
 
