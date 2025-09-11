@@ -10,6 +10,10 @@ use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\Student\StudentController;
 use App\Http\Controllers\Student\CourseController as StudentCourseController;
 use App\Http\Controllers\Student\ProfileController as StudentProfileController;
+use App\Http\Controllers\Student\ToolsController as StudentToolsController;
+use App\Http\Controllers\Student\CertificateController as StudentCertificateController;
+use App\Http\Controllers\Student\WishlistController as StudentWishlistController;
+use App\Http\Controllers\Student\ListController as StudentListController;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
@@ -112,7 +116,7 @@ Route::middleware('auth')->group(function () {
 
 // Student Routes
 Route::prefix('student')->name('student.')->middleware('auth', 'role:student')->group(function () {
-    Route::get('/dashboard', [StudentProfileController::class, 'index'])
+    Route::get('/dashboard/{tab?}', [StudentProfileController::class, 'dashboard'])
         ->name('dashboard');
 
     Route::get('/profile', [StudentProfileController::class, 'index'])
@@ -126,6 +130,67 @@ Route::prefix('student')->name('student.')->middleware('auth', 'role:student')->
 
     Route::get('/courses/wishlist', [StudentCourseController::class, 'wishlist'])
         ->name('courses.wishlist');
+
+    // Student Tools Routes
+    Route::get('/notes', [StudentToolsController::class, 'notes'])
+        ->name('notes');
+    
+    Route::get('/calendar', [StudentToolsController::class, 'calendar'])
+        ->name('calendar');
+    
+    Route::get('/assessments', [StudentToolsController::class, 'assessments'])
+        ->name('assessments');
+    
+    Route::get('/progress-tracker', [StudentToolsController::class, 'progressTracker'])
+        ->name('progress.tracker');
+    
+    Route::get('/study-planner', [StudentToolsController::class, 'studyPlanner'])
+        ->name('study.planner');
+    
+    Route::get('/discussion-forums', [StudentToolsController::class, 'discussionForums'])
+        ->name('discussion.forums');
+    
+    Route::get('/discussions', [StudentToolsController::class, 'discussions'])
+        ->name('discussions');
+    
+    Route::get('/downloads', [StudentToolsController::class, 'downloads'])
+        ->name('downloads');
+    
+    Route::get('/statistics', [StudentToolsController::class, 'statistics'])
+        ->name('statistics');
+    
+    Route::get('/study-groups', [StudentToolsController::class, 'studyGroups'])
+        ->name('study-groups');
+    
+    Route::get('/quick-review', [StudentToolsController::class, 'quickReview'])
+        ->name('quick-review');
+    
+    Route::get('/goals', [StudentToolsController::class, 'goals'])
+        ->name('goals');
+    
+    Route::get('/reports', [StudentToolsController::class, 'reports'])
+        ->name('reports');
+
+    // Certificate Routes
+    Route::get('/certificate/{certificate}/download', [StudentCertificateController::class, 'download'])
+        ->name('certificate.download');
+    
+    Route::get('/certificate/{certificate}/share', [StudentCertificateController::class, 'share'])
+        ->name('certificate.share');
+
+    // Wishlist Routes
+    Route::post('/wishlist/add/{course}', [StudentWishlistController::class, 'add'])
+        ->name('wishlist.add');
+    
+    Route::delete('/wishlist/remove/{course}', [StudentWishlistController::class, 'remove'])
+        ->name('wishlist.remove');
+
+    // User Lists Routes
+    Route::resource('lists', StudentListController::class);
+    Route::post('/lists/{list}/courses/{course}', [StudentListController::class, 'addCourse'])
+        ->name('lists.add.course');
+    Route::delete('/lists/{list}/courses/{course}', [StudentListController::class, 'removeCourse'])
+        ->name('lists.remove.course');
 
     Route::get('/courses/certificates', [StudentCourseController::class, 'certificates'])
         ->name('courses.certificates');

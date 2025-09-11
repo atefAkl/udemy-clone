@@ -230,4 +230,56 @@ class Course extends Model
     {
         return $query->where('is_featured', true);
     }
+
+    /**
+     * Wishlists relationship
+     */
+    public function wishlists()
+    {
+        return $this->hasMany(Wishlist::class);
+    }
+
+    /**
+     * Users who wishlisted this course
+     */
+    public function wishlistedBy()
+    {
+        return $this->belongsToMany(User::class, 'wishlists')
+            ->withPivot('added_at')
+            ->withTimestamps();
+    }
+
+    /**
+     * Certificates relationship
+     */
+    public function certificates()
+    {
+        return $this->hasMany(Certificate::class);
+    }
+
+    /**
+     * User lists that contain this course
+     */
+    public function userLists()
+    {
+        return $this->belongsToMany(UserList::class, 'user_list_courses')
+            ->withPivot('added_at', 'sort_order')
+            ->withTimestamps();
+    }
+
+    /**
+     * Check if course is in user's wishlist
+     */
+    public function isInWishlist($userId)
+    {
+        return $this->wishlists()->where('user_id', $userId)->exists();
+    }
+
+    /**
+     * Get wishlist count
+     */
+    public function getWishlistCountAttribute(): int
+    {
+        return $this->wishlists()->count();
+    }
 }

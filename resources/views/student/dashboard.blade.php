@@ -7,16 +7,43 @@
 @section('content')
 
 
-<!-- Performance Chart -->
+<!-- Navigation Tabs -->
 <ul class="top-nav d-flex gap-3 justify-content-center">
-    <li class="fs-5 fw-bold">{{__('my_profile')}}</li>
-    <li class="fs-5 fw-bold active">{{__('my_courses')}}</li>
-    <li class="fs-5 fw-bold">{{__('my_lists')}}</li>
-    <li class="fs-5 fw-bold">{{__('wishlists')}}</li>
-    <li class="fs-5 fw-bold">{{__('certificates')}}</li>
-    <li class="fs-5 fw-bold">{{__('archeived')}}</li>
-    <li class="fs-5 fw-bold">{{__('my_tools')}}</li>
-
+    <li class="fs-5 fw-bold {{ (!isset($tab) || $tab == 'profile') ? 'active' : '' }}">
+        <a href="{{ route('student.dashboard', ['tab' => 'profile']) }}" class="text-decoration-none">
+            {{__('student.my_profile')}}
+        </a>
+    </li>
+    <li class="fs-5 fw-bold {{ (isset($tab) && $tab == 'my_courses') ? 'active' : '' }}">
+        <a href="{{ route('student.dashboard', ['tab' => 'my_courses']) }}" class="text-decoration-none">
+            {{__('student.my_courses')}}
+        </a>
+    </li>
+    <li class="fs-5 fw-bold {{ (isset($tab) && $tab == 'my_lists') ? 'active' : '' }}">
+        <a href="{{ route('student.dashboard', ['tab' => 'my_lists']) }}" class="text-decoration-none">
+            {{__('student.my_lists')}}
+        </a>
+    </li>
+    <li class="fs-5 fw-bold {{ (isset($tab) && $tab == 'wishlists') ? 'active' : '' }}">
+        <a href="{{ route('student.dashboard', ['tab' => 'wishlists']) }}" class="text-decoration-none">
+            {{__('student.wishlists')}}
+        </a>
+    </li>
+    <li class="fs-5 fw-bold {{ (isset($tab) && $tab == 'certificates') ? 'active' : '' }}">
+        <a href="{{ route('student.dashboard', ['tab' => 'certificates']) }}" class="text-decoration-none">
+            {{__('student.certificates')}}
+        </a>
+    </li>
+    <li class="fs-5 fw-bold {{ (isset($tab) && $tab == 'archived') ? 'active' : '' }}">
+        <a href="{{ route('student.dashboard', ['tab' => 'archived']) }}" class="text-decoration-none">
+            {{__('student.archived_courses')}}
+        </a>
+    </li>
+    <li class="fs-5 fw-bold {{ (isset($tab) && $tab == 'my_tools') ? 'active' : '' }}">
+        <a href="{{ route('student.dashboard', ['tab' => 'my_tools']) }}" class="text-decoration-none">
+            {{__('student.my_tools')}}
+        </a>
+    </li>
 </ul>
 <div class="container">
 
