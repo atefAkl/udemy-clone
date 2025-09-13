@@ -1,60 +1,18 @@
-@extends('layouts.dashboard')
+@extends('layouts.instructor-wide')
 
-@section('title', __('app.view_course'))
+@section('title', __('instructor.view_course'))
 
-@section('sidebar-nav')
-<div class="nav-header">
-    <h6 class="text-muted mb-3">{{ __('app.instructor') }}</h6>
-</div>
-<ul class="nav nav-pills flex-column">
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('instructor.dashboard') }}">
-            <i class="bi bi-speedometer2 {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
-            {{ __('app.dashboard') }}
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link active" href="{{ route('instructor.courses.index') }}">
-            <i class="bi bi-book {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
-            {{ __('app.my_courses') }}
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="#">
-            <i class="bi bi-people {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
-            {{ __('app.students') }}
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="#">
-            <i class="bi bi-bar-chart {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
-            {{ __('app.analytics') }}
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="#">
-            <i class="bi bi-cash-coin {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
-            {{ __('app.earnings') }}
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="#">
-            <i class="bi bi-gear {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
-            {{ __('app.settings') }}
-        </a>
-    </li>
-</ul>
-@endsection
+
 
 @section('content')
 <!-- Breadcrumb -->
 <nav aria-label="breadcrumb" class="mb-4">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">
-            <a href="{{ route('instructor.dashboard') }}">{{ __('app.dashboard') }}</a>
+            <a href="{{ route('instructor.dashboard') }}">{{ __('instructor.dashboard') }}</a>
         </li>
         <li class="breadcrumb-item">
-            <a href="{{ route('instructor.courses.index') }}">{{ __('app.my_courses') }}</a>
+            <a href="{{ route('instructor.courses.index') }}">{{ __('instructor.my_courses') }}</a>
         </li>
         <li class="breadcrumb-item active" aria-current="page">{{ $course->title }}</li>
     </ol>
@@ -74,26 +32,26 @@
                         <h2 class="mb-2">{{ $course->title }}</h2>
                         <p class="text-muted mb-3">{{ $course->description }}</p>
                         <div class="d-flex flex-wrap gap-2 mb-3">
-                            <span class="badge bg-primary">{{ $course->category->name ?? __('app.category') }}</span>
+                            <span class="badge bg-primary">{{ $course->category->name ?? __('instructor.category') }}</span>
                             <span class="badge bg-secondary">{{ ucfirst($course->level) }}</span>
-                            <span class="badge bg-info">{{ $course->duration }} {{ __('app.hours') }}</span>
+                            <span class="badge bg-info">{{ $course->duration }} {{ __('instructor.hours') }}</span>
                             @if($course->status === 'published')
-                            <span class="badge bg-success">{{ __('app.published') }}</span>
+                            <span class="badge bg-success">{{ __('instructor.published') }}</span>
                             @elseif($course->status === 'draft')
-                            <span class="badge bg-warning">{{ __('app.draft') }}</span>
+                            <span class="badge bg-warning">{{ __('instructor.draft') }}</span>
                             @else
-                            <span class="badge bg-secondary">{{ __('app.pending_review') }}</span>
+                            <span class="badge bg-secondary">{{ __('instructor.pending_review') }}</span>
                             @endif
                         </div>
                         <div class="d-flex align-items-center gap-3">
                             <div class="d-flex align-items-center">
-                                <i class="bi bi-star-fill text-warning {{ session('locale', 'ar') === 'ar' ? 'ms-1' : 'me-1' }}"></i>
+                                <i class="fa fa-star-fill text-warning {{ session('locale', 'ar') === 'ar' ? 'ms-1' : 'me-1' }}"></i>
                                 <span class="fw-bold">4.5</span>
-                                <span class="text-muted">({{ $course->enrollments_count }} {{ __('app.students') }})</span>
+                                <span class="text-muted">({{ $course->enrollments_count }} {{ __('instructor.students') }})</span>
                             </div>
                             <div class="text-muted">
-                                <i class="bi bi-play-circle {{ session('locale', 'ar') === 'ar' ? 'ms-1' : 'me-1' }}"></i>
-                                {{ $course->lessons_count }} {{ __('app.lessons') }}
+                                <i class="fa fa-play-circle {{ session('locale', 'ar') === 'ar' ? 'ms-1' : 'me-1' }}"></i>
+                                {{ $course->lessons_count }} {{ __('instructor.lessons') }}
                             </div>
                         </div>
                     </div>
@@ -103,24 +61,24 @@
                                 @if($course->price > 0)
                                 ${{ number_format($course->price, 2) }}
                                 @else
-                                {{ __('app.free') }}
+                                {{ __('instructor.free') }}
                                 @endif
                             </h3>
                         </div>
                         <div class="d-grid gap-2">
                             <a href="{{ route('instructor.courses.edit', $course) }}" class="btn btn-primary">
-                                <i class="bi bi-pencil {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
-                                {{ __('app.edit_course') }}
+                                <i class="fa fa-pencil {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
+                                {{ __('instructor.edit_course') }}
                             </a>
                             @if($course->status === 'draft')
                             <button class="btn btn-success" onclick="publishCourse({{ $course->id }})">
-                                <i class="bi bi-upload {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
-                                {{ __('app.publish_course') }}
+                                <i class="fa fa-upload {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
+                                {{ __('instructor.publish_course') }}
                             </button>
                             @endif
                             <button class="btn btn-outline-danger" onclick="deleteCourse({{ $course->id }})">
-                                <i class="bi bi-trash {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
-                                {{ __('app.delete_course') }}
+                                <i class="fa fa-trash {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
+                                {{ __('instructor.delete_course') }}
                             </button>
                         </div>
                     </div>
@@ -133,46 +91,46 @@
 <!-- Course Statistics -->
 <div class="row mb-4">
     <div class="col-md-3">
-        <div class="card border-0 shadow-sm text-center">
+        <div class="card border-0 shadow-sm text-center" style="height: 10rem;">
             <div class="card-body">
                 <div class="text-primary mb-2">
-                    <i class="bi bi-people fs-1"></i>
+                    <i class="fa fa-users fs-1"></i>
                 </div>
-                <h4 class="mb-1">{{ $course->enrollments_count }}</h4>
-                <p class="text-muted mb-0">{{ __('app.total_students') }}</p>
+                <h4 class="mb-1 fw-bold">{{ $course->enrollments_count ?? 0 }}</h4>
+                <p class="text-muted mb-0">{{ __('instructor.total_students') }}</p>
             </div>
         </div>
     </div>
     <div class="col-md-3">
-        <div class="card border-0 shadow-sm text-center">
+        <div class="card border-0 shadow-sm text-center" style="height: 10rem;">
             <div class="card-body">
                 <div class="text-success mb-2">
-                    <i class="bi bi-cash-coin fs-1"></i>
+                    <i class="fa fa-dollar fs-1"></i>
                 </div>
-                <h4 class="mb-1">${{ number_format($course->enrollments_count * $course->price, 2) }}</h4>
-                <p class="text-muted mb-0">{{ __('app.total_earnings') }}</p>
+                <h4 class="mb-1 fw-bold">${{ number_format($course->enrollments_count ?? 0 * $course->price, 2) }}</h4>
+                <p class="text-muted mb-0">{{ __('instructor.total_earnings') }}</p>
             </div>
         </div>
     </div>
     <div class="col-md-3">
-        <div class="card border-0 shadow-sm text-center">
+        <div class="card border-0 shadow-sm text-center" style="height: 10rem;">
             <div class="card-body">
                 <div class="text-warning mb-2">
-                    <i class="bi bi-star-fill fs-1"></i>
+                    <i class="fa fa-star fs-1"></i>
                 </div>
-                <h4 class="mb-1">4.5</h4>
-                <p class="text-muted mb-0">{{ __('app.average_rating') }}</p>
+                <h4 class="mb-1 fw-bold">4.5</h4>
+                <p class="text-muted mb-0">{{ __('instructor.average_rating') }}</p>
             </div>
         </div>
     </div>
     <div class="col-md-3">
-        <div class="card border-0 shadow-sm text-center">
+        <div class="card border-0 shadow-sm text-center" style="height: 10rem;">
             <div class="card-body">
                 <div class="text-info mb-2">
-                    <i class="bi bi-play-circle fs-1"></i>
+                    <i class="fa fa-play-circle fs-1"></i>
                 </div>
-                <h4 class="mb-1">{{ $course->lessons_count }}</h4>
-                <p class="text-muted mb-0">{{ __('app.lessons') }}</p>
+                <h4 class="mb-1 fw-bold">{{ $course->lessons_count }}</h4>
+                <p class="text-muted mb-0">{{ __('instructor.lessons') }}</p>
             </div>
         </div>
     </div>
@@ -184,20 +142,20 @@
         <ul class="nav nav-tabs card-header-tabs" id="courseTab" role="tablist">
             <li class="nav-item" role="presentation">
                 <button class="nav-link active" id="lessons-tab" data-bs-toggle="tab" data-bs-target="#lessons" type="button" role="tab">
-                    <i class="bi bi-play-circle {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
-                    {{ __('app.lessons') }}
+                    <i class="fa fa-play-circle {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
+                    {{ __('instructor.lessons') }}
                 </button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="students-tab" data-bs-toggle="tab" data-bs-target="#students" type="button" role="tab">
-                    <i class="bi bi-people {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
-                    {{ __('app.students') }}
+                    <i class="fa fa-people {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
+                    {{ __('instructor.students') }}
                 </button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab">
-                    <i class="bi bi-star {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
-                    {{ __('app.reviews') }}
+                    <i class="fa fa-star {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
+                    {{ __('instructor.reviews') }}
                 </button>
             </li>
         </ul>
@@ -207,10 +165,10 @@
             <!-- Lessons Tab -->
             <div class="tab-pane fade show active" id="lessons" role="tabpanel">
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h5 class="mb-0">{{ __('app.course_lessons') }}</h5>
+                    <h5 class="mb-0">{{ __('instructor.course_lessons') }}</h5>
                     <button class="btn btn-primary">
-                        <i class="bi bi-plus {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
-                        {{ __('app.add_lesson') }}
+                        <i class="fa fa-plus {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
+                        {{ __('instructor.add_lesson') }}
                     </button>
                 </div>
 
@@ -228,21 +186,21 @@
                                 <p class="text-muted mb-0">{{ Str::limit($lesson->description, 100) }}</p>
                             </div>
                             <div class="col-md-2">
-                                <small class="text-muted">{{ $lesson->duration }} {{ __('app.minutes') }}</small>
+                                <small class="text-muted">{{ $lesson->duration }} {{ __('instructor.minutes') }}</small>
                             </div>
                             <div class="col-md-2">
                                 <span class="badge bg-{{ $lesson->is_free ? 'success' : 'secondary' }}">
-                                    {{ $lesson->is_free ? __('app.free') : __('app.premium') }}
+                                    {{ $lesson->is_free ? __('instructor.free') : __('instructor.premium') }}
                                 </span>
                             </div>
                             <div class="col-md-1">
                                 <div class="dropdown">
                                     <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="dropdown">
-                                        <i class="bi bi-three-dots-vertical"></i>
+                                        <i class="fa fa-three-dots-vertical"></i>
                                     </button>
                                     <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="#"><i class="bi bi-pencil {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>{{ __('app.edit') }}</a></li>
-                                        <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-trash {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>{{ __('app.delete') }}</a></li>
+                                        <li><a class="dropdown-item" href="#"><i class="fa fa-pencil {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>{{ __('instructor.edit') }}</a></li>
+                                        <li><a class="dropdown-item text-danger" href="#"><i class="fa fa-trash {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>{{ __('instructor.delete') }}</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -251,12 +209,12 @@
                 </div>
                 @empty
                 <div class="text-center py-5">
-                    <i class="bi bi-play-circle text-muted" style="font-size: 4rem;"></i>
-                    <h5 class="text-muted mt-3">{{ __('app.no_lessons_yet') }}</h5>
-                    <p class="text-muted">{{ __('app.start_adding_lessons') }}</p>
+                    <i class="fa fa-play-circle text-muted" style="font-size: 4rem;"></i>
+                    <h5 class="text-muted mt-3">{{ __('instructor.no_lessons_yet') }}</h5>
+                    <p class="text-muted">{{ __('instructor.start_adding_lessons') }}</p>
                     <button class="btn btn-primary">
-                        <i class="bi bi-plus {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
-                        {{ __('app.add_first_lesson') }}
+                        <i class="fa fa-plus {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
+                        {{ __('instructor.add_first_lesson') }}
                     </button>
                 </div>
                 @endforelse
@@ -265,11 +223,11 @@
             <!-- Students Tab -->
             <div class="tab-pane fade" id="students" role="tabpanel">
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h5 class="mb-0">{{ __('app.enrolled_students') }}</h5>
+                    <h5 class="mb-0">{{ __('instructor.enrolled_students') }}</h5>
                     <div class="input-group" style="width: 300px;">
-                        <input type="text" class="form-control" placeholder="{{ __('app.search_students') }}">
+                        <input type="text" class="form-control" placeholder="{{ __('instructor.search_students') }}">
                         <button class="btn btn-outline-secondary">
-                            <i class="bi bi-search"></i>
+                            <i class="fa fa-search"></i>
                         </button>
                     </div>
                 </div>
@@ -286,18 +244,18 @@
                                 <small class="text-muted">{{ $enrollment->user->email }}</small>
                             </div>
                             <div class="col-md-2">
-                                <small class="text-muted">{{ __('app.enrolled') }}: {{ $enrollment->created_at->format('M d, Y') }}</small>
+                                <small class="text-muted">{{ __('instructor.enrolled') }}: {{ $enrollment->created_at->format('M d, Y') }}</small>
                             </div>
                             <div class="col-md-2">
                                 <div class="progress" style="height: 8px;">
                                     <div class="progress-bar" style="width: {{ $enrollment->progress }}%"></div>
                                 </div>
-                                <small class="text-muted">{{ $enrollment->progress }}% {{ __('app.complete') }}</small>
+                                <small class="text-muted">{{ $enrollment->progress }}% {{ __('instructor.complete') }}</small>
                             </div>
                             <div class="col-md-2">
                                 <button class="btn btn-sm btn-outline-primary">
-                                    <i class="bi bi-envelope {{ session('locale', 'ar') === 'ar' ? 'ms-1' : 'me-1' }}"></i>
-                                    {{ __('app.message') }}
+                                    <i class="fa fa-envelope {{ session('locale', 'ar') === 'ar' ? 'ms-1' : 'me-1' }}"></i>
+                                    {{ __('instructor.message') }}
                                 </button>
                             </div>
                         </div>
@@ -305,9 +263,9 @@
                 </div>
                 @empty
                 <div class="text-center py-5">
-                    <i class="bi bi-people text-muted" style="font-size: 4rem;"></i>
-                    <h5 class="text-muted mt-3">{{ __('app.no_students_enrolled') }}</h5>
-                    <p class="text-muted">{{ __('app.promote_course_to_get_students') }}</p>
+                    <i class="fa fa-people text-muted" style="font-size: 4rem;"></i>
+                    <h5 class="text-muted mt-3">{{ __('instructor.no_students_enrolled') }}</h5>
+                    <p class="text-muted">{{ __('instructor.promote_course_to_get_students') }}</p>
                 </div>
                 @endforelse
             </div>
@@ -319,13 +277,13 @@
                         <div class="text-center">
                             <h2 class="text-warning mb-2">4.5</h2>
                             <div class="mb-2">
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-fill text-warning"></i>
-                                <i class="bi bi-star-half text-warning"></i>
+                                <i class="fa fa-star-fill text-warning"></i>
+                                <i class="fa fa-star-fill text-warning"></i>
+                                <i class="fa fa-star-fill text-warning"></i>
+                                <i class="fa fa-star-fill text-warning"></i>
+                                <i class="fa fa-star-half text-warning"></i>
                             </div>
-                            <p class="text-muted">{{ __('app.based_on') }} 25 {{ __('app.reviews') }}</p>
+                            <p class="text-muted">{{ __('instructor.based_on') }} 25 {{ __('instructor.reviews') }}</p>
                         </div>
                     </div>
                     <div class="col-md-8">
@@ -333,7 +291,7 @@
                         <div class="mb-2">
                             <div class="d-flex align-items-center">
                                 <span class="me-2">{{ $i }}</span>
-                                <i class="bi bi-star-fill text-warning me-2"></i>
+                                <i class="fa fa-star-fill text-warning me-2"></i>
                                 <div class="progress flex-grow-1 me-2" style="height: 8px;">
                                     <div class="progress-bar bg-warning" style="width: {{ rand(10, 80) }}%"></div>
                                 </div>
@@ -356,7 +314,7 @@
                                         <h6 class="mb-1">Student Name {{ $i }}</h6>
                                         <div class="mb-1">
                                             @for($j = 1; $j <= 5; $j++)
-                                                <i class="bi bi-star-fill text-warning small"></i>
+                                                <i class="fa fa-star-fill text-warning small"></i>
                                                 @endfor
                                         </div>
                                     </div>
@@ -378,21 +336,21 @@
 <!-- Course Actions -->
 <div class="card border-0 shadow-sm mb-4">
     <div class="card-header bg-white">
-        <h6 class="mb-0">{{ __('app.quick_actions') }}</h6>
+        <h6 class="mb-0">{{ __('instructor.quick_actions') }}</h6>
     </div>
     <div class="card-body">
         <div class="d-grid gap-2">
             <a href="{{ route('instructor.courses.edit', $course) }}" class="btn btn-outline-primary btn-sm">
-                <i class="bi bi-pencil {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
-                {{ __('app.edit_course') }}
+                <i class="fa fa-pencil {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
+                {{ __('instructor.edit_course') }}
             </a>
             <button class="btn btn-outline-success btn-sm">
-                <i class="bi bi-plus {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
-                {{ __('app.add_lesson') }}
+                <i class="fa fa-plus {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
+                {{ __('instructor.add_lesson') }}
             </button>
             <button class="btn btn-outline-info btn-sm">
-                <i class="bi bi-share {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
-                {{ __('app.share_course') }}
+                <i class="fa fa-share {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
+                {{ __('instructor.share_course') }}
             </button>
         </div>
     </div>
@@ -401,12 +359,12 @@
 <!-- Course Performance -->
 <div class="card border-0 shadow-sm mb-4">
     <div class="card-header bg-white">
-        <h6 class="mb-0">{{ __('app.performance') }}</h6>
+        <h6 class="mb-0">{{ __('instructor.performance') }}</h6>
     </div>
     <div class="card-body">
         <div class="mb-3">
             <div class="d-flex justify-content-between align-items-center mb-1">
-                <small class="text-muted">{{ __('app.completion_rate') }}</small>
+                <small class="text-muted">{{ __('instructor.completion_rate') }}</small>
                 <small class="fw-bold">78%</small>
             </div>
             <div class="progress" style="height: 6px;">
@@ -415,7 +373,7 @@
         </div>
         <div class="mb-3">
             <div class="d-flex justify-content-between align-items-center mb-1">
-                <small class="text-muted">{{ __('app.engagement') }}</small>
+                <small class="text-muted">{{ __('instructor.engagement') }}</small>
                 <small class="fw-bold">85%</small>
             </div>
             <div class="progress" style="height: 6px;">
@@ -424,7 +382,7 @@
         </div>
         <div class="mb-0">
             <div class="d-flex justify-content-between align-items-center mb-1">
-                <small class="text-muted">{{ __('app.satisfaction') }}</small>
+                <small class="text-muted">{{ __('instructor.satisfaction') }}</small>
                 <small class="fw-bold">92%</small>
             </div>
             <div class="progress" style="height: 6px;">
@@ -437,13 +395,13 @@
 <!-- Recent Activity -->
 <div class="card border-0 shadow-sm">
     <div class="card-header bg-white">
-        <h6 class="mb-0">{{ __('app.recent_activity') }}</h6>
+        <h6 class="mb-0">{{ __('instructor.recent_activity') }}</h6>
     </div>
     <div class="card-body">
         <div class="activity-item mb-3">
             <div class="d-flex align-items-start">
                 <div class="activity-icon bg-success text-white rounded-circle {{ session('locale', 'ar') === 'ar' ? 'ms-3' : 'me-3' }}" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
-                    <i class="bi bi-person-plus small"></i>
+                    <i class="fa fa-person-plus small"></i>
                 </div>
                 <div class="flex-grow-1">
                     <p class="mb-1 small">New student enrolled</p>
@@ -454,7 +412,7 @@
         <div class="activity-item mb-3">
             <div class="d-flex align-items-start">
                 <div class="activity-icon bg-warning text-white rounded-circle {{ session('locale', 'ar') === 'ar' ? 'ms-3' : 'me-3' }}" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
-                    <i class="bi bi-star small"></i>
+                    <i class="fa fa-star small"></i>
                 </div>
                 <div class="flex-grow-1">
                     <p class="mb-1 small">New 5-star review</p>
@@ -465,7 +423,7 @@
         <div class="activity-item mb-0">
             <div class="d-flex align-items-start">
                 <div class="activity-icon bg-info text-white rounded-circle {{ session('locale', 'ar') === 'ar' ? 'ms-3' : 'me-3' }}" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
-                    <i class="bi bi-check small"></i>
+                    <i class="fa fa-check small"></i>
                 </div>
                 <div class="flex-grow-1">
                     <p class="mb-1 small">Lesson completed</p>
@@ -526,12 +484,12 @@
 
 <script>
     function publishCourse(courseId) {
-        if (confirm('{{ __("app.confirm_publish_course") }}')) {
+        if (confirm('{{ __("instructor.confirm_publish_course") }}')) {
             fetch(`/instructor/courses/${courseId}/publish`, {
                 method: 'PATCH',
                 headers: {
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'instructorlication/json',
                 }
             }).then(response => {
                 if (response.ok) {
@@ -542,7 +500,7 @@
     }
 
     function deleteCourse(courseId) {
-        if (confirm('{{ __("app.delete_course_warning") }}')) {
+        if (confirm('{{ __("instructor.delete_course_warning") }}')) {
             fetch(`/instructor/courses/${courseId}`, {
                 method: 'DELETE',
                 headers: {

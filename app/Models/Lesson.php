@@ -12,35 +12,46 @@ class Lesson extends Model
 
     protected $fillable = [
         'course_id',
-        'module_id',
+        'section_id',
         'title',
         'slug',
         'description',
         'content_type',
-        'content_data',
+        'content',
         'video_url',
         'video_file',
-        'video_duration',
+        'duration',
         'article_content',
         'downloadable_resources',
         'sort_order',
-        'is_free',
+        'is_free_preview',
         'is_published',
-        'estimated_duration',
         'learning_objectives',
         'transcript',
         'notes',
+        'thumbnail',
+        'attachment',
+        'external_url',
+        'extra_data',
     ];
 
     protected $casts = [
-        'is_free' => 'boolean',
+        'is_free_preview' => 'boolean',
         'is_published' => 'boolean',
-        'video_duration' => 'integer',
-        'estimated_duration' => 'integer',
+        'duration' => 'integer',
         'sort_order' => 'integer',
-        'content_data' => 'array',
         'downloadable_resources' => 'array',
         'learning_objectives' => 'array',
+        'extra_data' => 'array',
+    ];
+
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array<int, string>
+     */
+    protected $appends = [
+        'formatted_duration',
     ];
 
     // Content Type Constants
@@ -54,9 +65,20 @@ class Lesson extends Model
     /**
      * Course relationship
      */
+    /**
+     * Get the course that owns the lesson.
+     */
     public function course()
     {
         return $this->belongsTo(Course::class);
+    }
+
+    /**
+     * Get the section that owns the lesson.
+     */
+    public function section()
+    {
+        return $this->belongsTo(Section::class);
     }
 
     /**

@@ -12,11 +12,11 @@ class Course extends Model
 
     protected $fillable = [
         'title',
+        'subtitle',
         'slug',
         'description',
         'short_description',
         'price',
-        'discount_price',
         'instructor_id',
         'category_id',
         'thumbnail',
@@ -30,36 +30,35 @@ class Course extends Model
         'what_you_learn',
         'meta_title',
         'meta_description',
-        // New fields for enhanced course structure
         'launch_date',
         'launch_time',
-        'objectives',
-        'table_of_contents',
         'has_certificate',
         'access_duration_type',
         'access_duration_value',
-        'target_level',
+        'access_duration_unit'
     ];
 
     protected $casts = [
-        'price' => 'decimal:2',
-        // No discount, there's coupons to manage discounts
-        'discount_price' => 'decimal:2',
-        'is_featured' => 'boolean',
-        'requirements' => 'array',
-        'what_you_learn' => 'array',
+        'price'                 => 'decimal:2',
+        'duration'              => 'decimal:1',
+        'is_featured'           => 'boolean',
+        'has_certificate'       => 'boolean',
+        'requirements'          => 'array',
+        'what_you_learn'        => 'array',
+        'launch_date'           => 'date',
+        'access_duration_value' => 'integer',
     ];
 
     // Course Status Constants
-    const STATUS_DRAFT = 'draft';
-    const STATUS_PENDING = 'pending';
-    const STATUS_PUBLISHED = 'published';
-    const STATUS_REJECTED = 'rejected';
+    const STATUS_DRAFT          = 'draft';
+    const STATUS_PENDING        = 'pending';
+    const STATUS_PUBLISHED      = 'published';
+    const STATUS_REJECTED       = 'rejected';
 
     // Course Level Constants
-    const LEVEL_BEGINNER = 'beginner';
-    const LEVEL_INTERMEDIATE = 'intermediate';
-    const LEVEL_ADVANCED = 'advanced';
+    const LEVEL_BEGINNER        = 'beginner';
+    const LEVEL_INTERMEDIATE    = 'intermediate';
+    const LEVEL_ADVANCED        = 'advanced';
 
     /**
      * Instructor relationship
@@ -79,6 +78,17 @@ class Course extends Model
 
     /**
      * Lessons relationship
+     */
+    /**
+     * Get the sections for the course.
+     */
+    public function sections()
+    {
+        return $this->hasMany(Section::class)->orderBy('sort_order');
+    }
+
+    /**
+     * Get the lessons for the course.
      */
     public function lessons()
     {

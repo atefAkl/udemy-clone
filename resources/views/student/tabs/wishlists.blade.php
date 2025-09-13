@@ -58,8 +58,8 @@
                                 <div class="d-grid gap-2">
                                     <a href="{{ route('courses.show', $course) }}" class="btn btn-primary">{{ __('student.view_course') }}</a>
                                     <div class="btn-group" role="group">
-                                        <button class="btn btn-success btn-sm" onclick="enrollCourse({{ $course->id }})">{{ __('student.enroll_now') }}</button>
-                                        <button class="btn btn-outline-danger btn-sm" onclick="removeFromWishlist({{ $course->id }})">
+                                        <button class="btn btn-success btn-sm" data-id="{{ $course->id }}" onclick="enrollCourse(this.dataset.id)">{{ __('student.enroll_now') }}</button>
+                                        <button class="btn btn-outline-danger btn-sm" data-id="{{ $course->id }}" onclick="removeFromWishlist(this.dataset.id)">
                                             <i class="fas fa-heart-broken"></i>
                                         </button>
                                     </div>

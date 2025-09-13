@@ -6,6 +6,12 @@
     text-decoration: none
 }
 
+a i.fa:not(:only-child),
+button i.fa:not(:only-child),
+* i.fa:not(:only-child) {
+    margin-inline-end: 0.5rem;
+}
+
 .form-control,
 .input-group-text,
 .form-select {
@@ -43,6 +49,8 @@ main {
 
 #myProfileTabs {
     box-shadow: 0 0 7px 2px #ccc;
+    min-height: 80vh;
+    background-color: #efefef;
 }
 
 #myProfileTabs div.navs a {
@@ -50,6 +58,7 @@ main {
     margin-inline-start: 5px;
     font-size: 1rem;
     font-weight: bold;
+    border-radius: 0;
     border-start-start-radius: 1rem;
     border-end-start-radius: 1rem;
     ;

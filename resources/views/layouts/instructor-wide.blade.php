@@ -18,10 +18,10 @@
 
     <!-- Cairo Font for Arabic -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link href="{{ asset('css/admin.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/instructor.css') }}" rel="stylesheet">
 </head>
 
-<body>
+<body class="p-0">
     <!-- Sidebar Toggle Button (Mobile) -->
     <button class="sidebar-toggle" id="sidebarToggle">
         <i class="fas fa-bars"></i>
@@ -32,15 +32,11 @@
         <i class="fas fa-th-list"></i>
     </button>
 
-    <!-- Sidebar -->
-    @include('includes.instructor-sidebar')
-    <!-- End of sidebar -->
-
     <!-- Main Content -->
-    <div class="dashboard-main w-100 mx-0" id="dashboardMain">
+    <div class="dashboard-main mx-0" id="dashboardMain">
         <!-- Header -->
-        <div class="dashboard-header px-4 py-3  bg-dark w-100">
-            <div class="container d-flex justify-content-between align-items-center">
+        <div class=" dashboard-header w-100 bg-dark">
+            <div class="container d-flex px-4 py-3 justify-content-between align-items-center">
                 <div>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb mb-0 small">
@@ -62,11 +58,43 @@
                         </button>
                     </form>
                 </div>
+
+                <!-- Instructor Links -->
+                <ul class="navbar-nav ms-auto d-flex flex-row gap-2 align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" title="{{ __('student.my_enrollments') }}"><i class="fa-solid fa-list"></i></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" title="{{ __('student.wishlist') }}"><i class="fa-solid fa-heart"></i></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" title="{{ __('student.cart') }}"><i class="fa-solid fa-cart-shopping"></i></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" title="{{ __('student.notifications') }}"><i class="fa-solid fa-bell"></i></a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa-solid fa-user-circle"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                            <form action="{{ route('logout') }}" method="POST" id="logout-form">
+                                @csrf
+                                <li><a class="dropdown-item" href="{{ route('instructor.dashboard') }}">{{ __('instructor.profile') }}</a></li>
+                                <li><a class="dropdown-item" href="{{ route('instructor.settings') }}">{{ __('instructor.settings') }}</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><button class="dropdown-item" type="submit">{{ __('instructor.logout') }}</button></li>
+                            </form>
+                        </ul>
+                    </li>
+                </ul>
             </div>
         </div>
 
         <!-- Content -->
-        <div class="p-4">
+        <div class="container p-4">
             <!-- Flash Messages -->
             @if(session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -88,13 +116,10 @@
         </div>
     </div>
 
-    <!-- Widgets Sidebar -->
-    <div class="widgets-sidebar shadow" id="widgetsSidebar" style="top: 80px;">
-        @yield('widgets')
-    </div>
-
     <!-- Mobile Overlay -->
-    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <div class="sidebar-overlay" id="sidebarOverlay">
+
+    </div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

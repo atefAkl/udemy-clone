@@ -45,7 +45,7 @@
                             <div class="row">
                                 @foreach($list->courses->take(3) as $course)
                                 <div class="col-4">
-                                    <div class="card-img-small mb-2" style="height: 60px; background-image: url('{{ asset('storage/' . $course->thumbnail) }}'); background-size: cover; background-position: center; border-radius: 4px;"></div>
+                                    <div class="card-img-small mb-2" data-url="{{ asset('storage/' . $course->thumbnail) }}" style="height: 60px; background-image: url(attr('data-url')); background-size: cover; background-position: center; border-radius: 4px;"></div>
                                 </div>
                                 @endforeach
                             </div>

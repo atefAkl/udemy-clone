@@ -1,23 +1,4 @@
-<div class="dashboard-sidebar" id="dashboardSidebar">
-    <!-- Brand -->
-    <div class="sidebar-brand bg-secondary">
-        <h5 class="text-white">
-            <i class="fas fa-graduation-cap" style="margin-inline-end: 10px;"></i>
-            {{ __('app.app_name') }}
-        </h5>
-        <small class="opacity-75 text-white">Instructor Dashboard</small>
-    </div>
-
-    <!-- User Info -->
-    <div class="sidebar-user">
-        <div class="d-flex align-items-center">
-            <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=007bff&color=fff" alt="{{ Auth::user()->name }}">
-            <div>
-                <div class="fw-semibold">{{ Auth::user()->name }}</div>
-                <small class="text-muted">{{ ucfirst(Auth::user()->role) }}</small>
-            </div>
-        </div>
-    </div>
+<div class="dashboard-sidebar" id="dashboardSidebar" style="top: 85px;">
 
     <!-- Navigation -->
     <div class="sidebar-header">

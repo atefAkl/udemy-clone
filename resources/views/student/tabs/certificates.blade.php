@@ -90,9 +90,9 @@
                                             <span class="visually-hidden">{{ __('student.more_options') }}</span>
                                         </button>
                                         <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" href="#" onclick="shareCertificate({{ $certificate->id }})">{{ __('student.share_certificate') }}</a></li>
-                                            <li><a class="dropdown-item" href="#" onclick="verifyCertificate('{{ $certificate->certificate_number }}')">{{ __('student.verify_certificate') }}</a></li>
-                                            <li><a class="dropdown-item" href="#" onclick="addToLinkedIn({{ $certificate->id }})">{{ __('student.add_to_linkedin') }}</a></li>
+                                            <li><a class="dropdown-item" data-id="{{ $certificate->id }}" href="#" onclick="shareCertificate(this.dataset.id)">{{ __('student.share_certificate') }}</a></li>
+                                            <li><a class="dropdown-item" data-number="{{ $certificate->certificate_number }}" href="#" onclick="verifyCertificate(this.datasetnumber)">{{ __('student.verify_certificate') }}</a></li>
+                                            <li><a class="dropdown-item" data-id="{{ $certificate->id }}" href="#" onclick="addToLinkedIn(this.dataset.id)">{{ __('student.add_to_linkedin') }}</a></li>
                                             <li>
                                                 <hr class="dropdown-divider">
                                             </li>

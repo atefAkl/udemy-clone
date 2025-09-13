@@ -110,7 +110,7 @@ return [
 
     // Profile Tab Keys
     'account'                       => 'الحساب',
-    'profile_info'                  => 'معلومات الملف الشخصي',
+    'profile_info'                  => 'الملف الشخصي',
     'credit'                        => 'الرصيد',
     'badges'                        => 'الشارات',
     'account_info'                  => 'معلومات الحساب',

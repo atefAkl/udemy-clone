@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\Instructor\InstructorController;
+use App\Http\Controllers\Instructor\SectionController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\Student\StudentController;
@@ -134,54 +135,54 @@ Route::prefix('student')->name('student.')->middleware('auth', 'role:student')->
     // Student Tools Routes
     Route::get('/notes', [StudentToolsController::class, 'notes'])
         ->name('notes');
-    
+
     Route::get('/calendar', [StudentToolsController::class, 'calendar'])
         ->name('calendar');
-    
+
     Route::get('/assessments', [StudentToolsController::class, 'assessments'])
         ->name('assessments');
-    
+
     Route::get('/progress-tracker', [StudentToolsController::class, 'progressTracker'])
         ->name('progress.tracker');
-    
+
     Route::get('/study-planner', [StudentToolsController::class, 'studyPlanner'])
         ->name('study.planner');
-    
+
     Route::get('/discussion-forums', [StudentToolsController::class, 'discussionForums'])
         ->name('discussion.forums');
-    
+
     Route::get('/discussions', [StudentToolsController::class, 'discussions'])
         ->name('discussions');
-    
+
     Route::get('/downloads', [StudentToolsController::class, 'downloads'])
         ->name('downloads');
-    
+
     Route::get('/statistics', [StudentToolsController::class, 'statistics'])
         ->name('statistics');
-    
+
     Route::get('/study-groups', [StudentToolsController::class, 'studyGroups'])
         ->name('study-groups');
-    
+
     Route::get('/quick-review', [StudentToolsController::class, 'quickReview'])
         ->name('quick-review');
-    
+
     Route::get('/goals', [StudentToolsController::class, 'goals'])
         ->name('goals');
-    
+
     Route::get('/reports', [StudentToolsController::class, 'reports'])
         ->name('reports');
 
     // Certificate Routes
     Route::get('/certificate/{certificate}/download', [StudentCertificateController::class, 'download'])
         ->name('certificate.download');
-    
+
     Route::get('/certificate/{certificate}/share', [StudentCertificateController::class, 'share'])
         ->name('certificate.share');
 
     // Wishlist Routes
     Route::post('/wishlist/add/{course}', [StudentWishlistController::class, 'add'])
         ->name('wishlist.add');
-    
+
     Route::delete('/wishlist/remove/{course}', [StudentWishlistController::class, 'remove'])
         ->name('wishlist.remove');
 
@@ -202,11 +203,28 @@ Route::prefix('student')->name('student.')->middleware('auth', 'role:student')->
 // Instructor Routes
 Route::prefix('instructor')->name('instructor.')->middleware(['auth', 'role:instructor'])->group(function () {
     Route::get('/dashboard', [InstructorController::class, 'dashboard'])->name('dashboard');
+    Route::get('/settings', [InstructorController::class, 'settings'])->name('settings');
 
     // Course Management
     Route::prefix('courses')->name('courses.')->group(function () {
+        // Section Management
+        Route::get('{course}/sections', [SectionController::class, 'index'])
+            ->name('sections.index');
+        Route::get('{course}/sections/create', [SectionController::class, 'create'])
+            ->name('sections.create');
+        Route::post('{course}/sections', [SectionController::class, 'store'])
+            ->name('sections.store');
+        Route::get('{course}/sections/{section}', [SectionController::class, 'show'])
+            ->name('sections.show');
+        Route::get('{course}/sections/{section}/edit', [SectionController::class, 'edit'])
+            ->name('sections.edit');
+        Route::put('{course}/sections/{section}', [SectionController::class, 'update'])
+            ->name('sections.update');
+        Route::delete('{course}/sections/{section}', [SectionController::class, 'destroy'])
+            ->name('sections.destroy');
         Route::get('/', [InstructorController::class, 'courses'])->name('index');
         Route::get('/create', [InstructorController::class, 'createCourse'])->name('create');
+        Route::get('/create/wide', [InstructorController::class, 'createCourseWide'])->name('create.wide');
         Route::post('/', [InstructorController::class, 'storeCourse'])->name('store');
         Route::get('/{course}', [InstructorController::class, 'showCourse'])->name('show');
         Route::get('/{course}/edit', [InstructorController::class, 'editCourse'])->name('edit');

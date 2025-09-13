@@ -60,7 +60,7 @@
                                     <small class="text-muted">{{ $enrollment->progress ?? 0 }}%</small>
                                 </div>
                                 <div class="progress" style="height: 8px;">
-                                    <div class="progress-bar bg-secondary" role="progressbar" style="width: {{ $enrollment->progress ?? 0 }}%"></div>
+                                    <div class="progress-bar bg-secondary" role="progressbar" style="width: @php echo $enrollment->progress ?? 0 . '%' @endphp"></div>
                                 </div>
                             </div>
 
@@ -88,12 +88,12 @@
                                             <span class="visually-hidden">{{ __('student.more_options') }}</span>
                                         </button>
                                         <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" href="#" onclick="downloadProgress({{ $enrollment->course->id }})">{{ __('student.download_progress') }}</a></li>
-                                            <li><a class="dropdown-item" href="#" onclick="exportNotes({{ $enrollment->course->id }})">{{ __('student.export_notes') }}</a></li>
+                                            <li><a class="dropdown-item" data-id="{{ $enrollment->course->id }}" href="#" onclick="downloadProgress(this.dataset.id)">{{ __('student.download_progress') }}</a></li>
+                                            <li><a class="dropdown-item" data-id="{{ $enrollment->course->id }}" href="#" onclick="exportNotes(this.dataset.id)">{{ __('student.export_notes') }}</a></li>
                                             <li>
                                                 <hr class="dropdown-divider">
                                             </li>
-                                            <li><a class="dropdown-item text-danger" href="#" onclick="permanentDelete({{ $enrollment->course->id }})">{{ __('student.delete_permanently') }}</a></li>
+                                            <li><a class="dropdown-item text-danger" data-id="{{ $enrollment->course->id }}" href="#" onclick="permanentDelete(this.dataset.id)">{{ __('student.delete_permanently') }}</a></li>
                                         </ul>
                                     </div>
                                 </div>
