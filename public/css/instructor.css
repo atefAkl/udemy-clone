@@ -1,5 +1,26 @@
 #dashboardMain.dashboard-main {
     padding: 0;
+
+}
+
+#dashboardMain .dashboard-header {
+    background-color: #e4e4e4;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+#dashboardMain .dashboard-header {
+    background-color: #e4e4e4;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.form-control:focus {
+    box-shadow: none;
 }
 
 * i.fa:first-child,

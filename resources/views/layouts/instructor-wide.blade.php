@@ -35,7 +35,7 @@
     <!-- Main Content -->
     <div class="dashboard-main mx-0" id="dashboardMain">
         <!-- Header -->
-        <div class=" dashboard-header w-100 bg-dark">
+        <div class=" dashboard-header w-100">
             <div class="container d-flex px-4 py-3 justify-content-between align-items-center">
                 <div>
                     <nav aria-label="breadcrumb">
@@ -176,8 +176,13 @@
                 widgets.classList.add('collapsed');
             }
         });
-    </script>
 
+        // Initialize Bootstrap tooltips
+        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(function(tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    </script>
     @stack('scripts')
 </body>
 
