@@ -24,6 +24,7 @@ class Course extends Model
         'level',
         'language',
         'duration',
+        'discount_price',
         'status',
         'is_featured',
         'requirements',

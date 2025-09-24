@@ -157,31 +157,78 @@ class InstructorController extends Controller
     {
         $this->authorize('update', $course);
 
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'subtitle' => 'nullable|string|max:120',
-            'short_description' => 'required|string|max:160',
-            'description' => 'required|string',
-            'category_id' => 'required|exists:categories,id',
-            'level' => 'required|in:beginner,intermediate,advanced,all_levels',
-            'language' => 'required|string|in:ar,en',
-            'price' => 'required|numeric|min:0',
-            'duration' => 'required|numeric|min:0.5',
-            'access_duration_value' => 'required|integer|min:1',
-            'access_duration_unit' => 'required|in:days,weeks,months,years',
-            'launch_date' => 'nullable|date',
-            'launch_time' => 'nullable|date_format:H:i',
-            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg|max:5120', // 5MB max
-            'preview_video' => 'nullable|mimes:mp4,mov,avi|max:102400', // 100MB max
-            'requirements' => 'nullable|array',
-            'requirements.*' => 'string|max:255',
-            'what_you_learn' => 'nullable|array',
-            'what_you_learn.*' => 'string|max:255',
-            'has_certificate' => 'boolean',
-            'remove_thumbnail' => 'boolean',
-            'remove_preview_video' => 'boolean'
-        ]);
+        $isPatch = $request->isMethod('patch') || $request->expectsJson();
 
+        // Validation rules
+        $rules = [
+            'title' => ($isPatch ? 'sometimes' : 'required') . '|string|max:255',
+            'subtitle' => 'sometimes|nullable|string|max:120',
+            'short_description' => ($isPatch ? 'sometimes' : 'required') . '|string|max:160',
+            'description' => ($isPatch ? 'sometimes' : 'required') . '|string',
+            'category_id' => ($isPatch ? 'sometimes' : 'required') . '|exists:categories,id',
+            'level' => ($isPatch ? 'sometimes' : 'required') . '|in:beginner,intermediate,advanced,all_levels',
+            'language' => ($isPatch ? 'sometimes' : 'required') . '|string|in:ar,en',
+            'price' => ($isPatch ? 'sometimes' : 'required') . '|numeric|min:0',
+            'duration' => ($isPatch ? 'sometimes' : 'required') . '|numeric|min:0.5',
+            'access_duration_value' => ($isPatch ? 'sometimes' : 'required') . '|integer|min:1',
+            'access_duration_unit' => ($isPatch ? 'sometimes' : 'required') . '|in:days,weeks,months,years',
+            'launch_date' => 'sometimes|nullable|date',
+            'launch_time' => 'sometimes|nullable|date_format:H:i',
+            'thumbnail' => 'sometimes|nullable|image|mimes:jpeg,png,jpg|max:5120', // 5MB max
+            'preview_video' => 'sometimes|nullable|mimes:mp4,mov,avi|max:102400', // 100MB max
+            'requirements' => 'sometimes|nullable|array',
+            'requirements.*' => 'string|max:255',
+            'what_you_learn' => 'sometimes|nullable|array',
+            'what_you_learn.*' => 'string|max:255',
+            'has_certificate' => 'sometimes|boolean',
+            'remove_thumbnail' => 'sometimes|boolean',
+            'remove_preview_video' => 'sometimes|boolean',
+        ];
+
+        $validated = $request->validate($rules);
+
+        // If PATCH/JSON: update only provided fields
+        if ($isPatch) {
+            $updates = [];
+
+            if ($request->has('title')) {
+                $updates['title'] = $validated['title'];
+                $updates['slug'] = Str::slug($validated['title']);
+            }
+            foreach ([
+                'subtitle', 'short_description', 'description', 'category_id', 'level', 'language',
+                'price', 'duration', 'access_duration_value', 'access_duration_unit',
+                'launch_date', 'launch_time', 'requirements', 'what_you_learn'
+            ] as $field) {
+                if ($request->has($field)) {
+                    $updates[$field] = $validated[$field] ?? ($request->input($field) ?? null);
+                }
+            }
+            if ($request->has('has_certificate')) {
+                $updates['has_certificate'] = (bool) $validated['has_certificate'];
+            }
+
+            // Derive access_duration_type if access_duration_value provided
+            if (array_key_exists('access_duration_value', $updates)) {
+                $value = (int) $updates['access_duration_value'];
+                $updates['access_duration_type'] = $value > 0 ? 'limited' : 'unlimited';
+            }
+
+            if (!empty($updates)) {
+                $course->fill($updates);
+            }
+
+            // No file operations in autosave (frontend excludes files)
+            $course->save();
+
+            return response()->json([
+                'success' => true,
+                'course_id' => $course->id,
+                'updated' => array_keys($updates),
+            ]);
+        }
+
+        // PUT: full update flow
         // Update basic course info
         $course->fill([
             'title' => $validated['title'],

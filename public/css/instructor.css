@@ -3,6 +3,7 @@
 
 }
 
+/* Dashboard header (fixed) */
 #dashboardMain .dashboard-header {
     background-color: #e4e4e4;
     position: fixed;
@@ -11,12 +12,11 @@
     z-index: 1000;
 }
 
-#dashboardMain .dashboard-header {
-    background-color: #e4e4e4;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 1000;
+/* Define a header height variable to be used by panes */
+#dashboardMain {
+    --header-height: 64px;
+    margin-bottom: calc(var(--header-height) + 1rem);
+    /* adjust if header height changes */
 }
 
 .form-control:focus {
@@ -1042,4 +1042,65 @@ legend a {
         background-color: #2d3748;
         border-color: #4a5568;
     }
+}
+
+/* Two-pane course editor layout */
+.course-editor-wrapper {
+    position: relative;
+}
+
+.course-pane-left {
+    position: fixed;
+    inset-inline-start: 0;
+    /* left in LTR, right in RTL */
+    top: calc(var(--header-height) + 1rem);
+    width: 50%;
+    height: calc(100vh - var(--header-height));
+    overflow: auto;
+    padding: 1rem;
+    background: transparent;
+}
+
+.course-pane-right {
+    position: fixed;
+    inset-inline-end: 0;
+    /* right in LTR, left in RTL */
+    top: var(--header-height);
+    width: 50%;
+    height: calc(100vh - var(--header-height));
+    overflow: auto;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-inline-start: 1px solid rgba(0, 0, 0, 0.075);
+}
+
+/* Nice card look for preview panel */
+.course-preview-card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+    background: #fff;
+}
+
+/* Responsive: stack panes on small screens */
+@media (max-width: 991.98px) {
+
+    .course-pane-left,
+    .course-pane-right {
+        position: static;
+        width: 100%;
+        height: auto;
+        overflow: visible;
+        padding: 0.75rem 0;
+    }
+
+    .course-pane-right {
+        border-inline-start: 0;
+        background: transparent;
+    }
+}
+
+/* Utility: floating label adjustments for tall textareas if used */
+.form-floating textarea.form-control {
+    min-height: 130px;
 }

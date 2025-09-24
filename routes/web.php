@@ -229,6 +229,8 @@ Route::prefix('instructor')->name('instructor.')->middleware(['auth', 'role:inst
         Route::get('/{course}', [InstructorController::class, 'showCourse'])->name('show');
         Route::get('/{course}/edit', [InstructorController::class, 'editCourse'])->name('edit');
         Route::put('/{course}', [InstructorController::class, 'updateCourse'])->name('update');
+        // Support JSON partial updates (autosave)
+        Route::patch('/{course}', [InstructorController::class, 'updateCourse'])->name('update.patch');
         Route::delete('/{course}', [InstructorController::class, 'deleteCourse'])->name('delete');
         Route::patch('/{course}/publish', [InstructorController::class, 'publishCourse'])->name('publish');
     });
