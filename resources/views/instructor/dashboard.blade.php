@@ -43,7 +43,7 @@
 
 
 @section('content')
-<div class="container px-4">
+<div class="container mt-5 pt-3 px-4">
     <!-- Welcome Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
@@ -170,109 +170,106 @@
     <div class="row g-4">
         <!-- Recent Courses -->
         <div class="col-lg-8">
-            <div class="card border-0 shadow-sm h-100  overflow-auto">
-                <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center py-3">
-                    <h6 class="mb-0 fw-bold">{{ __('instructor.recent_courses') }}</h6>
-                    <a href="{{ route('instructor.courses.index') }}" class="btn btn-sm btn-outline-primary">
-                        {{ __('instructor.view_all') }}
-                    </a>
-                </div>
-                <div class="card-body p-0 overflow-auto">
-                    <div class="table-responsive">
-                        <table class="table table-hover mb-0">
-                            <thead class="bg-light">
-                                <tr>
-                                    <th>{{ __('instructor.course') }}</th>
-                                    <th>{{ __('instructor.students') }}</th>
-                                    <th>{{ __('instructor.rating') }}</th>
-                                    <th>{{ __('instructor.status') }}</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody class="">
-                                @foreach($recentCourses ?? [] as $course)
-                                <tr>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <img src="{{ $course['thumbnail'] ?? 'https://via.placeholder.com/60' }}"
-                                                alt="{{ $course['title'] }}"
-                                                class="rounded me-3"
-                                                width="40" height="40" style="object-fit: cover;">
-                                            <div>
-                                                <h6 class="mb-0">{{ $course->title }}</h6>
-                                                <small class="text-muted">{{ $course->category->name ?? 'Uncategorized' }}</small>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>{{ $course->students->count() ?? 0 }}</td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <span class="text-warning me-1">
-                                                @for($i = 1; $i <= 5; $i++)
-                                                    @if($i <=($course['rating'] ?? 0))
-                                                    <i class="fas fa-star"></i>
-                                                    @elseif($i - 0.5 <= ($course['rating'] ?? 0))
-                                                        <i class="fas fa-star-half-alt"></i>
-                                                        @else
-                                                        <i class="far fa-star"></i>
-                                                        @endif
-                                                        @endfor
-                                            </span>
-                                            <small class="text-muted">({{ $course['reviews'] ?? 0 }})</small>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        @php
-                                        $statusClass = [
-                                        'published' => 'success',
-                                        'draft' => 'secondary',
-                                        'pending' => 'warning',
-                                        'rejected' => 'danger'
-                                        ][$course['status'] ?? 'draft'] ?? 'secondary';
-                                        @endphp
-                                        <span class="badge bg-{{ $statusClass }}">
-                                            {{ ucfirst($course['status'] ?? 'draft') }}
-                                        </span>
-                                    </td>
-                                    <td class="text-end">
-                                        <div class="dropdown">
-                                            <button class="btn btn-sm btn-link text-muted" type="button"
-                                                id="courseDropdown{{ $loop->index }}"
-                                                data-bs-toggle="dropdown"
-                                                aria-expanded="false">
-                                                <i class="fas fa-ellipsis-v"></i>
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-end"
-                                                aria-labelledby="courseDropdown{{ $loop->index }}">
-                                                <li>
-                                                    <a class="dropdown-item" href="#">
-                                                        <i class="fas fa-eye me-2"></i>{{ __('instructor.view') }}
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item" href="{{ route('instructor.courses.edit', $course->id) }}">
-                                                        <i class="fas fa-edit me-2"></i>{{ __('instructor.edit') }}
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <hr class="dropdown-divider">
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item text-danger" href="#">
-                                                        <i class="fas fa-trash-alt me-2"></i>{{ __('instructor.delete') }}
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
 
-                </div>
+            <div class="px-3 bg-white border-0 d-flex justify-content-between align-items-center py-1">
+                <h6 class="mb-0 fw-bold">{{ __('instructor.recent_courses') }}</h6>
+                <a href="{{ route('instructor.courses.index') }}" class="btn btn-sm btn-outline-primary">
+                    {{ __('instructor.view_all') }}
+                </a>
             </div>
+
+            <table class="table mb-0" style="overflow: show;">
+                <thead class="bg-light">
+                    <tr style="text-align: center">
+                        <th>{{ __('instructor.course') }}</th>
+                        <th>{{ __('instructor.students') }}</th>
+                        <th>{{ __('instructor.rating') }}</th>
+                        <th>{{ __('instructor.status') }}</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody class="" style="overflow: show;">
+                    @foreach($recentCourses ?? [] as $course)
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <img src="{{ $course['thumbnail'] ?? 'https://via.placeholder.com/60' }}"
+                                    alt="{{ $course['title'] }}"
+                                    class="rounded me-3"
+                                    width="40" height="40" style="object-fit: cover;">
+                                <div>
+                                    <h6 class="mb-0">{{ $course->title }}</h6>
+                                    <small class="text-muted">{{ $course->category->name ?? 'Uncategorized' }}</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>{{ $course->students->count() ?? 0 }}</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <span class="text-warning me-1">
+                                    @for($i = 1; $i <= 5; $i++)
+                                        @if($i <=($course['rating'] ?? 0))
+                                        <i class="fas fa-star"></i>
+                                        @elseif($i - 0.5 <= ($course['rating'] ?? 0))
+                                            <i class="fas fa-star-half-alt"></i>
+                                            @else
+                                            <i class="far fa-star"></i>
+                                            @endif
+                                            @endfor
+                                </span>
+                                <small class="text-muted">({{ $course['reviews'] ?? 0 }})</small>
+                            </div>
+                        </td>
+                        <td>
+                            @php
+                            $statusClass = [
+                            'published' => 'success',
+                            'draft' => 'secondary',
+                            'pending' => 'warning',
+                            'rejected' => 'danger'
+                            ][$course['status'] ?? 'draft'] ?? 'secondary';
+                            @endphp
+                            <span class="badge bg-{{ $statusClass }}">
+                                {{ ucfirst($course['status'] ?? 'draft') }}
+                            </span>
+                        </td>
+                        <td class="text-end">
+                            <div class="dropdown">
+                                <button class="btn btn-sm btn-link text-muted" type="button"
+                                    id="courseDropdown{{ $loop->index }}"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end"
+                                    aria-labelledby="courseDropdown{{ $loop->index }}">
+                                    <li>
+                                        <a class="dropdown-item" href="#">
+                                            <i class="fas fa-eye me-2"></i>{{ __('instructor.view') }}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('instructor.courses.edit', $course->id) }}">
+                                            <i class="fas fa-edit me-2"></i>{{ __('instructor.edit') }}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item text-danger" href="#">
+                                            <i class="fas fa-trash-alt me-2"></i>{{ __('instructor.delete') }}
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+
+
         </div>
     </div>
 
