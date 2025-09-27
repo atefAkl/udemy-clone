@@ -121,6 +121,8 @@
 
     </div>
 
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -160,10 +162,12 @@
             // Handle window resize
             window.addEventListener('resize', function() {
                 if (window.innerWidth >= 768) {
-                    sidebar.classList.remove('collapsed');
-                    sidebarOverlay.classList.remove('show');
+                    if (sidebar != null && sidebarOverlay != null) {
+                        sidebar.classList.remove('collapsed');
+                        sidebarOverlay.classList.remove('show');
+                    }
                 }
-                if (window.innerWidth >= 1200) {
+                if (window.innerWidth >= 1200 && widgets != null) {
                     widgets.classList.remove('collapsed');
                 }
             });
