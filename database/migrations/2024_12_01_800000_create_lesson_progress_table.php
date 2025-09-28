@@ -20,6 +20,7 @@ return new class extends Migration
             $table->json('progress_data')->nullable();
             $table->timestamp('last_accessed_at')->nullable();
             $table->timestamps();
+            $table->engine = 'InnoDB';
 
             $table->unique(['user_id', 'lesson_id']);
             $table->index(['user_id', 'is_completed']);

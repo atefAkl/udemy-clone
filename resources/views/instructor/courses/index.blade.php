@@ -1,4 +1,4 @@
-@extends('layouts.dashboard-wide')
+@extends('layouts.instructor-wide')
 
 @section('title', __('instructor.my_courses'))
 

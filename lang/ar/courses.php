@@ -2,6 +2,7 @@
 
 return [
     // Tiltes & Headings
+    'edit_course_main_heading' => 'ادارة / تعديل محتوى الدورة',
     'explore_courses_title' => 'استكشف الدورات',
     'explore_courses_description' => 'اكتشف آلاف الدورات من المدربين المختصين',
     // Course Management
@@ -101,6 +102,8 @@ return [
     // Course Messages
     'no_courses_found' => 'لم يتم العثور على دورات',
     'no_enrollments' => 'لا يوجد دورات مسجل بها حتى الأن',
+    'no_sections_yet' => 'لا توجد أقسام بعد',
+    'click_add_section_to_start' => 'انقر على زر "إضافة قسم" لبدء بناء منهجك الدراسي.',
     'see_more_courses' => 'بادر بالاطلاع على دوراتنا، واحجز دورتك المفضلة مع أمهر المدرسين لدينا من هنا',
     'view_courses' => 'قائمة الدورات',
     'start_creating_courses' => 'ابدأ في إنشاء دوراتك الأولى',
@@ -165,21 +168,61 @@ return [
     'total_courses' => 'إجمالي الدورات',
     'published_courses' => 'الدورات المنشورة',
 
+    // Side nav 
+    'sidenav' => [
+        'plan_your_course' => 'التخطيط للدورة',
+        'intended_learners' => 'الطلاب المستهدفون',
+        'course_layout' => 'تخطيط الدورة',
+        'setup_test_video' => 'إعداد و اختبار الفيديو',
+        'create_your_content' => 'إنشاء محتوىك',
+        'snap_edit' => 'التقط وعدل',
+        'curriculum' => 'المنهج',
+        'captions' => 'التعليق',
+        'accessibility' => 'امانية الوصول',
+        'publish_your_course' => 'نشر الدورة',
+        'landing_page' => 'الصفحة الرئيسية',
+        'pricing' => 'التسعير',
+        'promotion' => 'الترويج',
+        'course_messages' => 'رسائل الدورة',
+    ],
+
+    // Intended Learners Section
+    'intended_learners_paragraph' => 'الوصف التالي سيتم عرضه على صفحة دخول الدورة الخاصة بك و سيعمل على تأثير مباشر على أداء الدورة. هذه التفاصيل ستساعد الطلاب في اتخاذ قرار إذا كانت الدورة مناسبة لهم.',
+
+    // What are the requirements or prerequisites for taking your course?
+    'intended_learners_section_one_question' => 'ما هي المتطلبات أو المتطلبات الأساسية لأخذ الدورة؟',
+    'intended_learners_section_one_description' => 'يجب عليك إدخال الأهداف التعليمية أو النتائج التي يمكن للطلاب انتظارها بعد الانتهاء من الدورة.',
+    'intended_learners_section_one_placeholder' => 'مثال: تحديد الأدوار والمسؤوليات لمدير المشروع',
+    // What will Students learn in your course?
+    'intended_learners_section_two_question' => 'ما الذي ستعلم الطلاب في الدورة؟',
+    'intended_learners_section_two_description' => 'قائمة المهارات المطلوبة، الخبرة، الأدوات أو المعدات التي يجب أن يمتلكها الطلاب قبل البدء في الدورة. إذا كانت هناك متطلبات، استخدم هذا المكان كفرصة لخفض حاجات البداية للطلاب.',
+    'intended_learners_section_two_placeholder' => 'مثال: لا توجد تجربة برمجة.',
+    // What is your course for?
+    'intended_learners_section_three_question' => 'ما هو الغرض من الدورة؟',
+    'intended_learners_section_three_description' => 'اكتب وصفاً واضحاً يوضح ما سيتعلمه الطلاب من الدورة.',
+    'intended_learners_section_three_placeholder' => 'مثال: لا توجد تجربة برمجة.',
+
     // Instructor Edit Course
-    'plan_your_course' => 'Plan your course',
-    'intended_learners' => 'Intended Learners',
-    'course_layout' => 'Course layout',
+    'plan_your_course' => 'خطط لدورتك',
+    'intended_learners' => 'الطلاب المستهدفون',
+    'course_layout' => 'تخطيط الدورة',
+
+    'build_curriculum' => 'بناء المنهج',
+    'add_section' => 'إضافة قسم',
+    'add_lesson' => 'إضافة درس',
+    'lesson_title' => 'عنوان الدرس',
+
 
     // Teaching Center section
     'teaching_center_section_title'     => 'هل لديك دورة؟ قم بالتخطيط لها.',
     'teaching_center_section_paragraph' => 'سيؤدي التخطيط الدقيق لدورتك إلى إنشاء مسار تعليمي واضح للطلاب ويساعدك بمجرد تصويرها. فكر في تفاصيل كل محاضرة بما في ذلك المهارة التي ستعلمها، وطول الفيديو التقديري، والأنشطة العملية التي يجب تضمينها، وكيف ستنشئ مقدمات وملخصات.',
-    'teaching_center_ads_title'         => 'Our library of resources',
+    'teaching_center_ads_title'         => 'مكتبتنا من الموارد',
     'teaching_center_ads_paragraph'     => 'نصائح ودروس لتنظيم دورات الطلاب الذين يحبونها',
     'teaching_center_ads_button'        => 'مركز التدريس',
     'teaching_center_ads_link'          => 'https://www.udemy.com/teaching-center/',
 
     // Plan Your Course Tips Section
-    'tips_title' => 'Tips',
+    'tips_title' => 'نصائح',
     'plan_your_course_tips_subtitles' => [
         [
             'بداية بالأهداف.',
@@ -277,9 +320,55 @@ return [
         ['انضم إلى المجتمع', 'https://www.udemy.com/udemy-safety/', 'مكان للتحدث مع محاضرين آخرين'],
     ],
 
-    'setup_test_video_paragraph' => 'Upload a test video to make sure your camera and audio are working before you film your course.',
+    'setup_test_video_paragraph' => 'قم بتحميل فيديو تجريبي للتأكد من أن الكاميرا والصوت يعملان قبل تصوير دورتك.',
     'create_your_content' => 'التصوير والتحرير',
     'snap_edit' => 'التقط وعدل',
+
+    'share_knowledge_section_title'     => 'أنت على استعداد لمشاركة معرفتك.',
+    'share_knowledge_section_paragraph' => 'هذه هي لحظتك! إذا قمت بتنظيم دورتك واستخدمت أدلةنا، فأنت مستعد جيدًا للتصوير الفعلي. تمهل، خذ وقتك لجعله على ما يرام، وقم بالضبط الدقيق عند التحرير.',
+    'share_knowledge_ads_title'         => 'أنت في شركة جيدة',
+    'share_knowledge_ads_paragraph'     => 'دردش واحصل على مساعدة في الإنتاج مع مدربي المنصة الآخرين',
+    'share_knowledge_ads_button'        => 'انضم إلى مجتمع المبدعين',
+    'share_knowledge_ads_link'          => 'https://www.udemy.com/home/teaching/test-video?ref=setup_and_tv',
+
+    'snap_edit_video_tips_subtitles' => [
+        [
+            'خذ فترات راحة وراجع بشكل متكرر.',
+            'تحقق كثيرًا من أي تغييرات مثل الضوضاء الجديدة. كن على دراية بمستويات الطاقة لديك - يمكن أن يرهقك التصوير وهذا يترجم على الشاشة.'
+        ],
+        [
+            'بناء علاقة.',
+            'يريد الطلاب معرفة من يعلمهم. حتى بالنسبة للدورة التي تكون في الغالب عبارة عن تسجيلات شاشة، قم بتصوير نفسك لتقديمك. أو اقطع شوطًا إضافيًا وصور نفسك وأنت تقدم كل قسم!'
+        ],
+        [
+            'التواجد أمام الكاميرا يتطلب ممارسة.',
+            'قم بالاتصال البصري بالكاميرا وتحدث بوضوح. قم بإعادة التصوير عدة مرات حسب حاجتك للحصول على اللقطة الصحيحة.'
+        ],
+        [
+            'هيئ نفسك للنجاح في التحرير.',
+            'يمكنك تحرير التوقفات الطويلة والأخطاء والكلمات الزائدة. قم بتصوير بعض الأنشطة أو الصور الإضافية التي يمكنك إضافتها لاحقًا لتغطية تلك التقطيعات.'
+        ],
+        [
+            'إنشاء علامات صوتية.',
+            'صفق عندما تبدأ كل لقطة لتحديد مكان ارتفاع الصوت بسهولة أثناء التحرير. استخدم أدلةنا لإدارة يوم التسجيل بكفاءة.'
+        ],
+        [
+            'بالنسبة لتسجيلات الشاشة، قم بالتنظيف.',
+            'انقل الملفات والمجلدات غير ذات الصلة من سطح المكتب وافتح أي علامات تبويب مسبقًا. اجعل النص على الشاشة بحجم 24 نقطة على الأقل واستخدم التكبير لتسليط الضوء.'
+        ]
+    ],
+
+    'snap_edit_video_requirements' => [
+        'قم بتصوير وتصدير الفيديو بجودة HD لإنشاء مقاطع فيديو لا تقل عن 720p، أو 1080p إن أمكن.',
+        'يجب أن يصدر الصوت من كل من القناتين اليمنى واليسرى وأن يكون متزامنًا مع الفيديو الخاص بك',
+        'يجب أن يكون الصوت خاليًا من الصدى والضوضاء الخلفية حتى لا يشتت انتباه الطلاب',
+    ],
+
+    'snap_edit_video_resources' => [
+        ['إنشاء فيديو تجريبي', 'https://www.udemy.com/udemy-safety/', 'احصل على ملاحظات قبل تصوير دورتك بأكملها'],
+        ['مركز التدريس: دليل جودة الصوت والصورة', 'https://www.udemy.com/udemy-safety/', 'صور وحرر بثقة'],
+        ['الثقة والأمان في Udemy', 'https://www.udemy.com/udemy-safety/', 'سياساتنا للمدربين والطلاب'],
+    ],
     'curriculum' => 'المنهج',
     'captions' => 'التعليق (اختياري)',
     'accessibility' => 'الشمولية (اختياري)',

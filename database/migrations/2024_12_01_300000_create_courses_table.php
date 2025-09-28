@@ -37,6 +37,7 @@ return new class extends Migration
             $table->integer('access_duration_value')->nullable();
             $table->enum('target_level', ['beginner', 'intermediate', 'advanced', 'all'])->default('all');
             $table->timestamps();
+            $table->engine = 'InnoDB';
 
             $table->index(['status', 'created_at']);
             $table->index(['instructor_id', 'status']);

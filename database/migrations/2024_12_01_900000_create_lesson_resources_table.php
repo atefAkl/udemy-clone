@@ -27,6 +27,7 @@ return new class extends Migration
             $table->integer('download_count')->default(0);
             $table->integer('sort_order')->default(0);
             $table->timestamps();
+            $table->engine = 'InnoDB';
             $table->softDeletes();
 
             $table->index(['lesson_id', 'sort_order']);

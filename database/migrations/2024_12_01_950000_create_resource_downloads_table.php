@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('ip_address', 45)->nullable();
             $table->text('user_agent')->nullable();
             $table->timestamps();
+            $table->engine = 'InnoDB';
 
             $table->index(['lesson_resource_id', 'downloaded_at']);
             $table->index(['user_id', 'downloaded_at']);

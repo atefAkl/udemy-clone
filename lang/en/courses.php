@@ -2,6 +2,7 @@
 
 return [
     // Tiltes & Headings
+    'edit_course_main_heading' => 'Edit Course Contents',
     'explore_courses_title' => 'Explore Courses',
     'explore_courses_description' => 'Discover thousands of courses from expert instructors',
     // Course Management
@@ -101,6 +102,8 @@ return [
     // Course Messages
     'no_courses_found' => 'No courses found',
     'no_courses_yet' => 'No courses yet',
+    'no_sections_yet' => 'No sections yet',
+    'click_add_section_to_start' => 'Click the "Add Section" button to start building your curriculum.',
     'no_enrollments' => 'No enrollments yet.',
     'start_creating_courses' => 'Start creating your first courses',
     'create_first_course' => 'Create First Course',
@@ -164,6 +167,40 @@ return [
     'total_courses' => 'Total Courses',
     'published_courses' => 'Published Courses',
 
+    // Side nav 
+    'sidenav' => [
+        'plan_your_course' => 'Plan your course',
+        'intended_learners' => 'Intended Learners',
+        'course_layout' => 'Course layout',
+        'setup_test_video' => 'Setup test video',
+        'create_your_content' => 'Create your content',
+        'snap_edit' => 'Snap edit',
+        'curriculum' => 'Curriculum',
+        'captions' => 'Captions',
+        'accessibility' => 'Accessibility',
+        'publish_your_course' => 'Publish your course',
+        'landing_page' => 'Landing page',
+        'pricing' => 'Pricing',
+        'promotion' => 'Promotion',
+        'course_messages' => 'Course messages',
+
+    ],
+
+    // Intended Learners Section
+    'intended_learners_paragraph' => 'The following descriptions will be publicly visible on your Course Landing Page and will have a direct impact on your course performance. These descriptions will help learners decide if your course is right for them.',
+
+    // What are the requirements or prerequisites for taking your course?
+    'intended_learners_section_one_question' => 'What are the requirements or prerequisites for taking your course?',
+    'intended_learners_section_one_description' => 'You must enter at least 4 learning objectives or outcomes that learners can expect to achieve after completing your course.',
+    'intended_learners_section_one_placeholder' => 'Example: Define the roles and responsibilities of a project manager',
+    // What will Students learn in your course?
+    'intended_learners_section_two_question' => 'What will Students learn in your course?',
+    'intended_learners_section_two_description' => 'List the required skills, experience, tools or equipment learners should have prior to taking your course. If there are no requirements, use this space as an opportunity to lower the barrier for beginners.',
+    'intended_learners_section_two_placeholder' => 'Example: No programming experience needed.',
+    // What is your course for?
+    'intended_learners_section_three_question' => 'What is your course for?',
+    'intended_learners_section_three_description' => 'Write a clear description of the intended learners for your course who will find your course content valuable. This will help you attract the right learners to your course.',
+    'intended_learners_section_three_placeholder' => 'Example: No programming experience needed.',
     // Instructor Edit Course
     'plan_your_course' => 'Plan your course',
     'intended_learners' => 'Intended Learners',
@@ -177,9 +214,11 @@ return [
     'teaching_center_ads_button'    => 'Teaching Center',
     'teaching_center_ads_link'      => 'https://www.udemy.com/teaching-center/',
 
+
     // Course Edit Tips Section
 
     'tips_title' => 'Tips',
+
     'plan_your_course_tips_subtitles' => [
         [
             'Start with your goals.',
@@ -227,7 +266,7 @@ return [
     ],
 
     // Setup & test video Section
-    'setup_test_video' => 'إعداد وتجربة الفيديو',
+    'setup_test_video' => 'Setup & Test Videos',
     // Video Studio Section
     'video_studio_section_title'     => 'Arrange your ideal studio and get early feedback.',
     'video_studio_section_paragraph' => 'It is important to set up your audio and video correctly now, because it is much more difficult to fix video clips after recording them. There are many creative ways to use what you have to create a video that looks professional.',
@@ -279,10 +318,63 @@ return [
 
 
 
-    'setup_test_video' => 'Setup & test video',
     'setup_test_video_paragraph' => 'Upload a test video to make sure your camera and audio are working before you film your course.',
     'create_your_content' => 'Create Your Content',
     'snap_edit' => 'Snap & Edit',
+
+    // Snap & Edit videos Section
+
+    // Setup & test video Section
+    'snap_edit_videos' => 'Arrange your ideal studio and get early feedback.',
+    // Video Studio Section
+    'share_knowledge_section_title'     => 'You\'re ready to share your knowledge.',
+    'share_knowledge_section_paragraph' => 'This is your moment! If you’ve structured your course and used our guides, you\'re well prepared for the actual shoot. Pace yourself, take time to make it just right, and fine-tune when you edit. ',
+    'share_knowledge_ads_title'         => 'You\'re in good company',
+    'share_knowledge_ads_paragraph'     => 'Chat and get production help with other Platform instructors',
+    'share_knowledge_ads_button'        => 'Join Creators Community',
+    'share_knowledge_ads_link'          => 'https://www.udemy.com/home/teaching/test-video?ref=setup_and_tv',
+
+    // Setaup and test video section tips
+    'snap_edit_video_tips_subtitles' => [
+        [
+            'Take breaks and review frequently.',
+            'Check often for any changes such as new noises. Be aware of your own energy levels--filming can tire you out and that translates to the screen.'
+        ],
+        [
+            'Build rapport.',
+            'Students want to know who’s teaching them. Even for a course that is mostly screencasts, film yourself for your introduction. Or go the extra mile and film yourself introducing each section!.'
+        ],
+        [
+            'Being on camera takes practice.',
+            'Make eye contact with the camera and speak clearly. Do as many retakes as you need to get it right.'
+        ],
+        [
+            'Set yourself up for editing success.',
+            'You can edit out long pauses, mistakes, and ums or ahs. Film a few extra activities or images that you can add in later to cover those cuts.'
+        ],
+        [
+            'Create audio marks.',
+            'Clap when you start each take to easily locate the audio spike during editing. Use our guides to manage your recording day efficiently.'
+        ],
+        [
+            'For screencasts, clean up.',
+            'Move unrelated files and folders off your desktop and open any tabs in advance. Make on-screen text at least 24pt and use zooming to highlight.'
+        ]
+    ],
+
+
+    'snap_edit_video_requirements' => [
+        'Film and export in HD to create videos of at least 720p, or 1080p if possible.',
+        'Audio should come out of both the left and right channels and be synced to your video',
+        'Audio should be free of echo and background noise so as not to be distracting to students',
+    ],
+
+    'snap_edit_video_resources' => [
+        ['Create a test video', 'https://www.udemy.com/udemy-safety/', 'Get feedback before filming your whole course'],
+        ['Teaching Center: Guide to quality A/V', 'https://www.udemy.com/udemy-safety/', 'Film and edit with confidence'],
+        ['Udemy trust & safety', 'https://www.udemy.com/udemy-safety/', 'Our policies for instructors and students'],
+    ],
+
     'curriculum' => 'Curriculum',
     'captions' => 'Captions(Optional)',
     'accessibility' => 'Accessibility(Optional)',

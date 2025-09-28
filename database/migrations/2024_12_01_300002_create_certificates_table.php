@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('verification_code', 8)->nullable();
             $table->timestamps();
             $table->softDeletes();
+            $table->engine = 'InnoDB';
 
             $table->index(['user_id', 'type']);
             $table->index('certificate_number');

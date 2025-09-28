@@ -11,21 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sections', function (Blueprint $table) {
+        Schema::create('course_sections', function (Blueprint $table) {
             $table->id();
             $table->foreignId('course_id')->constrained()->onDelete('cascade');
             $table->string('title');
-            $table->text('description')->nullable();
-            $table->integer('sort_order')->default(0);
-            $table->boolean('is_published')->default(true);
-            $table->boolean('is_free_preview')->default(false);
-            $table->integer('duration')->default(0); // in minutes
+            $table->integer('order')->default(0);
             $table->timestamps();
+            $table->engine = 'InnoDB';
             $table->softDeletes();
-
-            // Indexes
-            $table->index('course_id');
-            $table->index('sort_order');
         });
     }
 
@@ -34,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sections');
+        Schema::dropIfExists('course_sections');
     }
 };

@@ -23,6 +23,7 @@ return new class extends Migration
 
             $table->index(['user_id', 'is_public']);
             $table->index('sort_order');
+            $table->engine = 'InnoDB';
         });
     }
 

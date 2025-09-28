@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('course_id')->constrained()->onDelete('cascade');
             $table->timestamp('added_at')->useCurrent();
             $table->timestamps();
+            $table->engine = 'InnoDB';
 
             $table->unique(['user_id', 'course_id']);
             $table->index('added_at');

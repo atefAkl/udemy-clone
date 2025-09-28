@@ -27,6 +27,7 @@ return new class extends Migration
             $table->dateTime('deleted_at')->nullable();
             $table->foreignId('parent_id')->nullable()->constrained('categories')->onDelete('cascade');
             $table->timestamps();
+            $table->engine = 'InnoDB';
 
             $table->index(['status', 'is_featured']);
             $table->index(['parent_id', 'sort_order']);

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('rating'); // 1-5
             $table->text('comment')->nullable();
             $table->timestamps();
+            $table->engine = 'InnoDB';
 
             $table->unique(['user_id', 'course_id']);
             $table->index(['course_id', 'rating']);

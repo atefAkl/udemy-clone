@@ -195,11 +195,24 @@ class InstructorController extends Controller
                 $updates['title'] = $validated['title'];
                 $updates['slug'] = Str::slug($validated['title']);
             }
-            foreach ([
-                'subtitle', 'short_description', 'description', 'category_id', 'level', 'language',
-                'price', 'duration', 'access_duration_value', 'access_duration_unit',
-                'launch_date', 'launch_time', 'requirements', 'what_you_learn'
-            ] as $field) {
+            foreach (
+                [
+                    'subtitle',
+                    'short_description',
+                    'description',
+                    'category_id',
+                    'level',
+                    'language',
+                    'price',
+                    'duration',
+                    'access_duration_value',
+                    'access_duration_unit',
+                    'launch_date',
+                    'launch_time',
+                    'requirements',
+                    'what_you_learn'
+                ] as $field
+            ) {
                 if ($request->has($field)) {
                     $updates[$field] = $validated[$field] ?? ($request->input($field) ?? null);
                 }

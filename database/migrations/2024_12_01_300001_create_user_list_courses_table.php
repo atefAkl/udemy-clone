@@ -21,6 +21,7 @@ return new class extends Migration
 
             $table->unique(['user_list_id', 'course_id']);
             $table->index('sort_order');
+            $table->engine = 'InnoDB';
         });
     }
 

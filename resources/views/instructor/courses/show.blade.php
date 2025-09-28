@@ -3,7 +3,6 @@
 @section('title', __('instructor.view_course'))
 
 
-
 @section('content')
 <!-- Breadcrumb -->
 <nav aria-label="breadcrumb" class="mb-4">

@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('progress')->default(0);
             $table->timestamp('completed_at')->nullable();
             $table->timestamps();
+            $table->engine = 'InnoDB';
 
             $table->unique(['user_id', 'course_id']);
             $table->index(['user_id', 'status']);

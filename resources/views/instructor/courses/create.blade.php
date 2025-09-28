@@ -133,7 +133,7 @@
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label for="category_id" class="form-label">{{ __('app.category') }} <span class="text-danger">*</span></label>
+                                <label for="category_id" class="form-label">{{ __('courses.category') }} <span class="text-danger">*</span></label>
                                 <select class="form-select @error('category_id') is-invalid @enderror"
                                     id="category_id" name="category_id" required>
                                     <option value="">{{ __('app.select_category') }}</option>
@@ -149,12 +149,12 @@
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label for="language" class="form-label">{{ __('app.language') }} <span class="text-danger">*</span></label>
+                                <label for="language" class="form-label">{{ __('courses.language') }} <span class="text-danger">*</span></label>
                                 <select class="form-select @error('language') is-invalid @enderror"
                                     id="language" name="language" required>
-                                    <option value="">{{ __('app.select_language') }}</option>
-                                    <option value="ar" {{ old('language') == 'ar' ? 'selected' : '' }}>{{ __('app.arabic') }}</option>
-                                    <option value="en" {{ old('language') == 'en' ? 'selected' : '' }}>{{ __('app.english') }}</option>
+                                    <option value="">{{ __('courses.select_language') }}</option>
+                                    <option value="ar" {{ old('language') == 'ar' ? 'selected' : '' }}>{{ __('courses.arabic') }}</option>
+                                    <option value="en" {{ old('language') == 'en' ? 'selected' : '' }}>{{ __('courses.english') }}</option>
                                 </select>
                                 @error('language')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -162,14 +162,14 @@
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label for="target_level" class="form-label">{{ __('app.target_level') }} <span class="text-danger">*</span></label>
+                                <label for="target_level" class="form-label">{{ __('courses.target_level') }} <span class="text-danger">*</span></label>
                                 <select class="form-select @error('target_level') is-invalid @enderror"
                                     id="target_level" name="target_level" required>
-                                    <option value="">{{ __('app.select_target_level') }}</option>
-                                    <option value="beginner" {{ old('target_level') == 'beginner' ? 'selected' : '' }}>{{ __('app.beginner') }}</option>
-                                    <option value="intermediate" {{ old('target_level') == 'intermediate' ? 'selected' : '' }}>{{ __('app.intermediate') }}</option>
-                                    <option value="advanced" {{ old('target_level') == 'advanced' ? 'selected' : '' }}>{{ __('app.advanced') }}</option>
-                                    <option value="professional" {{ old('target_level') == 'professional' ? 'selected' : '' }}>{{ __('app.professional') }}</option>
+                                    <option value="">{{ __('courses.select_target_level') }}</option>
+                                    <option value="beginner" {{ old('target_level') == 'beginner' ? 'selected' : '' }}>{{ __('courses.beginner') }}</option>
+                                    <option value="intermediate" {{ old('target_level') == 'intermediate' ? 'selected' : '' }}>{{ __('courses.intermediate') }}</option>
+                                    <option value="advanced" {{ old('target_level') == 'advanced' ? 'selected' : '' }}>{{ __('courses.advanced') }}</option>
+                                    <option value="professional" {{ old('target_level') == 'professional' ? 'selected' : '' }}>{{ __('courses.professional') }}</option>
                                 </select>
                                 @error('target_level')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -177,13 +177,13 @@
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label for="price" class="form-label">{{ __('app.price') }} <span class="text-danger">*</span></label>
+                                <label for="price" class="form-label">{{ __('courses.price') }} <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text">$</span>
                                     <input type="number" class="form-control @error('price') is-invalid @enderror"
                                         id="price" name="price" value="{{ old('price', 0) }}" min="0" step="0.01" required>
                                 </div>
-                                <div class="form-text">{{ __('app.set_zero_for_free_course') }}</div>
+                                <div class="form-text">{{ __('courses.set_zero_for_free_course') }}</div>
                                 @error('price')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -197,14 +197,14 @@
                     <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
                         <h5 class="mb-0 fw-bold d-flex align-items-center">
                             <span class="d-flex align-items-center justify-content-center rounded-circle bg-light border text-muted me-2" style="width: 24px; height: 24px; font-size: 12px;">2</span>
-                            {{ __('app.launch_schedule') }}
+                            {{ __('courses.launch_schedule') }}
                         </h5>
                         <span class="badge bg-light text-dark">Optional</span>
                     </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="launch_date" class="form-label">{{ __('app.launch_date') }}</label>
+                                <label for="launch_date" class="form-label">{{ __('courses.launch_date') }}</label>
                                 <input type="date" class="form-control @error('launch_date') is-invalid @enderror"
                                     id="launch_date" name="launch_date" value="{{ old('launch_date') }}">
                                 @error('launch_date')
@@ -213,7 +213,7 @@
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label for="launch_time" class="form-label">{{ __('app.launch_time') }}</label>
+                                <label for="launch_time" class="form-label">{{ __('courses.launch_time') }}</label>
                                 <input type="time" class="form-control @error('launch_time') is-invalid @enderror"
                                     id="launch_time" name="launch_time" value="{{ old('launch_time') }}">
                                 @error('launch_time')
@@ -225,19 +225,19 @@
                             <input class="form-check-input" type="checkbox" id="has_certificate"
                                 name="has_certificate" value="1" {{ old('has_certificate') ? 'checked' : '' }}>
                             <label class="form-check-label" for="has_certificate">
-                                {{ __('app.course_includes_certificate') }}
+                                {{ __('courses.course_includes_certificate') }}
                             </label>
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label for="access_duration_type" class="form-label">{{ __('app.content_access') }}</label>
+                            <label for="access_duration_type" class="form-label">{{ __('courses.content_access') }}</label>
                             <select class="form-select @error('access_duration_type') is-invalid @enderror"
                                 id="access_duration_type" name="access_duration_type">
-                                <option value="unlimited" {{ old('access_duration_type', 'unlimited') == 'unlimited' ? 'selected' : '' }}>
-                                    {{ __('app.unlimited_access') }}
+                                <option value="lifetime" {{ old('access_duration_type', 'unlimited') == 'unlimited' ? 'selected' : '' }}>
+                                    {{ __('courses.unlimited_access') }}
                                 </option>
                                 <option value="limited" {{ old('access_duration_type') == 'limited' ? 'selected' : '' }}>
-                                    {{ __('app.limited_access') }}
+                                    {{ __('courses.limited_access') }}
                                 </option>
                             </select>
                             @error('access_duration_type')
@@ -246,10 +246,10 @@
                         </div>
 
                         <div class="col-md-6 mb-3" id="access_duration_field" style="display: none;">
-                            <label for="access_duration_value" class="form-label">{{ __('app.access_duration_days') }}</label>
+                            <label for="access_duration_value" class="form-label">{{ __('courses.access_duration_days') }}</label>
                             <input type="number" class="form-control @error('access_duration_value') is-invalid @enderror"
                                 id="access_duration_value" name="access_duration_value" value="{{ old('access_duration_value') }}" min="1">
-                            <div class="form-text">{{ __('app.number_of_days_after_completion') }}</div>
+                            <div class="form-text">{{ __('courses.number_of_days_after_completion') }}</div>
                             @error('access_duration_value')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -263,19 +263,19 @@
             <div>
                 <a href="{{ route('instructor.courses.index') }}" class="btn btn-link text-muted px-0">
                     <i class="fas fa-times me-1"></i>
-                    {{ __('app.cancel') }}
+                    {{ __('courses.cancel') }}
                 </a>
             </div>
             <div class="d-flex gap-2">
                 <button type="button" class="btn btn-outline-secondary" disabled>
                     <i class="fas fa-arrow-left me-1"></i>
-                    {{ __('app.previous') }}
+                    {{ __('courses.previous') }}
                 </button>
                 <button type="submit" name="action" value="draft" class="btn btn-outline-secondary">
-                    {{ __('app.save_as_draft') }}
+                    {{ __('courses.save_as_draft') }}
                 </button>
                 <button type="button" class="btn btn-primary px-4" id="continueButton">
-                    {{ __('app.continue') }}
+                    {{ __('courses.continue') }}
                     <i class="fas fa-arrow-right ms-2"></i>
                 </button>
             </div>
@@ -289,25 +289,25 @@
             <div class="card-header bg-primary text-white">
                 <h6 class="mb-0">
                     <i class="fas fa-lightbulb" style="margin-inline-end: 10px;"></i>
-                    {{ __('app.course_creation_tips') }}
+                    {{ __('courses.course_creation_tips') }}
                 </h6>
             </div>
             <div class="card-body">
                 <div class="mb-3">
-                    <h6 class="text-primary">{{ __('app.compelling_title') }}</h6>
-                    <p class="small text-muted">{{ __('app.title_tip') }}</p>
+                    <h6 class="text-primary">{{ __('courses.compelling_title') }}</h6>
+                    <p class="small text-muted">{{ __('courses.title_tip') }}</p>
                 </div>
                 <div class="mb-3">
-                    <h6 class="text-success">{{ __('app.clear_description') }}</h6>
-                    <p class="small text-muted">{{ __('app.description_tip') }}</p>
+                    <h6 class="text-success">{{ __('courses.clear_description') }}</h6>
+                    <p class="small text-muted">{{ __('courses.description_tip') }}</p>
                 </div>
                 <div class="mb-3">
-                    <h6 class="text-info">{{ __('app.attractive_thumbnail') }}</h6>
-                    <p class="small text-muted">{{ __('app.thumbnail_tip') }}</p>
+                    <h6 class="text-info">{{ __('courses.attractive_thumbnail') }}</h6>
+                    <p class="small text-muted">{{ __('courses.thumbnail_tip') }}</p>
                 </div>
                 <div class="mb-0">
-                    <h6 class="text-warning">{{ __('app.competitive_pricing') }}</h6>
-                    <p class="small text-muted">{{ __('app.pricing_tip') }}</p>
+                    <h6 class="text-warning">{{ __('courses.competitive_pricing') }}</h6>
+                    <p class="small text-muted">{{ __('courses.pricing_tip') }}</p>
                 </div>
             </div>
         </div>

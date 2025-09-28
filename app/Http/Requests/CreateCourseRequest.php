@@ -36,7 +36,7 @@ class CreateCourseRequest extends FormRequest
             'requirements'          => 'nullable|string|max:1000',
             'objectives'            => 'nullable|string|max:1000',
             'has_certificate'       => 'boolean',
-            'access_duration_type'  => 'required|in:unlimited,limited',
+            'access_duration_type'  => 'required|in:lifetime,limited',
             'access_duration_value' => 'nullable|integer|min:1|required_if:access_duration_type,limited',
         ];
     }
@@ -84,7 +84,7 @@ class CreateCourseRequest extends FormRequest
             'objectives.string'                 => 'course objectives must be a string',
             'objectives.max'                    => 'course objectives must be less than 1000 characters',
             'has_certificate.boolean'           => 'course has certificate must be a boolean',
-            'access_duration_type.in'           => 'course access duration type must be unlimited or limited',
+            'access_duration_type.in'           => 'course access duration type must be lifetime or limited',
             'access_duration_value.integer'     => 'course access duration value must be an integer',
             'access_duration_value.required_if' => 'course access duration value is required if access duration type is limited',
         ];
