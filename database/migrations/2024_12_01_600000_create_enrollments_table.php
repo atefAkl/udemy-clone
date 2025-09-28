@@ -18,6 +18,7 @@ return new class extends Migration
             $table->decimal('price_paid', 8, 2);
             $table->enum('status', ['active', 'completed', 'cancelled'])->default('active');
             $table->timestamp('enrolled_at');
+            $table->string('progress')->default(0);
             $table->timestamp('completed_at')->nullable();
             $table->timestamps();
 

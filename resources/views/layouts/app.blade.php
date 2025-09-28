@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Learning Platform') }} - @yield('title', 'Online Learning')</title>
+    <title>{{ __('app.app_name') ?? 'Learning Platform' }} - @yield('title', 'Online Learning')</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -30,7 +30,11 @@
     <!-- Custom CSS -->
     <style>
         body {
-            font-family: @if(app()->getLocale()==='ar') 'Cairo', @else 'Figtree'@endif, sans-serif;
+            font-family: 'Figtree', sans-serif;
+        }
+
+        [dir="rtl"] body {
+            font-family: 'Cairo', sans-serif;
         }
 
         .navbar-brand {
@@ -60,7 +64,6 @@
             display: none;
         }
     </style>
-
     @stack('styles')
 </head>
 
@@ -70,7 +73,7 @@
         <div class="container">
             <a class="navbar-brand text-primary" href="{{ route('home') }}">
                 <i class="fa-solid fa-graduation-cap" style="margin-inline-end: 10px"></i>
-                {{ config('app.name', 'Learning Platform') }}
+                {{ __('app.app_name') ?? 'Learning Platform' }}
             </a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -128,7 +131,7 @@
                                 </a></li>
                             @endif
 
-                            @if(auth()->user()->isInstructor() || auth()->user()->isAdmin())
+                            @if(auth()->user()->isInstructor() || auth()->user()->isInstructor())
                             <li><a class="dropdown-item" href="{{ route('instructor.dashboard') }}">
                                     <i class="fa-solid fa-person-workspace" style="margin-inline-end: 10px"></i>{{ __('app.instructor_dashboard') }}
                                 </a></li>
@@ -160,7 +163,7 @@
     </nav>
 
     <!-- Main Content -->
-    <main>
+    <main style="min-height: calc(100vh - 200px)">
         @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show m-0" role="alert">
             <div class="container">

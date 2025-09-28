@@ -1,0 +1,115 @@
+{
+    "survey": {
+        "name": "نموذج التقديم لدورة تطوير الويب",
+        "description": "",
+        "purpose": "",
+        "start_date": "",
+        "end_date": "",
+        "servey_period": "60",
+        "url": "",
+        "questions": [
+            {
+                "id": "1",
+                "order": "1",
+                "type": "text",
+                "question": "Email",
+                "description": "",
+                "required": 1,
+                "notes": [
+                    "This form is collecting email addresses."
+                ],
+                "options": [],
+                "perfect_answer": "any",
+                "placeholder": "Valid email address",
+                "range": "",
+                "weight": "4"
+            },
+            {
+                "id": "2",
+                "order": "2",
+                "type": "select",
+                "question": "Age",
+                "description": "",
+                "required": 1,
+                "notes": [
+                    "اختر الفئة العمرية"
+                ],
+                "options": [
+                    {
+                        "id": "1",
+                        "order": "1",
+                        "option": "اقل من 15 سنة",
+                        "weight": "0"
+                    },
+                    {
+                        "id": "2",
+                        "order": "2",
+                        "option": " من 15 إلى 25 سنة",
+                        "weight": "3"
+                    },
+                    {
+                        "id": "3",
+                        "order": "3",
+                        "option": " من 25 إلى 35 سنة",
+                        "weight": "2"
+                    },
+                    {
+                        "id": "4",
+                        "order": "4",
+                        "option": " أكبر من 35 سنة",
+                        "weight": "0"
+                    }
+                ],
+                "perfect_answer": "",
+                "placeholder": "",
+                "range": ""
+            },
+            {
+                "id": "2",
+                "order": "2",
+                "type": "checkbox",
+                "question": "  ما هي متصفحات الإنترنت التي تستخدمها بشكل منتظم؟",
+                "description": "",
+                "required": 1,
+                "notes": [
+                    "اختر الفئة العمرية"
+                ],
+                "options": [
+                    {
+                        "id": "1",
+                        "order": "1",
+                        "option": "اقل من 15 سنة",
+                        "weight": "0"
+                    },
+                    {
+                        "id": "2",
+                        "order": "2",
+                        "option": " من 15 إلى 25 سنة",
+                        "weight": "1"
+                    },
+                    {
+                        "id": "3",
+                        "order": "3",
+                        "option": " من 25 إلى 35 سنة",
+                        "weight": "1"
+                    },
+                    {
+                        "id": "4",
+                        "order": "4",
+                        "option": " أكبر من 35 سنة",
+                        "weight": "1"
+                    },
+                    {
+                        "id": "4",
+                        "order": "4",
+                        "option": " ",
+                        "weight": "1"
+                    }
+                ],
+                "perfect_answer": "",
+                "placeholder": "",
+                "range": ""
+            }
+        ]
+    }
+}

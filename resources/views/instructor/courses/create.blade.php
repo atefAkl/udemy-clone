@@ -1,6 +1,47 @@
-@extends('layouts.instructor-simple')
+@extends('layouts.instructor-wide')
 
 @section('title', __('instructor.create_course'))
+
+@section('content-header')
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="m-0">{{ __('instructor.create_new_course') }}</h1>
+        <p class="text-muted mb-0">{{ __('instructor.create_course_description') }}</p>
+    </div>
+    <a href="{{ route('instructor.courses.index') }}" class="btn btn-outline-secondary">
+        <i class="fas fa-arrow-left me-2"></i>
+        {{ __('instructor.back_to_courses') }}
+    </a>
+</div>
+
+<!-- Progress Bar -->
+<div class="progress mb-4" style="height: 6px;">
+    <div class="progress-bar bg-primary" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+</div>
+
+<!-- Progress Steps -->
+<div class="d-flex justify-content-between mb-5 position-relative">
+    <div class="text-center">
+        <div class="mx-auto mb-2 d-flex align-items-center justify-content-center rounded-circle bg-primary text-white" style="width: 32px; height: 32px; font-size: 0.875rem;">1</div>
+        <span class="small">{{ __('courses.basic_information') }}</span>
+    </div>
+    <div class="text-center">
+        <div class="mx-auto mb-2 d-flex align-items-center justify-content-center rounded-circle bg-light border text-muted" style="width: 32px; height: 32px; font-size: 0.875rem;">2</div>
+        <span class="small text-muted">{{ __('app.course_curriculum') }}</span>
+    </div>
+    <div class="text-center">
+        <div class="mx-auto mb-2 d-flex align-items-center justify-content-center rounded-circle bg-light border text-muted" style="width: 32px; height: 32px; font-size: 0.875rem;">3</div>
+        <span class="small text-muted">{{ __('app.course_landing_page') }}</span>
+    </div>
+    <div class="text-center">
+        <div class="mx-auto mb-2 d-flex align-items-center justify-content-center rounded-circle bg-light border text-muted" style="width: 32px; height: 32px; font-size: 0.875rem;">4</div>
+        <span class="small text-muted">{{ __('app.pricing') }}</span>
+    </div>
+    <div class="position-absolute w-100" style="top: 16px; z-index: -1; height: 2px; background-color: #e9ecef;">
+        <div class="bg-primary" style="width: 25%; height: 100%;"></div>
+    </div>
+</div>
+@endsection
 
 @section('sidebar-nav')
 <a href="{{ route('instructor.dashboard') }}" class="nav-link">
@@ -31,30 +72,15 @@
 
 @section('content')
 <div class="container-fluid p-4">
-    <!-- Breadcrumb -->
-    <nav aria-label="breadcrumb" class="mb-4">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a href="{{ route('instructor.dashboard') }}">{{ __('instructor.dashboard') }}</a>
-            </li>
-            <li class="breadcrumb-item">
-                <a href="{{ route('instructor.courses.index') }}">{{ __('instructor.my_courses') }}</a>
-            </li>
-            <li class="breadcrumb-item active">{{ __('instructor.create_course') }}</li>
-        </ol>
-    </nav>
-
-    <!-- Page Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h2 class="mb-1">{{ __('instructor.create_new_course') }}</h2>
-            <p class="text-muted">{{ __('instructor.create_course_description') }}</p>
-        </div>
-        <a href="{{ route('instructor.courses.index') }}" class="btn btn-outline-secondary">
-            <i class="fas fa-arrow-left" style="margin-inline-end: 8px;"></i>
-            {{ __('instructor.back_to_courses') }}
-        </a>
+    @if($errors->any())
+    <div class="alert alert-danger">
+        <ul class="mb-0">
+            @foreach($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
     </div>
+    @endif
 
     <!-- Course Creation Form -->
     <div class="row">
@@ -63,12 +89,13 @@
                 @csrf
 
                 <!-- Basic Information Card -->
-                <div class="card border-0 shadow-sm mb-4">
-                    <div class="card-header bg-white border-0 py-3">
-                        <h5 class="mb-0">
-                            <i class="fas fa-info-circle text-primary" style="margin-inline-end: 10px;"></i>
+                <div class="card dashboard-card mb-4 border-0 shadow-sm">
+                    <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0 fw-bold d-flex align-items-center">
+                            <span class="d-flex align-items-center justify-content-center rounded-circle bg-primary text-white me-2" style="width: 24px; height: 24px; font-size: 12px;">1</span>
                             {{ __('courses.basic_information') }}
                         </h5>
+                        <span class="badge bg-light text-dark">Required</span>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -166,12 +193,13 @@
                 </div>
 
                 <!-- Launch Schedule Card -->
-                <div class="card border-0 shadow-sm mb-4">
-                    <div class="card-header bg-white border-0 py-3">
-                        <h5 class="mb-0">
-                            <i class="fas fa-calendar-alt text-success" style="margin-inline-end: 10px;"></i>
+                <div class="card dashboard-card mb-4 border-0 shadow-sm">
+                    <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0 fw-bold d-flex align-items-center">
+                            <span class="d-flex align-items-center justify-content-center rounded-circle bg-light border text-muted me-2" style="width: 24px; height: 24px; font-size: 12px;">2</span>
                             {{ __('app.launch_schedule') }}
                         </h5>
+                        <span class="badge bg-light text-dark">Optional</span>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -186,181 +214,176 @@
 
                             <div class="col-md-6 mb-3">
                                 <label for="launch_time" class="form-label">{{ __('app.launch_time') }}</label>
-                                <input type="datetime-local" class="form-control @error('launch_time') is-invalid @enderror"
+                                <input type="time" class="form-control @error('launch_time') is-invalid @enderror"
                                     id="launch_time" name="launch_time" value="{{ old('launch_time') }}">
                                 @error('launch_time')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
                         </div>
-                    </div>
-                </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="has_certificate"
+                                name="has_certificate" value="1" {{ old('has_certificate') ? 'checked' : '' }}>
+                            <label class="form-check-label" for="has_certificate">
+                                {{ __('app.course_includes_certificate') }}
+                            </label>
+                        </div>
 
-                <!-- Media Content Card -->
-                <div class="card border-0 shadow-sm mb-4">
-                    <div class="card-header bg-white border-0 py-3">
-                        <h5 class="mb-0">
-                            <i class="fas fa-photo-video text-info" style="margin-inline-end: 10px;"></i>
-                            {{ __('app.media_content') }}
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="thumbnail" class="form-label">{{ __('app.course_thumbnail') }}</label>
-                                <input type="file" class="form-control @error('thumbnail') is-invalid @enderror"
-                                    id="thumbnail" name="thumbnail" accept="image/*">
-                                <div class="form-text">{{ __('app.recommended_size_1920x1080') }}</div>
-                                @error('thumbnail')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="access_duration_type" class="form-label">{{ __('app.content_access') }}</label>
+                            <select class="form-select @error('access_duration_type') is-invalid @enderror"
+                                id="access_duration_type" name="access_duration_type">
+                                <option value="unlimited" {{ old('access_duration_type', 'unlimited') == 'unlimited' ? 'selected' : '' }}>
+                                    {{ __('app.unlimited_access') }}
+                                </option>
+                                <option value="limited" {{ old('access_duration_type') == 'limited' ? 'selected' : '' }}>
+                                    {{ __('app.limited_access') }}
+                                </option>
+                            </select>
+                            @error('access_duration_type')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
 
-                            <div class="col-md-6 mb-3">
-                                <label for="preview_video" class="form-label">{{ __('app.preview_video') }}</label>
-                                <input type="file" class="form-control @error('preview_video') is-invalid @enderror"
-                                    id="preview_video" name="preview_video" accept="video/*">
-                                <div class="form-text">{{ __('app.duration_3_to_10_minutes') }}</div>
-                                @error('preview_video')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
+                        <div class="col-md-6 mb-3" id="access_duration_field" style="display: none;">
+                            <label for="access_duration_value" class="form-label">{{ __('app.access_duration_days') }}</label>
+                            <input type="number" class="form-control @error('access_duration_value') is-invalid @enderror"
+                                id="access_duration_value" name="access_duration_value" value="{{ old('access_duration_value') }}" min="1">
+                            <div class="form-text">{{ __('app.number_of_days_after_completion') }}</div>
+                            @error('access_duration_value')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
                     </div>
                 </div>
-
-                <!-- Course Structure Card -->
-                <div class="card border-0 shadow-sm mb-4">
-                    <div class="card-header bg-white border-0 py-3">
-                        <h5 class="mb-0">
-                            <i class="fas fa-list-ul text-warning" style="margin-inline-end: 10px;"></i>
-                            {{ __('app.course_structure') }}
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <label for="requirements" class="form-label">{{ __('app.requirements') }}</label>
-                                <textarea class="form-control @error('requirements') is-invalid @enderror"
-                                    id="requirements" name="requirements" rows="3"
-                                    placeholder="{{ __('app.enter_course_requirements') }}">{{ old('requirements') }}</textarea>
-                                <div class="form-text">{{ __('app.requirements_can_be_customized_later') }}</div>
-                                @error('requirements')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div class="col-md-12 mb-3">
-                                <label for="objectives" class="form-label">{{ __('app.objectives') }}</label>
-                                <textarea class="form-control @error('objectives') is-invalid @enderror"
-                                    id="objectives" name="objectives" rows="3"
-                                    placeholder="{{ __('app.enter_course_objectives') }}">{{ old('objectives') }}</textarea>
-                                <div class="form-text">{{ __('app.objectives_can_be_customized_later') }}</div>
-                                @error('objectives')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Certificate & Access Card -->
-                <div class="card border-0 shadow-sm mb-4">
-                    <div class="card-header bg-white border-0 py-3">
-                        <h5 class="mb-0">
-                            <i class="fas fa-certificate text-primary" style="margin-inline-end: 10px;"></i>
-                            {{ __('app.certificate_and_access') }}
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="has_certificate"
-                                        name="has_certificate" value="1" {{ old('has_certificate') ? 'checked' : '' }}>
-                                    <label class="form-check-label" for="has_certificate">
-                                        {{ __('app.course_includes_certificate') }}
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label for="access_duration_type" class="form-label">{{ __('app.content_access') }}</label>
-                                <select class="form-select @error('access_duration_type') is-invalid @enderror"
-                                    id="access_duration_type" name="access_duration_type">
-                                    <option value="unlimited" {{ old('access_duration_type', 'unlimited') == 'unlimited' ? 'selected' : '' }}>
-                                        {{ __('app.unlimited_access') }}
-                                    </option>
-                                    <option value="limited" {{ old('access_duration_type') == 'limited' ? 'selected' : '' }}>
-                                        {{ __('app.limited_access') }}
-                                    </option>
-                                </select>
-                                @error('access_duration_type')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div class="col-md-6 mb-3" id="access_duration_field" style="display: none;">
-                                <label for="access_duration_value" class="form-label">{{ __('app.access_duration_days') }}</label>
-                                <input type="number" class="form-control @error('access_duration_value') is-invalid @enderror"
-                                    id="access_duration_value" name="access_duration_value" value="{{ old('access_duration_value') }}" min="1">
-                                <div class="form-text">{{ __('app.number_of_days_after_completion') }}</div>
-                                @error('access_duration_value')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="d-flex gap-3 mb-4">
-                    <button type="submit" name="action" value="draft" class="btn btn-outline-primary">
-                        <i class="fas fa-save" style="margin-inline-end: 8px;"></i>
-                        {{ __('app.save_as_draft') }}
-                    </button>
-                    <button type="submit" name="action" value="publish" class="btn btn-primary">
-                        <i class="fas fa-rocket" style="margin-inline-end: 8px;"></i>
-                        {{ __('app.create_and_publish') }}
-                    </button>
-                    <a href="{{ route('instructor.courses.index') }}" class="btn btn-secondary">
-                        {{ __('app.cancel') }}
-                    </a>
-                </div>
-            </form>
         </div>
 
-        <!-- Sidebar Tips -->
-        <div class="col-lg-4">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-primary text-white">
-                    <h6 class="mb-0">
-                        <i class="fas fa-lightbulb" style="margin-inline-end: 10px;"></i>
-                        {{ __('app.course_creation_tips') }}
-                    </h6>
+        <!-- Action Buttons -->
+        <div class="d-flex justify-content-between align-items-center mt-5 pt-4">
+            <div>
+                <a href="{{ route('instructor.courses.index') }}" class="btn btn-link text-muted px-0">
+                    <i class="fas fa-times me-1"></i>
+                    {{ __('app.cancel') }}
+                </a>
+            </div>
+            <div class="d-flex gap-2">
+                <button type="button" class="btn btn-outline-secondary" disabled>
+                    <i class="fas fa-arrow-left me-1"></i>
+                    {{ __('app.previous') }}
+                </button>
+                <button type="submit" name="action" value="draft" class="btn btn-outline-secondary">
+                    {{ __('app.save_as_draft') }}
+                </button>
+                <button type="button" class="btn btn-primary px-4" id="continueButton">
+                    {{ __('app.continue') }}
+                    <i class="fas fa-arrow-right ms-2"></i>
+                </button>
+            </div>
+        </div>
+        </form>
+    </div>
+
+    <!-- Sidebar Tips -->
+    <div class="col-lg-4">
+        <div class="card dashboard-card">
+            <div class="card-header bg-primary text-white">
+                <h6 class="mb-0">
+                    <i class="fas fa-lightbulb" style="margin-inline-end: 10px;"></i>
+                    {{ __('app.course_creation_tips') }}
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <h6 class="text-primary">{{ __('app.compelling_title') }}</h6>
+                    <p class="small text-muted">{{ __('app.title_tip') }}</p>
                 </div>
-                <div class="card-body">
-                    <div class="mb-3">
-                        <h6 class="text-primary">{{ __('app.compelling_title') }}</h6>
-                        <p class="small text-muted">{{ __('app.title_tip') }}</p>
-                    </div>
-                    <div class="mb-3">
-                        <h6 class="text-success">{{ __('app.clear_description') }}</h6>
-                        <p class="small text-muted">{{ __('app.description_tip') }}</p>
-                    </div>
-                    <div class="mb-3">
-                        <h6 class="text-info">{{ __('app.attractive_thumbnail') }}</h6>
-                        <p class="small text-muted">{{ __('app.thumbnail_tip') }}</p>
-                    </div>
-                    <div class="mb-0">
-                        <h6 class="text-warning">{{ __('app.competitive_pricing') }}</h6>
-                        <p class="small text-muted">{{ __('app.pricing_tip') }}</p>
-                    </div>
+                <div class="mb-3">
+                    <h6 class="text-success">{{ __('app.clear_description') }}</h6>
+                    <p class="small text-muted">{{ __('app.description_tip') }}</p>
+                </div>
+                <div class="mb-3">
+                    <h6 class="text-info">{{ __('app.attractive_thumbnail') }}</h6>
+                    <p class="small text-muted">{{ __('app.thumbnail_tip') }}</p>
+                </div>
+                <div class="mb-0">
+                    <h6 class="text-warning">{{ __('app.competitive_pricing') }}</h6>
+                    <p class="small text-muted">{{ __('app.pricing_tip') }}</p>
                 </div>
             </div>
         </div>
     </div>
 </div>
+</div>
+
+<style>
+    .form-section {
+        margin-bottom: 2rem;
+    }
+
+    .form-section-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #eee;
+    }
+
+    .form-label {
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+
+    .required-field::after {
+        content: '*';
+        color: #dc3545;
+        margin-inline-start: 4px;
+    }
+
+    .dashboard-card {
+        border: none;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        overflow: hidden;
+        margin-bottom: 1.5rem;
+        border: 1px solid #e9ecef;
+    }
+
+    .dashboard-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0.5rem 2rem 0 rgba(58, 59, 69, 0.15);
+    }
+
+    .card-header {
+        background-color: #fff;
+        border-bottom: 1px solid #e9ecef;
+        padding: 1.25rem 1.5rem;
+    }
+
+    .card-body {
+        padding: 1.5rem;
+    }
+
+    .btn-primary {
+        font-weight: 600;
+        padding: 0.5rem 1.5rem;
+        border-radius: 4px;
+    }
+
+    .btn-outline-secondary {
+        border-radius: 4px;
+        padding: 0.5rem 1rem;
+    }
+
+    .preview-thumbnail {
+        max-width: 200px;
+        max-height: 150px;
+        margin-top: 1rem;
+        border: 1px solid #e3e6f0;
+        border-radius: 5px;
+        display: none;
+    }
+</style>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -431,14 +454,13 @@
                         if (!preview) {
                             preview = document.createElement('img');
                             preview.id = 'thumbnail-preview';
+                            preview.className = 'img-thumbnail mt-2';
                             preview.style.maxWidth = '200px';
                             preview.style.maxHeight = '120px';
-                            preview.style.marginTop = '10px';
-                            preview.style.borderRadius = '8px';
-                            preview.style.border = '2px solid #dee2e6';
                             thumbnailInput.parentNode.appendChild(preview);
                         }
                         preview.src = e.target.result;
+                        preview.style.display = 'block';
                     };
                     reader.readAsDataURL(file);
                 }
@@ -454,8 +476,7 @@
                     if (!sizeInfo) {
                         sizeInfo = document.createElement('div');
                         sizeInfo.id = 'video-size-info';
-                        sizeInfo.style.marginTop = '5px';
-                        sizeInfo.style.fontSize = '0.875rem';
+                        sizeInfo.className = 'small mt-1';
                         previewVideoInput.parentNode.appendChild(sizeInfo);
                     }
                     sizeInfo.innerHTML = `File size: ${fileSize} MB`;
@@ -466,31 +487,54 @@
 
         // Form validation before submit
         const form = document.querySelector('form');
+        const continueButton = document.getElementById('continueButton');
+
+        function validateForm() {
+            const requiredFields = form.querySelectorAll('[required]');
+            let isValid = true;
+
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.classList.add('is-invalid');
+                    isValid = false;
+                } else {
+                    field.classList.remove('is-invalid');
+                }
+            });
+
+            if (!isValid) {
+                // Scroll to first invalid field
+                const firstInvalid = form.querySelector('.is-invalid');
+                if (firstInvalid) {
+                    firstInvalid.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center'
+                    });
+                    firstInvalid.focus();
+                }
+            }
+
+            return isValid;
+        }
+
+        // Handle continue button click
+        if (continueButton) {
+            continueButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (validateForm()) {
+                    // Here you would typically submit the form or move to the next step
+                    // For now, just show an alert
+                    alert('Form is valid! Proceeding to next step...');
+                    // form.submit();
+                }
+            });
+        }
+
+        // Handle form submission
         if (form) {
             form.addEventListener('submit', function(e) {
-                const requiredFields = form.querySelectorAll('[required]');
-                let isValid = true;
-
-                requiredFields.forEach(field => {
-                    if (!field.value.trim()) {
-                        field.classList.add('is-invalid');
-                        isValid = false;
-                    } else {
-                        field.classList.remove('is-invalid');
-                    }
-                });
-
-                if (!isValid) {
+                if (!validateForm()) {
                     e.preventDefault();
-                    // Scroll to first invalid field
-                    const firstInvalid = form.querySelector('.is-invalid');
-                    if (firstInvalid) {
-                        firstInvalid.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'center'
-                        });
-                        firstInvalid.focus();
-                    }
                 }
             });
         }

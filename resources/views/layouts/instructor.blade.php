@@ -37,10 +37,10 @@
     <!-- End of sidebar -->
 
     <!-- Main Content -->
-    <div class="dashboard-main" id="dashboardMain">
+    <div class="dashboard-main w-100 mx-0" id="dashboardMain">
         <!-- Header -->
-        <div class="dashboard-header px-4 py-3  bg-dark">
-            <div class="d-flex justify-content-between align-items-center">
+        <div class="dashboard-header px-4 py-3  bg-dark w-100">
+            <div class="container d-flex justify-content-between align-items-center">
                 <div>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb mb-0 small">
@@ -89,7 +89,7 @@
     </div>
 
     <!-- Widgets Sidebar -->
-    <div class="widgets-sidebar shadow" id="widgetsSidebar">
+    <div class="widgets-sidebar shadow" id="widgetsSidebar" style="top: 80px;">
         @yield('widgets')
     </div>
 

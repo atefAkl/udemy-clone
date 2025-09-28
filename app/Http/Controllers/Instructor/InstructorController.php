@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Instructor;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CreateCourseRequest;
 use App\Models\Course;
 use App\Models\Category;
 use App\Models\Lesson;
@@ -73,29 +74,20 @@ class InstructorController extends Controller
     }
 
     /**
+     * Show create course form (Wide Layout)
+     */
+    public function createCourseWide()
+    {
+        $categories = Category::where('is_active', true)->get();
+        return view('instructor.courses.create-wide', compact('categories'));
+    }
+
+    /**
      * Store new course
      */
-    public function storeCourse(Request $request)
+    public function storeCourse(CreateCourseRequest $request)
     {
-        $request->validate([
-            'title'                 => 'required|string|max:100',
-            'short_description'     => 'required|string|max:160',
-            'description'           => 'required|string|max:500',
-            'category_id'           => 'required|exists:categories,id',
-            'language'              => 'required|in:ar,en',
-            'target_level'          => 'required|in:beginner,intermediate,advanced,professional',
-            'price'                 => 'required|numeric|min:0',
-            'launch_date'           => 'nullable|date|after_or_equal:today',
-            'launch_time'           => 'nullable|date',
-            'thumbnail'             => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120', // 5MB max
-            'preview_video'         => 'nullable|file|mimes:mp4,mov,avi,wmv|max:102400', // 100MB max
-            'requirements'          => 'nullable|string|max:1000',
-            'objectives'            => 'nullable|string|max:1000',
-            'has_certificate'       => 'boolean',
-            'access_duration_type'  => 'required|in:unlimited,limited',
-            'access_duration_value' => 'nullable|integer|min:1|required_if:access_duration_type,limited',
-        ]);
-
+        //return $request->all();
         $course = new Course();
         $course->title = $request->title;
         $course->slug = Str::slug($request->title);
@@ -108,10 +100,10 @@ class InstructorController extends Controller
         $course->instructor_id = Auth::id();
         $course->launch_date = $request->launch_date;
         $course->launch_time = $request->launch_time;
-        $course->requirements = $request->requirements;
-        $course->objectives = $request->objectives;
-        $course->has_certificate = $request->boolean('has_certificate');
-        $course->access_duration_type = $request->access_duration_type;
+        //$course->requirements = $request->requirements ?? 'No requirements';
+        //$course->objectives = $request->objectives ?? 'No objectives';
+        $course->has_certificate = $request->boolean('has_certificate') ?? false;
+        $course->access_duration_type = $request->access_duration_type ?? 'unlimited';
         $course->access_duration_value = $request->access_duration_type === 'limited' ? $request->access_duration_value : null;
         $course->status = Course::STATUS_DRAFT;
 
@@ -165,47 +157,132 @@ class InstructorController extends Controller
     {
         $this->authorize('update', $course);
 
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'short_description' => 'required|string|max:500',
-            'description' => 'required|string',
-            'category_id' => 'required|exists:categories,id',
-            'level' => 'required|in:beginner,intermediate,advanced',
-            'language' => 'required|string|max:10',
-            'price' => 'required|numeric|min:0',
-            'discount_price' => 'nullable|numeric|min:0|lt:price',
-            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'requirements' => 'nullable|array',
-            'what_you_learn' => 'nullable|array',
-        ]);
+        $isPatch = $request->isMethod('patch') || $request->expectsJson();
 
-        $course->title = $request->title;
-        $course->slug = Str::slug($request->title);
-        $course->short_description = $request->short_description;
-        $course->description = $request->description;
-        $course->category_id = $request->category_id;
-        $course->level = $request->level;
-        $course->language = $request->language;
-        $course->price = $request->price;
-        $course->discount_price = $request->discount_price;
-        $course->requirements = $request->requirements ?? [];
-        $course->what_you_learn = $request->what_you_learn ?? [];
+        // Validation rules
+        $rules = [
+            'title' => ($isPatch ? 'sometimes' : 'required') . '|string|max:255',
+            'subtitle' => 'sometimes|nullable|string|max:120',
+            'short_description' => ($isPatch ? 'sometimes' : 'required') . '|string|max:160',
+            'description' => ($isPatch ? 'sometimes' : 'required') . '|string',
+            'category_id' => ($isPatch ? 'sometimes' : 'required') . '|exists:categories,id',
+            'level' => ($isPatch ? 'sometimes' : 'required') . '|in:beginner,intermediate,advanced,all_levels',
+            'language' => ($isPatch ? 'sometimes' : 'required') . '|string|in:ar,en',
+            'price' => ($isPatch ? 'sometimes' : 'required') . '|numeric|min:0',
+            'duration' => ($isPatch ? 'sometimes' : 'required') . '|numeric|min:0.5',
+            'access_duration_value' => ($isPatch ? 'sometimes' : 'required') . '|integer|min:1',
+            'access_duration_unit' => ($isPatch ? 'sometimes' : 'required') . '|in:days,weeks,months,years',
+            'launch_date' => 'sometimes|nullable|date',
+            'launch_time' => 'sometimes|nullable|date_format:H:i',
+            'thumbnail' => 'sometimes|nullable|image|mimes:jpeg,png,jpg|max:5120', // 5MB max
+            'preview_video' => 'sometimes|nullable|mimes:mp4,mov,avi|max:102400', // 100MB max
+            'requirements' => 'sometimes|nullable|array',
+            'requirements.*' => 'string|max:255',
+            'what_you_learn' => 'sometimes|nullable|array',
+            'what_you_learn.*' => 'string|max:255',
+            'has_certificate' => 'sometimes|boolean',
+            'remove_thumbnail' => 'sometimes|boolean',
+            'remove_preview_video' => 'sometimes|boolean',
+        ];
 
-        // Handle thumbnail upload
-        if ($request->hasFile('thumbnail')) {
-            // Delete old thumbnail
-            if ($course->thumbnail) {
-                Storage::disk('public')->delete('courses/' . $course->thumbnail);
+        $validated = $request->validate($rules);
+
+        // If PATCH/JSON: update only provided fields
+        if ($isPatch) {
+            $updates = [];
+
+            if ($request->has('title')) {
+                $updates['title'] = $validated['title'];
+                $updates['slug'] = Str::slug($validated['title']);
+            }
+            foreach ([
+                'subtitle', 'short_description', 'description', 'category_id', 'level', 'language',
+                'price', 'duration', 'access_duration_value', 'access_duration_unit',
+                'launch_date', 'launch_time', 'requirements', 'what_you_learn'
+            ] as $field) {
+                if ($request->has($field)) {
+                    $updates[$field] = $validated[$field] ?? ($request->input($field) ?? null);
+                }
+            }
+            if ($request->has('has_certificate')) {
+                $updates['has_certificate'] = (bool) $validated['has_certificate'];
             }
 
-            $thumbnailPath = $request->file('thumbnail')->store('courses', 'public');
+            // Derive access_duration_type if access_duration_value provided
+            if (array_key_exists('access_duration_value', $updates)) {
+                $value = (int) $updates['access_duration_value'];
+                $updates['access_duration_type'] = $value > 0 ? 'limited' : 'unlimited';
+            }
+
+            if (!empty($updates)) {
+                $course->fill($updates);
+            }
+
+            // No file operations in autosave (frontend excludes files)
+            $course->save();
+
+            return response()->json([
+                'success' => true,
+                'course_id' => $course->id,
+                'updated' => array_keys($updates),
+            ]);
+        }
+
+        // PUT: full update flow
+        // Update basic course info
+        $course->fill([
+            'title' => $validated['title'],
+            'subtitle' => $validated['subtitle'] ?? null,
+            'slug' => Str::slug($validated['title']),
+            'short_description' => $validated['short_description'],
+            'description' => $validated['description'],
+            'category_id' => $validated['category_id'],
+            'level' => $validated['level'],
+            'language' => $validated['language'],
+            'price' => $validated['price'],
+            'duration' => $validated['duration'],
+            'access_duration_type' => $validated['access_duration_value'] > 0 ? 'limited' : 'unlimited',
+            'access_duration_value' => $validated['access_duration_value'],
+            'access_duration_unit' => $validated['access_duration_unit'],
+            'launch_date' => $validated['launch_date'] ?? null,
+            'launch_time' => $validated['launch_time'] ?? null,
+            'requirements' => $validated['requirements'] ?? [],
+            'what_you_learn' => $validated['what_you_learn'] ?? [],
+            'has_certificate' => $validated['has_certificate'] ?? false,
+        ]);
+
+        // Handle thumbnail upload/removal
+        if ($request->hasFile('thumbnail')) {
+            // Delete old thumbnail if exists
+            if ($course->thumbnail) {
+                Storage::disk('public')->delete('courses/thumbnails/' . $course->thumbnail);
+            }
+            $thumbnailPath = $request->file('thumbnail')->store('courses/thumbnails', 'public');
             $course->thumbnail = basename($thumbnailPath);
+        } elseif ($request->boolean('remove_thumbnail') && $course->thumbnail) {
+            // Remove thumbnail if requested
+            Storage::disk('public')->delete('courses/thumbnails/' . $course->thumbnail);
+            $course->thumbnail = null;
+        }
+
+        // Handle preview video upload/removal
+        if ($request->hasFile('preview_video')) {
+            // Delete old video if exists
+            if ($course->preview_video) {
+                Storage::disk('public')->delete('courses/videos/' . $course->preview_video);
+            }
+            $videoPath = $request->file('preview_video')->store('courses/videos', 'public');
+            $course->preview_video = basename($videoPath);
+        } elseif ($request->boolean('remove_preview_video') && $course->preview_video) {
+            // Remove video if requested
+            Storage::disk('public')->delete('courses/videos/' . $course->preview_video);
+            $course->preview_video = null;
         }
 
         $course->save();
 
         return redirect()->route('instructor.courses.show', $course->id)
-            ->with('success', 'Course updated successfully!');
+            ->with('success', __('Course updated successfully!'));
     }
 
     /**
