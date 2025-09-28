@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\Instructor\InstructorController;
+use App\Http\Controllers\Instructor\CourseController as InstructorCourseController;
 use App\Http\Controllers\Instructor\SectionController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ResourceController;
@@ -208,31 +209,31 @@ Route::prefix('instructor')->name('instructor.')->middleware(['auth', 'role:inst
     // Course Management
     Route::prefix('courses')->name('courses.')->group(function () {
         // Section Management
-        Route::get('{course}/sections', [SectionController::class, 'index'])
+        Route::get('{course}/sections',                 [SectionController::class, 'index'])
             ->name('sections.index');
-        Route::get('{course}/sections/create', [SectionController::class, 'create'])
+        Route::get('{course}/sections/create',          [SectionController::class, 'create'])
             ->name('sections.create');
-        Route::post('{course}/sections', [SectionController::class, 'store'])
+        Route::post('{course}/sections',                [SectionController::class, 'store'])
             ->name('sections.store');
-        Route::get('{course}/sections/{section}', [SectionController::class, 'show'])
+        Route::get('{course}/sections/{section}',       [SectionController::class, 'show'])
             ->name('sections.show');
-        Route::get('{course}/sections/{section}/edit', [SectionController::class, 'edit'])
+        Route::get('{course}/sections/{section}/edit',  [SectionController::class, 'edit'])
             ->name('sections.edit');
-        Route::put('{course}/sections/{section}', [SectionController::class, 'update'])
+        Route::put('{course}/sections/{section}',       [SectionController::class, 'update'])
             ->name('sections.update');
-        Route::delete('{course}/sections/{section}', [SectionController::class, 'destroy'])
+        Route::delete('{course}/sections/{section}',    [SectionController::class, 'destroy'])
             ->name('sections.destroy');
-        Route::get('/', [InstructorController::class, 'courses'])->name('index');
-        Route::get('/create', [InstructorController::class, 'createCourse'])->name('create');
-        Route::get('/create/wide', [InstructorController::class, 'createCourseWide'])->name('create.wide');
-        Route::post('/', [InstructorController::class, 'storeCourse'])->name('store');
-        Route::get('/{course}', [InstructorController::class, 'showCourse'])->name('show');
-        Route::get('/{course}/edit', [InstructorController::class, 'editCourse'])->name('edit');
-        Route::put('/{course}', [InstructorController::class, 'updateCourse'])->name('update');
+        Route::get('/',                                 [InstructorCourseController::class, 'index'])->name('index');
+        Route::get('/create',                           [InstructorCourseController::class, 'create'])->name('create');
+        Route::get('/create/wide',                      [InstructorCourseController::class, 'createCourseWide'])->name('create.wide');
+        Route::post('/',                                [InstructorCourseController::class, 'store'])->name('store');
+        Route::get('/{course}',                         [InstructorCourseController::class, 'show'])->name('show');
+        Route::get('/{course}/edit',                    [InstructorCourseController::class, 'edit'])->name('edit');
+        Route::put('/{course}',                         [InstructorCourseController::class, 'update'])->name('update');
         // Support JSON partial updates (autosave)
-        Route::patch('/{course}', [InstructorController::class, 'updateCourse'])->name('update.patch');
-        Route::delete('/{course}', [InstructorController::class, 'deleteCourse'])->name('delete');
-        Route::patch('/{course}/publish', [InstructorController::class, 'publishCourse'])->name('publish');
+        Route::patch('/{course}',                       [InstructorCourseController::class, 'update'])->name('update.patch');
+        Route::delete('/{course}',                      [InstructorCourseController::class, 'delete'])->name('delete');
+        Route::patch('/{course}/publish',               [InstructorCourseController::class, 'publish'])->name('publish');
     });
 
     // Categories Management

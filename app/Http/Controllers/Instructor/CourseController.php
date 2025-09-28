@@ -3,50 +3,25 @@
 namespace App\Http\Controllers\Instructor;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use App\Http\Requests\CreateCourseRequest;
 use App\Models\Course;
-use App\Models\Category;
-use App\Models\Lesson;
-use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-
 use Illuminate\Support\Facades\Auth;
+use App\Models\Category;
+use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 
-class InstructorController extends Controller
+class CourseController extends Controller
 {
     use AuthorizesRequests;
-
-    /**
-     * Instructor dashboard
-     */
-    public function dashboard()
-    {
-        $instructor = User::find(Auth::id());
-        $stats = [
-            'total_courses' => $instructor->courses()->count(),
-            'published_courses' => $instructor->courses()->published()->count(),
-            'total_students' => $instructor->courses()->withCount('enrollments')->get()->sum('enrollments_count'),
-            'total_revenue' => 0, // Will be calculated later with payment system
-        ];
-
-        $recentCourses = $instructor->courses()
-            ->with(['category', 'enrollments'])
-            ->latest()
-            ->limit(5)
-            ->get();
-
-        $courses_categories = Category::parents()->get();
-
-        return view('instructor.dashboard', compact('stats', 'recentCourses', 'courses_categories'));
-    }
+    //
 
     /**
      ** List instructor courses
      */
-    public function courses()
+    public function index()
     {
         $courses = User::find(Auth::id())->courses()
             ->with(['category', 'enrollments'])
@@ -66,25 +41,16 @@ class InstructorController extends Controller
     /**
      * Show create course form
      */
-    public function createCourse()
+    public function create()
     {
         $categories = Category::where('is_active', true)->get();
         return view('instructor.courses.create', compact('categories'));
     }
 
     /**
-     * Show create course form (Wide Layout)
-     */
-    public function createCourseWide()
-    {
-        $categories = Category::where('is_active', true)->get();
-        return view('instructor.courses.create-wide', compact('categories'));
-    }
-
-    /**
      * Store new course
      */
-    public function storeCourse(CreateCourseRequest $request)
+    public function store(CreateCourseRequest $request)
     {
         $validated = $request->validated();
 
@@ -106,6 +72,7 @@ class InstructorController extends Controller
             'access_duration_value'  => $validated['access_duration_type'] === 'limited' ? $validated['access_duration_value'] : null,
             'status'                 => Course::STATUS_DRAFT,
         ]);
+
         // Handle thumbnail upload
         if ($request->hasFile('thumbnail')) {
             $thumbnailPath = $request->file('thumbnail')->store('courses/thumbnails', 'public');
@@ -127,7 +94,7 @@ class InstructorController extends Controller
     /**
      ** Show course details
      */
-    public function showCourse(Course $course)
+    public function show(Course $course)
     {
         $this->authorize('update', $course);
 
@@ -141,7 +108,7 @@ class InstructorController extends Controller
     /**
      ** Show edit course form
      */
-    public function editCourse(Course $course)
+    public function edit(Course $course)
     {
         $this->authorize('update', $course);
 
@@ -152,7 +119,7 @@ class InstructorController extends Controller
     /**
      * Update course
      */
-    public function updateCourse(Request $request, Course $course)
+    public function update(Request $request, Course $course)
     {
         $this->authorize('update', $course);
 
@@ -330,183 +297,5 @@ class InstructorController extends Controller
         $course->update(['status' => Course::STATUS_PUBLISHED]);
 
         return back()->with('success', 'Course published successfully!');
-    }
-
-    /**
-     * List instructor categories
-     */
-    public function categories()
-    {
-        $instructor = Auth::user();
-
-        $categories = Category::with(['parent', 'children'])
-            ->withCount('courses')
-            ->latest()
-            ->paginate(15);
-
-        $stats = [
-            'total_categories' => Category::count(),
-            'active_categories' => Category::where('status', 'active')->count(),
-            'parent_categories' => Category::whereNull('parent_id')->count(),
-            'subcategories' => Category::whereNotNull('parent_id')->count(),
-        ];
-
-        return view('instructor.categories.index', compact('categories', 'stats'));
-    }
-
-    /**
-     * Show create category form
-     */
-    public function createCategory()
-    {
-        $parentCategories = Category::whereNull('parent_id')
-            ->where('status', 'active')
-            ->orderBy('name')
-            ->get();
-
-        $recentCategories = Category::latest()
-            ->limit(5)
-            ->get();
-
-        $stats = [
-            'total_categories' => Category::count(),
-            'parent_categories' => Category::whereNull('parent_id')->count(),
-            'subcategories' => Category::whereNotNull('parent_id')->count(),
-        ];
-
-        return view('instructor.categories.create', compact('parentCategories', 'recentCategories', 'stats'));
-    }
-
-    /**
-     * Store new category
-     */
-    public function storeCategory(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255|unique:categories,name',
-            'slug' => 'nullable|string|max:255|unique:categories,slug',
-            'description' => 'nullable|string',
-            'parent_id' => 'nullable|exists:categories,id',
-            'status' => 'required|in:active,inactive',
-            'icon' => 'nullable|string|max:100',
-            'color' => 'nullable|string|max:7',
-            'sort_order' => 'nullable|integer|min:0',
-            'is_featured' => 'boolean',
-            'meta_title' => 'nullable|string|max:255',
-            'meta_description' => 'nullable|string|max:500',
-        ]);
-
-        $category = new Category();
-        $category->name = $request->name;
-        $category->slug = $request->slug ?: Str::slug($request->name);
-        $category->description = $request->description;
-        $category->parent_id = $request->parent_id;
-        $category->status = $request->status;
-        $category->icon = $request->icon;
-        $category->color = $request->color ?? '#007bff';
-        $category->sort_order = $request->sort_order ?? 0;
-        $category->is_featured = $request->boolean('is_featured');
-        $category->meta_title = $request->meta_title;
-        $category->meta_description = $request->meta_description;
-
-        $category->save();
-
-        return redirect()->route('instructor.categories.index')
-            ->with('success', __('app.category_created'));
-    }
-
-    /**
-     * Show category details
-     */
-    public function showCategory(Category $category)
-    {
-        $category->load(['parent', 'children', 'courses' => function ($query) {
-            $query->where('instructor_id', Auth::id())->latest();
-        }]);
-
-        $stats = [
-            'total_courses' => $category->courses()->count(),
-            'published_courses' => $category->courses()->where('status', 'published')->count(),
-            'draft_courses' => $category->courses()->where('status', 'draft')->count(),
-        ];
-
-        return view('instructor.categories.show', compact('category', 'stats'));
-    }
-
-    /**
-     * Show edit category form
-     */
-    public function editCategory(Category $category)
-    {
-        $parentCategories = Category::whereNull('parent_id')
-            ->where('status', 'active')
-            ->where('id', '!=', $category->id)
-            ->orderBy('name')
-            ->get();
-
-        return view('instructor.categories.edit', compact('category', 'parentCategories'));
-    }
-
-    /**
-     * Update category
-     */
-    public function updateCategory(Request $request, Category $category)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255|unique:categories,name,' . $category->id,
-            'slug' => 'nullable|string|max:255|unique:categories,slug,' . $category->id,
-            'description' => 'nullable|string',
-            'parent_id' => 'nullable|exists:categories,id',
-            'status' => 'required|in:active,inactive',
-            'icon' => 'nullable|string|max:100',
-            'color' => 'nullable|string|max:7',
-            'sort_order' => 'nullable|integer|min:0',
-            'is_featured' => 'boolean',
-            'meta_title' => 'nullable|string|max:255',
-            'meta_description' => 'nullable|string|max:500',
-        ]);
-
-        // Prevent category from being its own parent
-        if ($request->parent_id == $category->id) {
-            return back()->withErrors(['parent_id' => 'Category cannot be its own parent.']);
-        }
-
-        $category->name = $request->name;
-        $category->slug = $request->slug ?: Str::slug($request->name);
-        $category->description = $request->description;
-        $category->parent_id = $request->parent_id;
-        $category->status = $request->status;
-        $category->icon = $request->icon;
-        $category->color = $request->color ?? '#007bff';
-        $category->sort_order = $request->sort_order ?? 0;
-        $category->is_featured = $request->boolean('is_featured');
-        $category->meta_title = $request->meta_title;
-        $category->meta_description = $request->meta_description;
-
-        $category->save();
-
-        return redirect()->route('instructor.categories.index')
-            ->with('success', __('app.category_updated'));
-    }
-
-    /**
-     * Delete category
-     */
-    public function deleteCategory(Category $category)
-    {
-        // Check if category has courses
-        if ($category->courses()->count() > 0) {
-            return back()->with('error', 'Cannot delete category with existing courses.');
-        }
-
-        // Check if category has subcategories
-        if ($category->children()->count() > 0) {
-            return back()->with('error', 'Cannot delete category with subcategories.');
-        }
-
-        $category->delete();
-
-        return redirect()->route('instructor.categories.index')
-            ->with('success', __('app.category_deleted'));
     }
 }
