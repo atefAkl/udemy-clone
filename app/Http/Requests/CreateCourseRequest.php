@@ -62,7 +62,6 @@ class CreateCourseRequest extends FormRequest
             'category_id.exists'                => 'course category does not exist',
             'language.required'                 => 'course language is required',
             'language.in'                       => 'course language must be ar or en',
-            // initiaizinlg files
             'target_level.required'             => 'course target level is required',
             'target_level.in'                   => 'course target level must be beginner, intermediate, advanced or professional',
             'price.required'                    => 'course price is required',

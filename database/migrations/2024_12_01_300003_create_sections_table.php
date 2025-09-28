@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('sections', function (Blueprint $table) {
             $table->id();
             $table->string('title')->nullable();
-            $table->timestamps();
             $table->unsignedBigInteger('course_id')->references('id')->on('courses')->onDelete('cascade');
             $table->string('description');
             $table->integer('sort_order');
@@ -23,6 +22,10 @@ return new class extends Migration
             $table->boolean('has_assignment')->default(0);
             $table->boolean('has_survey')->default(0);
             $table->boolean('has_rating')->default(0);
+
+            $table->engine('INNODB');
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 
