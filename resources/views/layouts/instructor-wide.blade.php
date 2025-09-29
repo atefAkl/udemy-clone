@@ -19,6 +19,11 @@
     <!-- Cairo Font for Arabic -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link href="{{ asset('css/instructor.css') }}" rel="stylesheet">
+
+    <!-- Video.js CSS -->
+    <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" />
+
+    @stack('styles')
 </head>
 
 <body class="p-0">
@@ -120,6 +125,9 @@
     <div class="sidebar-overlay" id="sidebarOverlay">
 
     </div>
+
+    <!-- Video.js JS -->
+    <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
 
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
