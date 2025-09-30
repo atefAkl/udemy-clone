@@ -194,6 +194,11 @@
         tooltipTriggerList.map(function(tooltipTriggerEl) {
             return new bootstrap.Tooltip(tooltipTriggerEl);
         });
+
+        $('.progress-bar').each(function() {
+            const width = $(this).data('width');
+            $(this).css('width', width + '%');
+        });
     </script>
     @stack('scripts')
 </body>

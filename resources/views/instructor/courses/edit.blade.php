@@ -111,13 +111,13 @@
                     <ul class="nav flex-column border">
                         <!-- Planning -->
                         <h5>{{__('courses.sidenav.plan_your_course')}}</h5>
+                        <li class="active" data-target="#generalInfo"><i class="fa fa-circle-stop"></i>{{__('courses.sidenav.general_info')}}</li>
                         <li class="" data-target="#intendedLearners"><i class="fa fa-circle-stop"></i>{{__('courses.sidenav.intended_learners')}}</li>
                         <li data-target="#courseLayout"><i class="fa fa-circle-stop"></i>{{__('courses.sidenav.course_layout')}}</li>
                         <li data-target="#setupTestVideo"><i class="fa fa-circle-stop"></i>{{__('courses.sidenav.setup_test_video')}}</li>
                         <!-- Create Your Content -->
                         <h5>{{__('Create Your Content')}}</h5>
                         <li data-target="#snapEdit"><i class="fa fa-circle-stop"></i>{{__('courses.sidenav.snap_edit')}}</li>
-                        <li class="active" data-target="#generalInfo"><i class="fa fa-circle-stop"></i>{{__('courses.sidenav.general_info')}}</li>
                         <li data-target="#curriculum"><i class="fa fa-circle-stop"></i>{{__('courses.sidenav.curriculum')}}</li>
                         <li data-target="#captions"><i class="fa fa-circle-stop"></i>{{__('courses.sidenav.captions')}}</li>
                         <li data-target="#accessibility"><i class="fa fa-circle-stop"></i>{{__('courses.sidenav.accessibility')}}</li>
@@ -132,6 +132,13 @@
                 </div>
                 <div class="col col-lg-9">
                     <div id="form-sections">
+                        <div id="generalInfo" class="form-section active">
+                            <h4 class="form-section-title">{{__('courses.general_info_title')}}</h4>
+
+                            <div class="p-3">
+                                <x-general-info :course="$course" />
+                            </div>
+                        </div>
 
                         <div id="intendedLearners" class="form-section">
                             <h4 class="form-section-title">{{__('courses.intended_learners')}}</h4>
@@ -336,25 +343,7 @@
                             </div>
                         </div>
 
-                        <div id="generalInfo" class="form-section active">
-                            <h4 class="form-section-title">{{__('courses.general_info_title')}}</h4>
-                            <h3 class="text-center">Student view</h3>
-                            <div class="p-3">
-                                <video
-                                    id="my-video"
-                                    class="video-js vjs-default-skin shadow rounded"
-                                    controls
-                                    preload="auto"
-                                    width="500"
-                                    height="300"
-                                    poster="{{asset('images/platform-logo.jpg')}}"
-                                    data-setup="{}">
 
-                                    <source src="{{asset('images/GF_2026.mp4')}}" type="video/mp4">
-                                    <track kind="subtitles" src="{{asset('images/GF_2026.mp4')}}" srclang="en" label="English">
-                                </video>
-                            </div>
-                        </div>
 
                         <!-- Snap & Edit Videos -->
                         <div id="curriculum" class="form-section">

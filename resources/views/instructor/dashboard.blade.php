@@ -281,14 +281,14 @@
 <div class="card border-0 shadow-sm mb-4">
     <div class="card-header bg-white">
         <h6 class="mb-0">
-            <i class="fa fa-speedometer text-success {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
+            <i class="fa fa-speedometer text-success me-2"></i>
             {{ __('instructor.quick_stats') }}
         </h6>
     </div>
     <div class="card-body">
         <div class="row text-center">
             <div class="col-6 mb-3">
-                <div class="border-{{ session('locale', 'ar') === 'ar' ? 'start' : 'end' }}">
+                <div class="border-end">
                     <h4 class="text-primary mb-1">4.7</h4>
                     <small class="text-muted">{{ __('instructor.average_rating') }}</small>
                 </div>
@@ -298,7 +298,7 @@
                 <small class="text-muted">{{ __('instructor.completion_rate') }}</small>
             </div>
             <div class="col-6">
-                <div class="border-{{ session('locale', 'ar') === 'ar' ? 'start' : 'end' }}">
+                <div class="border-end">
                     <h4 class="text-info mb-1">234</h4>
                     <small class="text-muted">{{ __('instructor.total_reviews') }}</small>
                 </div>
@@ -315,7 +315,7 @@
 <div class="card border-0 shadow-sm mb-4">
     <div class="card-header bg-white">
         <h6 class="mb-0">
-            <i class="fa fa-activity text-info {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
+            <i class="fa fa-activity text-info me-2"></i>
             {{ __('app.recent_activity') }}
         </h6>
     </div>
@@ -351,7 +351,7 @@
 
         @foreach($activities as $activity)
         <div class="d-flex align-items-start mb-3 {{ !$loop->last ? 'pb-3 border-bottom' : '' }}">
-            <div class="{{ session('locale', 'ar') === 'ar' ? 'ms-3' : 'me-3' }}">
+            <div class="me-3">
                 <i class="{{ $activity['icon'] }}"></i>
             </div>
             <div class="flex-grow-1">
@@ -367,30 +367,30 @@
 <div class="card border-0 shadow-sm">
     <div class="card-header bg-white">
         <h6 class="mb-0">
-            <i class="fa fa-lightning text-warning {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
+            <i class="fa fa-lightning text-warning me-2"></i>
             {{ __('app.quick_actions') }}
         </h6>
     </div>
     <div class="card-body">
         <div class="d-grid gap-2">
             <a href="{{ route('instructor.courses.create') }}" class="btn btn-primary">
-                <i class="fa fa-plus {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
+                <i class="fa fa-plus me-2"></i>
                 {{ __('instructor.create_new_course') }}
             </a>
             <a href="{{ route('instructor.courses.index') }}" class="btn btn-outline-primary">
-                <i class="fa fa-list {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
+                <i class="fa fa-list me-2"></i>
                 {{ __('instructor.manage_courses_btn') }}
             </a>
             <a href="#" class="btn btn-outline-success">
-                <i class="fa fa-bar-chart {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
+                <i class="fa fa-bar-chart me-2"></i>
                 {{ __('instructor.performance_reports') }}
             </a>
             <a href="#" class="btn btn-outline-info">
-                <i class="fa fa-chat-dots {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
+                <i class="fa fa-chat-dots me-2"></i>
                 {{ __('instructor.student_messages') }}
             </a>
             <a href="#" class="btn btn-outline-secondary">
-                <i class="fa fa-gear {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
+                <i class="fa fa-gear me-2"></i>
                 {{ __('app.profile_settings') }}
             </a>
         </div>
@@ -398,38 +398,6 @@
 </div>
 @endsection
 
-@if(session('locale', 'ar') === 'ar')
-<style>
-    .breadcrumb-item+.breadcrumb-item::before {
-        float: left;
-        padding-right: 0.5rem;
-        padding-left: 0;
-        content: "←";
-    }
-
-    .border-end {
-        border-left: 1px solid #dee2e6 !important;
-        border-right: none !important;
-    }
-
-    .border-start {
-        border-right: 1px solid #dee2e6 !important;
-        border-left: none !important;
-    }
-</style>
-@else
-<style>
-    .border-end {
-        border-right: 1px solid #dee2e6 !important;
-        border-left: none !important;
-    }
-
-    .border-start {
-        border-left: 1px solid #dee2e6 !important;
-        border-right: none !important;
-    }
-</style>
-@endif
 
 <style>
     .bg-gradient-primary {
@@ -445,24 +413,39 @@
     }
 </style>
 
+<div id="chart-data"
+     data-labels='{{ json_encode(session('locale', 'ar') === 'ar' ? ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو'] : ['January', 'February', 'March', 'April', 'May', 'June']) }}'
+     data-enrollments-label="{{ __('app.new_enrollments') }}"
+     data-revenue-label="{{ __('app.revenue') }} ($)"
+     data-is-rtl="{{ session('locale', 'ar') === 'ar' ? 'true' : 'false' }}">
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const ctx = document.getElementById('performanceChart').getContext('2d');
-        new Chart(ctx, {
+        const chartDataEl = document.getElementById('chart-data');
+        if (!chartDataEl) return;
+
+        const labels = JSON.parse(chartDataEl.dataset.labels);
+        const enrollmentsLabel = chartDataEl.dataset.enrollmentsLabel;
+        const revenueLabel = chartDataEl.dataset.revenueLabel;
+        const isRtl = chartDataEl.dataset.isRtl === 'true';
+
+        const ctx = document.getElementById('performanceChart');
+        if (!ctx) return;
+
+        new Chart(ctx.getContext('2d'), {
             type: 'line',
             data: {
-                labels: @if(session('locale', 'ar') === 'ar')['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو']
-                @else['January', 'February', 'March', 'April', 'May', 'June']
-                @endif,
+                labels: labels,
                 datasets: [{
-                    label: '{{ __("app.new_enrollments") }}',
+                    label: enrollmentsLabel,
                     data: [12, 19, 3, 5, 2, 3],
                     borderColor: '#007bff',
                     backgroundColor: 'rgba(0, 123, 255, 0.1)',
                     tension: 0.4
                 }, {
-                    label: '{{ __("app.revenue") }} ($)',
+                    label: revenueLabel,
                     data: [300, 450, 200, 400, 150, 300],
                     borderColor: '#28a745',
                     backgroundColor: 'rgba(40, 167, 69, 0.1)',
@@ -475,11 +458,8 @@
                 plugins: {
                     legend: {
                         position: 'top',
-                        rtl: {
-                            {
-                                session('locale', 'ar') === 'ar' ? 'true' : 'false'
-                            }
-                        }
+                        rtl: isRtl,
+                        textDirection: isRtl ? 'rtl' : 'ltr'
                     }
                 },
                 scales: {

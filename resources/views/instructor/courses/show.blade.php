@@ -70,12 +70,12 @@
                                 {{ __('instructor.edit_course') }}
                             </a>
                             @if($course->status === 'draft')
-                            <button class="btn btn-success" onclick="publishCourse({{ $course->id }})">
+                            <button class="btn btn-success" data-course-id="{{ $course->id }}" onclick="publishCourse(this.getAttribute('course-id'))">
                                 <i class="fa fa-upload {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
                                 {{ __('instructor.publish_course') }}
                             </button>
                             @endif
-                            <button class="btn btn-outline-danger" onclick="deleteCourse({{ $course->id }})">
+                            <button class="btn btn-outline-danger" data-course-id="{{ $course->id }}" onclick="deleteCourse(this.getAttribute('course-id'))">
                                 <i class="fa fa-trash {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
                                 {{ __('instructor.delete_course') }}
                             </button>
@@ -247,7 +247,7 @@
                             </div>
                             <div class="col-md-2">
                                 <div class="progress" style="height: 8px;">
-                                    <div class="progress-bar" style="width: {{ $enrollment->progress }}%"></div>
+                                    <div class="progress-bar" data-width="{{ $enrollment->progress }}"></div>
                                 </div>
                                 <small class="text-muted">{{ $enrollment->progress }}% {{ __('instructor.complete') }}</small>
                             </div>
