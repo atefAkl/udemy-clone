@@ -169,6 +169,7 @@ return [
 
     // Side nav 
     'sidenav' => [
+        'general_info' => 'General info',
         'plan_your_course' => 'Plan your course',
         'intended_learners' => 'Intended Learners',
         'course_layout' => 'Course layout',
@@ -185,6 +186,9 @@ return [
         'course_messages' => 'Course messages',
 
     ],
+
+    // Sections Titles
+    'general_info_title' => 'Course General Information',
 
     // Intended Learners Section
     'intended_learners_paragraph' => 'The following descriptions will be publicly visible on your Course Landing Page and will have a direct impact on your course performance. These descriptions will help learners decide if your course is right for them.',

@@ -170,6 +170,7 @@ return [
 
     // Side nav 
     'sidenav' => [
+        'general_info' => 'معلومات عامة',
         'plan_your_course' => 'التخطيط للدورة',
         'intended_learners' => 'الطلاب المستهدفون',
         'course_layout' => 'تخطيط الدورة',
@@ -185,6 +186,10 @@ return [
         'promotion' => 'الترويج',
         'course_messages' => 'رسائل الدورة',
     ],
+
+    // Sections Titles
+    'general_info_title' => 'معلومات عامة',
+
 
     // Intended Learners Section
     'intended_learners_paragraph' => 'الوصف التالي سيتم عرضه على صفحة دخول الدورة الخاصة بك و سيعمل على تأثير مباشر على أداء الدورة. هذه التفاصيل ستساعد الطلاب في اتخاذ قرار إذا كانت الدورة مناسبة لهم.',

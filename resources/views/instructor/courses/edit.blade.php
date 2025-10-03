@@ -111,7 +111,8 @@
                     <ul class="nav flex-column border">
                         <!-- Planning -->
                         <h5>{{__('courses.sidenav.plan_your_course')}}</h5>
-                        <li class="active" data-target="#intendedLearners"><i class="fa fa-circle-stop"></i>{{__('courses.sidenav.intended_learners')}}</li>
+                        <li class="active" data-target="#generalInfo"><i class="fa fa-circle-stop"></i>{{__('courses.sidenav.general_info')}}</li>
+                        <li class="" data-target="#intendedLearners"><i class="fa fa-circle-stop"></i>{{__('courses.sidenav.intended_learners')}}</li>
                         <li data-target="#courseLayout"><i class="fa fa-circle-stop"></i>{{__('courses.sidenav.course_layout')}}</li>
                         <li data-target="#setupTestVideo"><i class="fa fa-circle-stop"></i>{{__('courses.sidenav.setup_test_video')}}</li>
                         <!-- Create Your Content -->
@@ -131,8 +132,15 @@
                 </div>
                 <div class="col col-lg-9">
                     <div id="form-sections">
+                        <div id="generalInfo" class="form-section active">
+                            <h4 class="form-section-title">{{__('courses.general_info_title')}}</h4>
 
-                        <div id="intendedLearners" class="form-section active">
+                            <div class="p-3">
+                                <x-general-info :course="$course" />
+                            </div>
+                        </div>
+
+                        <div id="intendedLearners" class="form-section">
                             <h4 class="form-section-title">{{__('courses.intended_learners')}}</h4>
                             <div class="p-3">
                                 <p class="form-notes m-3">{{__('courses.intended_learners_paragraph')}}</p>
@@ -334,6 +342,8 @@
 
                             </div>
                         </div>
+
+
 
                         <!-- Snap & Edit Videos -->
                         <div id="curriculum" class="form-section">
