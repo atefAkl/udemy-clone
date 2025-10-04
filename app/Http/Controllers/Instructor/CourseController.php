@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Instructor;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\CreateCourseRequest;
+use App\Http\Requests\UpdateCourseGeneralInfoRequest;
 use App\Models\Course;
 use Illuminate\Support\Str;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -73,11 +74,13 @@ class CourseController extends Controller
             'status'                 => Course::STATUS_DRAFT,
         ]);
 
-        // Handle thumbnail upload
-        if ($request->hasFile('thumbnail')) {
-            $thumbnailPath = $request->file('thumbnail')->store('courses/thumbnails', 'public');
-            $course->thumbnail = basename($thumbnailPath);
+        // Handle banner upload
+        if ($request->hasFile('banner')) {
+            $bannerPath = $request->file('banner')->store('courses/banners', 'public');
+            $course->banner = basename($bannerPath);
         }
+
+
 
         // Handle promo video upload
         if ($request->hasFile('promo_video')) {
@@ -89,6 +92,70 @@ class CourseController extends Controller
 
         return redirect()->route('instructor.courses.show', $course->id)
             ->with('success', 'Course created successfully!');
+    }
+    /**
+     * Update course general information
+     * @param Request $request
+     * @param Course $course
+     * @return RedirectResponse
+     */
+
+    public function updateGeneralInfo(UpdateCourseGeneralInfoRequest $request, Course $course)
+    {
+        $validated = $request->validated();
+
+        // Update basic fields
+        $course->update([
+            'title'             => $validated['title'],
+            'subtitle'          => $validated['subtitle'],
+            'slug'              => Str::slug($validated['title']),
+            'short_description' => $validated['short_description'],
+            'description'       => $validated['description'],
+            'category_id'       => $validated['category'], // Note: field name is 'category' in request
+            'level'             => $validated['level'],
+            'language'          => $validated['language'],
+            'price'             => $validated['price'],
+        ]);
+
+        // Handle Banner
+        if ($request->input('banner_source') === 'upload' && $request->hasFile('banner')) {
+            if ($course->banner) {
+                Storage::disk('public')->delete('courses/banners/' . $course->banner);
+            }
+            $bannerPath = $request->file('banner')->store('courses/banners', 'public');
+            $course->banner = basename($bannerPath);
+            $course->banner_source = 'upload';
+            $course->banner_url = null;
+        } elseif ($request->input('banner_source') === 'link' && !empty($validated['banner_url'])) {
+            if ($course->banner) {
+                Storage::disk('public')->delete('courses/banners/' . $course->banner);
+            }
+            $course->banner = null;
+            $course->banner_source = 'link';
+            $course->banner_url = $validated['banner_url'];
+        }
+
+        // Handle Promo Video
+        if ($request->input('video_source') === 'upload' && $request->hasFile('promo_video')) {
+            if ($course->promo_video) {
+                Storage::disk('public')->delete('courses/promo_videos/' . $course->promo_video);
+            }
+            $videoPath = $request->file('promo_video')->store('courses/promo_videos', 'public');
+            $course->promo_video = basename($videoPath);
+            $course->video_source = 'upload';
+            $course->video_url = null;
+        } elseif ($request->input('video_source') === 'link' && !empty($validated['video_url'])) {
+            if ($course->promo_video) {
+                Storage::disk('public')->delete('courses/promo_videos/' . $course->promo_video);
+            }
+            $course->promo_video = null;
+            $course->video_source = 'link';
+            $course->video_url = $validated['video_url'];
+        }
+
+        $course->save();
+
+        return redirect()->back()->with('success', __('courses.general_info_updated'));
     }
 
     /**
@@ -121,127 +188,20 @@ class CourseController extends Controller
      */
     public function update(Request $request, Course $course)
     {
-        $this->authorize('update', $course);
 
-        $isPatch = $request->isMethod('patch') || $request->expectsJson();
 
-        // Validation rules
-        $rules = [
-            'title' => ($isPatch ? 'sometimes' : 'required') . '|string|max:255',
-            'subtitle' => 'sometimes|nullable|string|max:120',
-            'short_description' => ($isPatch ? 'sometimes' : 'required') . '|string|max:160',
-            'description' => ($isPatch ? 'sometimes' : 'required') . '|string',
-            'category_id' => ($isPatch ? 'sometimes' : 'required') . '|exists:categories,id',
-            'level' => ($isPatch ? 'sometimes' : 'required') . '|in:beginner,intermediate,advanced,all_levels',
-            'language' => ($isPatch ? 'sometimes' : 'required') . '|string|in:ar,en',
-            'price' => ($isPatch ? 'sometimes' : 'required') . '|numeric|min:0',
-            'duration' => ($isPatch ? 'sometimes' : 'required') . '|numeric|min:0.5',
-            'access_duration_value' => ($isPatch ? 'sometimes' : 'required') . '|integer|min:1',
-            'access_duration_unit' => ($isPatch ? 'sometimes' : 'required') . '|in:days,weeks,months,years',
-            'launch_date' => 'sometimes|nullable|date',
-            'launch_time' => 'sometimes|nullable|date_format:H:i',
-            'thumbnail' => 'sometimes|nullable|image|mimes:jpeg,png,jpg|max:5120', // 5MB max
-            'preview_video' => 'sometimes|nullable|mimes:mp4,mov,avi|max:102400', // 100MB max
-            'requirements' => 'sometimes|nullable|array',
-            'requirements.*' => 'string|max:255',
-            'what_you_learn' => 'sometimes|nullable|array',
-            'what_you_learn.*' => 'string|max:255',
-            'has_certificate' => 'sometimes|boolean',
-            'remove_thumbnail' => 'sometimes|boolean',
-            'remove_preview_video' => 'sometimes|boolean',
-        ];
-
-        $validated = $request->validate($rules);
-
-        // If PATCH/JSON: update only provided fields
-        if ($isPatch) {
-            $updates = [];
-
-            if ($request->has('title')) {
-                $updates['title'] = $validated['title'];
-                $updates['slug'] = Str::slug($validated['title']);
+        // Handle banner upload/removal
+        if ($request->hasFile('banner')) {
+            // Delete old banner if exists
+            if ($course->banner) {
+                Storage::disk('public')->delete('courses/banners/' . $course->banner);
             }
-            foreach (
-                [
-                    'subtitle',
-                    'short_description',
-                    'description',
-                    'category_id',
-                    'level',
-                    'language',
-                    'price',
-                    'duration',
-                    'access_duration_value',
-                    'access_duration_unit',
-                    'launch_date',
-                    'launch_time',
-                    'requirements',
-                    'what_you_learn'
-                ] as $field
-            ) {
-                if ($request->has($field)) {
-                    $updates[$field] = $validated[$field] ?? ($request->input($field) ?? null);
-                }
-            }
-            if ($request->has('has_certificate')) {
-                $updates['has_certificate'] = (bool) $validated['has_certificate'];
-            }
-
-            // Derive access_duration_type if access_duration_value provided
-            if (array_key_exists('access_duration_value', $updates)) {
-                $value = (int) $updates['access_duration_value'];
-                $updates['access_duration_type'] = $value > 0 ? 'limited' : 'unlimited';
-            }
-
-            if (!empty($updates)) {
-                $course->fill($updates);
-            }
-
-            // No file operations in autosave (frontend excludes files)
-            $course->save();
-
-            return response()->json([
-                'success' => true,
-                'course_id' => $course->id,
-                'updated' => array_keys($updates),
-            ]);
-        }
-
-        // PUT: full update flow
-        // Update basic course info
-        $course->fill([
-            'title' => $validated['title'],
-            'subtitle' => $validated['subtitle'] ?? null,
-            'slug' => Str::slug($validated['title']),
-            'short_description' => $validated['short_description'],
-            'description' => $validated['description'],
-            'category_id' => $validated['category_id'],
-            'level' => $validated['level'],
-            'language' => $validated['language'],
-            'price' => $validated['price'],
-            'duration' => $validated['duration'],
-            'access_duration_type' => $validated['access_duration_value'] > 0 ? 'limited' : 'unlimited',
-            'access_duration_value' => $validated['access_duration_value'],
-            'access_duration_unit' => $validated['access_duration_unit'],
-            'launch_date' => $validated['launch_date'] ?? null,
-            'launch_time' => $validated['launch_time'] ?? null,
-            'requirements' => $validated['requirements'] ?? [],
-            'what_you_learn' => $validated['what_you_learn'] ?? [],
-            'has_certificate' => $validated['has_certificate'] ?? false,
-        ]);
-
-        // Handle thumbnail upload/removal
-        if ($request->hasFile('thumbnail')) {
-            // Delete old thumbnail if exists
-            if ($course->thumbnail) {
-                Storage::disk('public')->delete('courses/thumbnails/' . $course->thumbnail);
-            }
-            $thumbnailPath = $request->file('thumbnail')->store('courses/thumbnails', 'public');
-            $course->thumbnail = basename($thumbnailPath);
-        } elseif ($request->boolean('remove_thumbnail') && $course->thumbnail) {
-            // Remove thumbnail if requested
-            Storage::disk('public')->delete('courses/thumbnails/' . $course->thumbnail);
-            $course->thumbnail = null;
+            $bannerPath = $request->file('banner')->store('courses/banners', 'public');
+            $course->banner = basename($bannerPath);
+        } elseif ($request->boolean('remove_banner') && $course->banner) {
+            // Remove banner if requested
+            Storage::disk('public')->delete('courses/banners/' . $course->banner);
+            $course->banner = null;
         }
 
         // Handle preview video upload/removal
@@ -260,7 +220,7 @@ class CourseController extends Controller
 
         $course->save();
 
-        return redirect()->route('instructor.courses.show', $course->id)
+        return redirect()->back()
             ->with('success', __('Course updated successfully!'));
     }
 
@@ -271,9 +231,9 @@ class CourseController extends Controller
     {
         $this->authorize('delete', $course);
 
-        // Delete thumbnail
-        if ($course->thumbnail) {
-            Storage::disk('public')->delete('courses/' . $course->thumbnail);
+        // Delete banner
+        if ($course->banner) {
+            Storage::disk('public')->delete('courses/' . $course->banner);
         }
 
         $course->delete();

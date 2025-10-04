@@ -16,6 +16,12 @@ class Course extends Model
         'slug',
         'description',
         'short_description',
+        'banner',
+        'banner_source',
+        'banner_url',
+        'promo_video',
+        'video_source',
+        'video_url',
         'price',
         'instructor_id',
         'category_id',
@@ -36,7 +42,7 @@ class Course extends Model
         'has_certificate',
         'access_duration_type',
         'access_duration_value',
-        'access_duration_unit'
+        'access_duration_unit',
     ];
 
     protected $casts = [

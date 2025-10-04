@@ -18,6 +18,10 @@ return new class extends Migration
             $table->text('description');
             $table->text('banner')->nullable();
             $table->text('promo_video')->nullable();
+            $table->string('banner_source')->nullable();
+            $table->string('banner_url')->nullable();
+            $table->string('video_source')->nullable();
+            $table->string('video_url')->nullable();
             $table->text('short_description')->nullable();
             $table->decimal('price', 8, 2);
             $table->decimal('discount_price', 8, 2)->nullable();

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\CategoryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
@@ -210,20 +211,13 @@ Route::prefix('instructor')->name('instructor.')->middleware(['auth', 'role:inst
     // Course Management
     Route::prefix('courses')->name('courses.')->group(function () {
         // Section Management
-        Route::get('{course}/sections',                 [SectionController::class, 'index'])
-            ->name('sections.index');
-        Route::get('{course}/sections/create',          [SectionController::class, 'create'])
-            ->name('sections.create');
-        Route::post('{course}/sections',                [SectionController::class, 'store'])
-            ->name('sections.store');
-        Route::get('{course}/sections/{section}',       [SectionController::class, 'show'])
-            ->name('sections.show');
-        Route::get('{course}/sections/{section}/edit',  [SectionController::class, 'edit'])
-            ->name('sections.edit');
-        Route::put('{course}/sections/{section}',       [SectionController::class, 'update'])
-            ->name('sections.update');
-        Route::delete('{course}/sections/{section}',    [SectionController::class, 'destroy'])
-            ->name('sections.destroy');
+        Route::get('{course}/sections',                 [SectionController::class, 'index'])->name('sections.index');
+        Route::get('{course}/sections/create',          [SectionController::class, 'create'])->name('sections.create');
+        Route::post('{course}/sections',                [SectionController::class, 'store'])->name('sections.store');
+        Route::get('{course}/sections/{section}',       [SectionController::class, 'show'])->name('sections.show');
+        Route::get('{course}/sections/{section}/edit',  [SectionController::class, 'edit'])->name('sections.edit');
+        Route::put('{course}/sections/{section}',       [SectionController::class, 'update'])->name('sections.update');
+        Route::delete('{course}/sections/{section}',    [SectionController::class, 'destroy'])->name('sections.destroy');
         Route::get('/',                                 [InstructorCourseController::class, 'index'])->name('index');
         Route::get('/create',                           [InstructorCourseController::class, 'create'])->name('create');
         Route::get('/create/wide',                      [InstructorCourseController::class, 'createCourseWide'])->name('create.wide');
@@ -231,6 +225,7 @@ Route::prefix('instructor')->name('instructor.')->middleware(['auth', 'role:inst
         Route::get('/{course}',                         [InstructorCourseController::class, 'show'])->name('show');
         Route::get('/{course}/edit',                    [InstructorCourseController::class, 'edit'])->name('edit');
         Route::put('/{course}',                         [InstructorCourseController::class, 'update'])->name('update');
+        Route::put('/{course}/general-info',            [InstructorCourseController::class, 'updateGeneralInfo'])->name('update.general-info');
         // Support JSON partial updates (autosave)
         Route::patch('/{course}',                       [InstructorCourseController::class, 'update'])->name('update.patch');
         Route::delete('/{course}',                      [InstructorCourseController::class, 'delete'])->name('delete');
@@ -265,31 +260,31 @@ Route::prefix('instructor')->name('instructor.')->middleware(['auth', 'role:inst
 
 // Admin Routes
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('/dashboard', [App\Http\Controllers\Admin\AdminController::class, 'dashboard'])->name('dashboard');
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 
     // User Management
     Route::prefix('users')->name('users.')->group(function () {
-        Route::get('/', [App\Http\Controllers\Admin\AdminController::class, 'users'])->name('index');
-        Route::get('/create', [App\Http\Controllers\Admin\AdminController::class, 'createUser'])->name('create');
-        Route::post('/', [App\Http\Controllers\Admin\AdminController::class, 'storeUser'])->name('store');
-        Route::get('/{user}', [App\Http\Controllers\Admin\AdminController::class, 'showUser'])->name('show');
-        Route::get('/{user}/edit', [App\Http\Controllers\Admin\AdminController::class, 'editUser'])->name('edit');
-        Route::put('/{user}', [App\Http\Controllers\Admin\AdminController::class, 'updateUser'])->name('update');
-        Route::delete('/{user}', [App\Http\Controllers\Admin\AdminController::class, 'deleteUser'])->name('delete');
-        Route::post('/{id}/restore', [App\Http\Controllers\Admin\AdminController::class, 'restoreUser'])->name('restore');
+        Route::get('/',                         [AdminController::class, 'users'])->name('index');
+        Route::get('/create',                   [AdminController::class, 'createUser'])->name('create');
+        Route::post('/',                        [AdminController::class, 'storeUser'])->name('store');
+        Route::get('/{user}',                   [AdminController::class, 'showUser'])->name('show');
+        Route::get('/{user}/edit',              [AdminController::class, 'editUser'])->name('edit');
+        Route::put('/{user}',                   [AdminController::class, 'updateUser'])->name('update');
+        Route::delete('/{user}',                [AdminController::class, 'deleteUser'])->name('delete');
+        Route::post('/{id}/restore',            [AdminController::class, 'restoreUser'])->name('restore');
     });
 
     // Instructors Management
-    Route::get('/instructors', [App\Http\Controllers\Admin\AdminController::class, 'instructors'])->name('instructors.index');
+    Route::get('/instructors', [AdminController::class, 'instructors'])->name('instructors.index');
 
     // Students Management
-    Route::get('/students', [App\Http\Controllers\Admin\AdminController::class, 'students'])->name('students.index');
+    Route::get('/students', [AdminController::class, 'students'])->name('students.index');
 
     // Course Management
     Route::prefix('courses')->name('courses.')->group(function () {
-        Route::get('/', [App\Http\Controllers\Admin\AdminController::class, 'courses'])->name('index');
-        Route::get('/{course}', [App\Http\Controllers\Admin\AdminController::class, 'showCourse'])->name('show');
-        Route::patch('/{course}/status', [App\Http\Controllers\Admin\AdminController::class, 'updateCourseStatus'])->name('update-status');
+        Route::get('/', [AdminController::class, 'courses'])->name('index');
+        Route::get('/{course}', [AdminController::class, 'showCourse'])->name('show');
+        Route::patch('/{course}/status', [AdminController::class, 'updateCourseStatus'])->name('update-status');
     });
 
     // Categories Management
