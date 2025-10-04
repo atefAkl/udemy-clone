@@ -8,6 +8,7 @@ use App\Http\Controllers\Instructor\InstructorController;
 use App\Http\Controllers\Instructor\CourseController as InstructorCourseController;
 use App\Http\Controllers\Instructor\SectionController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Instructor\MediaLibraryController;
 use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\Student\StudentController;
 use App\Http\Controllers\Student\CourseController as StudentCourseController;
@@ -246,6 +247,20 @@ Route::prefix('instructor')->name('instructor.')->middleware(['auth', 'role:inst
         Route::put('/{category}',       [InstructorController::class, 'updateCategory'])->name('update');
         Route::delete('/{category}',    [InstructorController::class, 'deleteCategory'])->name('destroy');
     });
+
+    // Media Library Routes
+    Route::get('/media-library/{type}', [MediaLibraryController::class, 'index'])
+        ->where('type', 'images|videos')
+        ->name('instructor.media-library.index');
+
+    Route::post('/setup-media-library', [MediaLibraryController::class, 'setup'])
+        ->name('instructor.media-library.setup');
+
+    Route::post('/media-library/upload', [MediaLibraryController::class, 'upload'])
+        ->name('instructor.media-library.upload');
+
+    Route::delete('/media-library/{media}', [MediaLibraryController::class, 'destroy'])
+        ->name('instructor.media-library.destroy');
 });
 
 // Admin Routes

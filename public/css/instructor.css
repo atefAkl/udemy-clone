@@ -1,6 +1,25 @@
+/* Instructor Layout Styles */
+:root {
+    --sidebar-width: 250px;
+    --topbar-height: 60px;
+    --primary-color: #4e73df;
+    --secondary-color: #858796;
+    --success-color: #1cc88a;
+    --info-color: #36b9cc;
+    --warning-color: #f6c23e;
+    --danger-color: #e74a3b;
+    --light-color: #f8f9fc;
+    --dark-color: #5a5c69;
+    --border-color: #e3e6f0;
+    --labels-bg-color: #c3f0dde0;
+}
 #dashboardMain.dashboard-main {
     padding: 0;
+    background-image: linear-gradient(45deg, #5f8664 0%, #47506b 100%);
+}
 
+.hidden {
+    display: none;
 }
 
 /* Dashboard header (fixed) */
@@ -106,21 +125,6 @@
     color: #e74a3b;
 }
 
-/* Instructor Layout Styles */
-:root {
-    --sidebar-width: 250px;
-    --topbar-height: 60px;
-    --primary-color: #4e73df;
-    --secondary-color: #858796;
-    --success-color: #1cc88a;
-    --info-color: #36b9cc;
-    --warning-color: #f6c23e;
-    --danger-color: #e74a3b;
-    --light-color: #f8f9fc;
-    --dark-color: #5a5c69;
-    --border-color: #e3e6f0;
-}
-
 /* Base Layout */
 .instructor-layout {
     display: flex;
@@ -156,12 +160,20 @@
     color: var(--primary-color);
 }
 
+.input-group label.input-group-text {
+    background-color: #c3f0dde0;
+    line-height: 1;
+    font-weight: 600;
+}
+
 .input-group button.input-group-text,
 .input-group label.input-group-text,
 .input-group span.input-group-text,
 .input-group input.form-control,
-.input-group select.form-select {
+.input-group select.form-select,
+.input-group select.form-control {
     height: 2rem;
+    line-height: 1;
 }
 
 .sidebar-nav {
@@ -317,7 +329,6 @@
 
 /* Dark Mode Support */
 @media (prefers-color-scheme: dark) {
-
     .sidebar,
     .top-nav,
     .page-header,
@@ -350,11 +361,11 @@
 
 body {
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f8f9fa;
+    background-color: #9e9d9d;
     overflow-x: hidden;
 }
 
-[dir=rtl] body {
+[dir="rtl"] body {
     font-family: "Cairo", sans-serif;
 }
 
@@ -535,7 +546,7 @@ body {
     /* box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1); */
 }
 
-[dir=rtl] .dashboard-sidebar {
+[dir="rtl"] .dashboard-sidebar {
     right: 0;
     left: auto;
 }
@@ -567,7 +578,7 @@ body {
     transition: transform 0.3s ease;
 }
 
-[dir=rtl] .widgets-sidebar {
+[dir="rtl"] .widgets-sidebar {
     right: auto;
     left: 0;
 }
@@ -581,7 +592,7 @@ body {
     left: 10px;
 }
 
-[dir=rtl] .sidebar-toggle {
+[dir="rtl"] .sidebar-toggle {
     left: auto;
     right: 10px;
 }
@@ -591,7 +602,7 @@ body {
     background: #6c757d;
 }
 
-[dir=rtl] .widgets-toggle {
+[dir="rtl"] .widgets-toggle {
     right: auto;
     left: 10px;
     background: #6c757d;
@@ -632,16 +643,19 @@ fieldset {
     border: 1px solid #ccc;
     background-color: #f4f4f4;
     padding: 1rem;
+    border-radius: 0.5rem;
 }
 
 legend {
-    padding: 0.1rem 0.5rem;
+    padding: 0.1rem 1rem;
     border: 1px solid #ccc;
     position: absolute;
     width: auto;
+    border-radius: 0.5rem;
     top: -1rem;
-    background-color: #ccc;
+    background-color: var(--labels-bg-color);
     font-size: 1rem;
+    font-weight: 600;
 }
 
 legend span,
@@ -1022,7 +1036,6 @@ legend a {
 
 /* Dark Mode Support (Future Enhancement) */
 @media (prefers-color-scheme: dark) {
-
     .admin-card,
     .widget {
         background-color: #2d3748;
@@ -1084,7 +1097,6 @@ legend a {
 
 /* Responsive: stack panes on small screens */
 @media (max-width: 991.98px) {
-
     .course-pane-left,
     .course-pane-right {
         position: static;
@@ -1102,5 +1114,5 @@ legend a {
 
 /* Utility: floating label adjustments for tall textareas if used */
 .form-floating textarea.form-control {
-    min-height: 130px;
+    min-height: 80px;
 }

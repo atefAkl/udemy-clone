@@ -5,7 +5,8 @@ return [
     'edit_course_main_heading' => 'Edit Course Contents',
     'explore_courses_title' => 'Explore Courses',
     'explore_courses_description' => 'Discover thousands of courses from expert instructors',
-    // Course Management
+
+    // Course Management & Actions
     'courses' => 'Courses',
     'all_courses' => 'All Courses',
     'my_courses' => 'My Courses',
@@ -21,30 +22,47 @@ return [
     'course_thumbnail' => 'Course Thumbnail',
     'course_media' => 'Course Media',
     'course_statistics' => 'Course Statistics',
+    'announcement_media' => 'Announcement Media',
 
-    // Course Details
+    // Labels and Buttons
     'basic_information' => 'Basic Information',
+    'subtitle' => 'Subtitle',
     'enter_course_title' => 'Enter course title',
     'enter_course_description' => 'Enter course description',
     'short_description' => 'Short Description',
+    'estimated_duration' => 'Estimated Duration',
+    'pricing' => 'Pricing',
+
+    // Placeholders & Options
+    'languages' => ['ar' => 'العربية', 'en' => 'English'],
+    'select_category' => 'Select Category',
     'enter_short_description' => 'Enter a short description for the course',
     'category' => 'Category',
-    'select_category' => 'Select Category',
     'all_categories' => 'All Categories',
     'difficulty_level' => 'Difficulty Level',
+    'audience_levels' => [
+        'beginner' => 'Beginner',
+        'intermediate' => 'Intermediate',
+        'professional' => 'Professional',
+        'advanced' => 'Advanced'
+    ],
+    'price_input_tips' => 'Enter course price, Or set it to 0 for free course',
     'select_level' => 'Select Level',
-    'beginner' => 'Beginner',
-    'intermediate' => 'Intermediate',
-    'advanced' => 'Advanced',
-    'professional' => 'Professional',
-
-    // Course Pricing & Duration
-    'pricing' => 'Pricing',
     'set_price_zero_for_free' => 'Set price to zero for free course',
     'set_zero_for_free_course' => 'Set to 0 for free course',
-    'estimated_duration' => 'Estimated Duration',
     'hours' => 'hours',
     'price' => 'Price',
+
+    // Calculated Fields
+    'duration' => 'Duration',
+    'total_units' => 'Total Units',
+    'total_lessons' => 'Total Lessons',
+    'total_enrollments' => 'Total Enrollments',
+    'has_certificate' => 'Has Certificate',
+    'has_quizes' => 'Has Quizes',
+    'has_training' => 'Has Training',
+    'access_type' => 'Access Type',
+
 
     // Course Media
     'recommended_size_1280x720' => 'Recommended size: 1280x720 pixels',
@@ -387,4 +405,26 @@ return [
     'pricing' => 'Pricing',
     'promotion' => 'Promotion',
     'course_messages' => 'Course Messages',
+
+    // Banner Upload Options
+    'upload_banner' => 'Upload Banner',
+    'upload_from_device' => 'Upload from Device',
+    'choose_from_library' => 'Choose from Library',
+    'from_url' => 'From URL',
+    'paste_from_clipboard' => 'Paste from Clipboard',
+    'promo_video' => 'Promo Video',
+    'upload_promo_video' => 'Upload Promo Video',
+    'enter_image_url' => 'Enter Image URL',
+    'enter_video_url' => 'Enter Video URL',
+    'submit' => 'Submit',
+    'cancel' => 'Cancel',
+    'close' => 'Close',
+    'select_file' => 'Select File',
+    'invalid_image_url' => 'Invalid image URL. Please enter a valid image URL.',
+    'invalid_video_url' => 'Invalid video URL. Please enter a valid video URL.',
+    'no_image_in_clipboard' => 'No image found in clipboard. Please copy an image first.',
+    'please_select_valid_image' => 'Please select a valid image file.',
+    'please_select_valid_video' => 'Please select a valid video file.',
+    'media_library' => 'Media Library',
+    'no_media_files' => 'No media files found in your library.',
 ];

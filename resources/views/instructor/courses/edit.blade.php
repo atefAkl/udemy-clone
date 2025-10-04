@@ -48,7 +48,7 @@
     #updateCourseForm ul.nav h5 {
         padding: 1rem;
         text-align: center;
-        border-block: 1px solid #dee2e6;
+        border-block-end: 1px solid #dee2e6;
         background-color: #f9f9f9;
     }
 
@@ -102,7 +102,7 @@
 </style>
 <div class="d-flex justify-content-between align-items-center pt-5 mb-4">
     <div id="updateCourseForm" class="container pt-5">
-        <h3 class="mb-4 "><i class="fa fa-edit outline-secondary"></i> {{__('courses.edit_course_main_heading')}}</h3>
+        <h3 class="mb-4 text-white"><i class="fa fa-edit outline-secondary"></i> {{__('courses.edit_course_main_heading')}}</h3>
         <form action="{{ route('instructor.courses.update', $course) }}" method="POST" enctype="multipart/form-data" id="courseForm">
             @csrf
             @method('PUT')
@@ -136,7 +136,7 @@
                             <h4 class="form-section-title">{{__('courses.general_info_title')}}</h4>
 
                             <div class="p-3">
-                                <x-general-info :course="$course" />
+                                <x-general-info :course="$course" :categories="$categories" />
                             </div>
                         </div>
 
@@ -145,20 +145,14 @@
                             <div class="p-3">
                                 <p class="form-notes m-3">{{__('courses.intended_learners_paragraph')}}</p>
                                 <hr>
-                                <x-add-to-list
-                                    title="{{ __('courses.intended_learners_section_one_question') }}"
-                                    description="{{ __('courses.intended_learners_section_one_description') }}"
-                                    inputName="learning_objectives"
+                                <x-add-to-list title="{{ __('courses.intended_learners_section_one_question') }}"
+                                    description="{{ __('courses.intended_learners_section_one_description') }}" inputName="learning_objectives"
                                     placeholder="{{ __('courses.intended_learners_section_one_placeholder') }}" />
-                                <x-add-to-list
-                                    title="{{ __('courses.intended_learners_section_two_question') }}"
-                                    description="{{ __('courses.intended_learners_section_two_description') }}"
-                                    inputName="post_requirements"
+                                <x-add-to-list title="{{ __('courses.intended_learners_section_two_question') }}"
+                                    description="{{ __('courses.intended_learners_section_two_description') }}" inputName="post_requirements"
                                     placeholder="{{ __('courses.intended_learners_section_two_placeholder') }}" />
-                                <x-add-to-list
-                                    title="{{ __('courses.intended_learners_section_three_question') }}"
-                                    description="{{ __('courses.intended_learners_section_three_description') }}"
-                                    inputName="course_audience"
+                                <x-add-to-list title="{{ __('courses.intended_learners_section_three_question') }}"
+                                    description="{{ __('courses.intended_learners_section_three_description') }}" inputName="course_audience"
                                     placeholder="{{ __('courses.intended_learners_section_three_placeholder') }}" />
                             </div>
                         </div>
@@ -174,13 +168,9 @@
                                             <p class="pb-3">{{__('courses.teaching_center_section_paragraph')}}</p>
                                         </div>
                                         <div class="col col-md-5">
-                                            <x-ads-component
-                                                src="{{asset('images/teaching-center-ads-image.png')}}"
-                                                alt="{{__('courses.teaching_center_ads_title')}}"
-                                                head="{{__('courses.teaching_center_ads_title')}}"
-                                                text="{{__('courses.teaching_center_ads_paragraph')}}"
-                                                button_text="{{__('courses.teaching_center_ads_button')}}"
-                                                btn_link="{{__('courses.teaching_center_ads_link')}}" />
+                                            <x-ads-component src="{{asset('images/teaching-center-ads-image.png')}}" alt="{{__('courses.teaching_center_ads_title')}}"
+                                                head="{{__('courses.teaching_center_ads_title')}}" text="{{__('courses.teaching_center_ads_paragraph')}}"
+                                                button_text="{{__('courses.teaching_center_ads_button')}}" btn_link="{{__('courses.teaching_center_ads_link')}}" />
                                         </div>
                                     </div>
                                     <hr>
@@ -234,13 +224,9 @@
                                             <p class="pb-3">{{__('courses.video_studio_section_paragraph')}}</p>
                                         </div>
                                         <div class="col col-md-5">
-                                            <x-ads-component
-                                                src="{{asset('images/video-making-ads.png')}}"
-                                                alt="{{__('courses.video_studio_ads_title')}}"
-                                                head="{{__('courses.video_studio_ads_title')}}"
-                                                text="{{__('courses.video_studio_ads_paragraph')}}"
-                                                button_text="{{__('courses.video_studio_ads_button')}}"
-                                                btn_link="{{__('courses.video_studio_ads_link')}}" />
+                                            <x-ads-component src="{{asset('images/video-making-ads.png')}}" alt="{{__('courses.video_studio_ads_title')}}"
+                                                head="{{__('courses.video_studio_ads_title')}}" text="{{__('courses.video_studio_ads_paragraph')}}"
+                                                button_text="{{__('courses.video_studio_ads_button')}}" btn_link="{{__('courses.video_studio_ads_link')}}" />
                                         </div>
                                     </div>
                                     <hr>
@@ -293,13 +279,9 @@
                                             <p class="pb-3">{{__('courses.video_studio_section_paragraph')}}</p>
                                         </div>
                                         <div class="col col-md-5">
-                                            <x-ads-component
-                                                src="{{asset('images/creators-community.png')}}"
-                                                alt="{{__('courses.share_knowledge_ads_title')}}"
-                                                head="{{__('courses.share_knowledge_ads_title')}}"
-                                                text="{{__('courses.share_knowledge_ads_paragraph')}}"
-                                                button_text="{{__('courses.share_knowledge_ads_button')}}"
-                                                btn_link="{{__('courses.share_knowledge_ads_link')}}" />
+                                            <x-ads-component src="{{asset('images/creators-community.png')}}" alt="{{__('courses.share_knowledge_ads_title')}}"
+                                                head="{{__('courses.share_knowledge_ads_title')}}" text="{{__('courses.share_knowledge_ads_paragraph')}}"
+                                                button_text="{{__('courses.share_knowledge_ads_button')}}" btn_link="{{__('courses.share_knowledge_ads_link')}}" />
                                         </div>
                                     </div>
                                     <hr>
@@ -350,9 +332,7 @@
                             <h4 class="form-section-title">{{__('courses.curriculum')}}</h4>
                             <div class="p-3">
                                 <section>
-                                    <x-dismissable-note
-                                        paragraph_text="{{__('courses.curriculum_paragraph')}}"
-                                        btn_text="{{__('labels.dismiss')}}" />
+                                    <x-dismissable-note paragraph_text="{{__('courses.curriculum_paragraph')}}" btn_text="{{__('labels.dismiss')}}" />
                                 </section>
                                 <x-curriculum-builder :courseId="$course->id" :sections="$course->sections" />
                             </div>
@@ -370,6 +350,7 @@
 @endsection
 
 @push('scripts')
+<script src="{{ asset('js/media-uploader.js') }}"></script>
 <script>
     $(document).ready(function() {
         // Reusable script for all add-to-list components
