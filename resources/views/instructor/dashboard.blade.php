@@ -47,8 +47,8 @@
     <!-- Welcome Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h1 class="h3 mb-1">{{ __('instructor.welcome_back') }}, {{ Auth::user()->name }}!</h1>
-            <p class="text-muted mb-0">{{ __('instructor.dashboard_overview') }}</p>
+            <h1 class="h3 text-white mb-1">{{ __('instructor.welcome_back') }}, {{ Auth::user()->name }}!</h1>
+            <p class="text-light mb-0">{{ __('instructor.dashboard_overview') }}</p>
         </div>
         <div>
             <a href="{{ route('instructor.courses.create') }}" class="btn btn-primary">
@@ -169,7 +169,7 @@
     <!-- Main Content -->
     <div class="row g-4">
         <!-- Recent Courses -->
-        <div class="col-lg-8">
+        <div class="col-lg-9">
 
             <div class="px-3 bg-white border-0 d-flex justify-content-between align-items-center py-1">
                 <h6 class="mb-0 fw-bold">{{ __('instructor.recent_courses') }}</h6>
@@ -182,8 +182,8 @@
                 <thead class="bg-light">
                     <tr style="text-align: center">
                         <th>{{ __('instructor.course') }}</th>
-                        <th>{{ __('instructor.students') }}</th>
-                        <th>{{ __('instructor.rating') }}</th>
+                        <th>{{ __('courses.enrollments') }}</th>
+                        <th>{{ __('courses.rating') }}</th>
                         <th>{{ __('instructor.status') }}</th>
                         <th></th>
                     </tr>
@@ -193,8 +193,8 @@
                     <tr>
                         <td>
                             <div class="d-flex align-items-center">
-                                <img src="{{ $course['thumbnail'] ?? 'https://via.placeholder.com/60' }}"
-                                    alt="{{ $course['title'] }}"
+                                <img src="{{ asset($course->banner_url) ?? 'https://via.placeholder.com/60' }}"
+                                    alt="{{ $course->title }}"
                                     class="rounded me-3"
                                     width="40" height="40" style="object-fit: cover;">
                                 <div>
@@ -206,7 +206,7 @@
                         <td>{{ $course->students->count() ?? 0 }}</td>
                         <td>
                             <div class="d-flex align-items-center">
-                                <span class="text-warning me-1">
+                                <div class="text-warning me-1">
                                     @for($i = 1; $i <= 5; $i++)
                                         @if($i <=($course['rating'] ?? 0))
                                         <i class="fas fa-star"></i>
@@ -216,8 +216,8 @@
                                             <i class="far fa-star"></i>
                                             @endif
                                             @endfor
-                                </span>
-                                <small class="text-muted">({{ $course['reviews'] ?? 0 }})</small>
+                                </div>
+                                <small class="text-muted">[{{ $course->average_rating }}-{{ $course->reviews_count ?? 0 }}]</small>
                             </div>
                         </td>
                         <td>
@@ -414,10 +414,10 @@
 </style>
 
 <div id="chart-data"
-     data-labels='{{ json_encode(session('locale', 'ar') === 'ar' ? ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو'] : ['January', 'February', 'March', 'April', 'May', 'June']) }}'
-     data-enrollments-label="{{ __('app.new_enrollments') }}"
-     data-revenue-label="{{ __('app.revenue') }} ($)"
-     data-is-rtl="{{ session('locale', 'ar') === 'ar' ? 'true' : 'false' }}">
+    data-labels='{{ json_encode(session('locale', 'ar') === 'ar' ? ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو'] : ['January', 'February', 'March', 'April', 'May', 'June']) }}'
+    data-enrollments-label="{{ __('app.new_enrollments') }}"
+    data-revenue-label="{{ __('app.revenue') }} ($)"
+    data-is-rtl="{{ session('locale', 'ar') === 'ar' ? 'true' : 'false' }}">
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

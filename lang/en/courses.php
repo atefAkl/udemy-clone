@@ -427,6 +427,87 @@ return [
     'curriculum' => 'Curriculum',
     'captions' => 'Captions(Optional)',
     'accessibility' => 'Accessibility(Optional)',
+    'accessibility_dismissable_message' => [
+        'heading' => 'Create accessible learning content',
+        'content' => 'Accessibility provides a person with a disability the opportunity to acquire the same information, engage in the same interactions, and enjoy the same services as a person without a disability — in an equally effective and equally integrated manner. In short, it’s an inclusive practice of removing barriers that prevent interaction with, or access to, learning for as many people as possible. </br> It might be assumed that accessibility is primarily about helping people with physical disabilities, such as those with hearing or vision loss. But making your content accessible is more than a principle of equity. It also helps you to expand your reach so more learners can benefit from your courses.'
+    ],
+    'accessibility_tips_subtitles' => [
+
+        'Accessibility checklists.' => 'To help you create accessible training content, we have provided instructors with recommendations and best practices that should be followed when creating new courses or updating existing content. Please review these recommendations and accessibility checklists to determine if your course complies with the guidelines. </br> Note: Although these accessibility guidelines are highly recommended, they are not a mandatory requirement for publishing your course. However, content that adheres to these guidelines may attract a larger number of learners who can enroll in your course.'
+
+    ],
+    'accessibility_tips_resources' => [
+        ['Creating accessible learning content', 'https://www.udemy.com/udemy-safety/', 'Get feedback before filming your whole course'],
+        ['Accessible audio content', 'https://www.udemy.com/udemy-safety/', 'Film and edit with confidence'],
+        ['Accessible visual content', 'https://www.udemy.com/udemy-safety/', 'Our policies for instructors and students'],
+        ['Planning your course accessibility considerations', 'https://www.udemy.com/udemy-safety/', 'Our policies for instructors and students'],
+        ['Creating accessible resource documents', 'https://www.udemy.com/udemy-safety/', 'Our policies for instructors and students'],
+        ['Indicating your course as accessible', 'https://www.udemy.com/udemy-safety/', 'Our policies for instructors and students'],
+    ],
+
+    'accessibility_checklish' => [
+
+        [
+            'title' => 'Accessibility checklist for captions.',
+            'items' => [
+                'Review all automatically generated captions for accuracy. Captions should be at least 99% accurate.',
+                'Indicate any audio effects related to the course in captions, example: (sfx).',
+                'Include any non-verbal elements like music in captions, example: (jazz music).',
+                'Include any audio cues in captions, example: (roar).',
+                'Identify captions speakers whether they are in front of the camera or off-screen.'
+            ],
+            'note' => [
+                'text' => 'Learn more about providing accessible captions in the ',
+                'url' => 'http://www.udemy.local/teaching-center/accessibility-checklist',
+                'anchor_text' => 'Aqldemy Teaching Center'
+            ],
+            'check_input' => [
+                'label' => 'Does this course comply with these guidelines?',
+                'name' => 'accessible_captions',
+            ]
+        ],
+        [
+            'title' => 'Accessibility checklist for audio.',
+            'items' => [
+                'Audio should be clear and distinct, like in audiobooks.',
+                'Explain the visible content (if not just decoration)',
+                'Explain all screen interactions without skipping steps.',
+                'Use clear language, moderate pace (not too fast).',
+                'Avoid idioms, jargon, specialized terms, or general language, and explain unfamiliar terms or abbreviations.',
+                'Review captions for all audio content to ensure accuracy - especially correct names, abbreviations, symbols, and technical terms.'
+            ],
+            'note' => [
+                'text' => 'Learn more about accessible audio content in the ',
+                'url' => 'http://www.udemy.local/teaching-center/accessibility-checklist',
+                'anchor_text' => 'Aqldemy Teaching Center'
+            ],
+            'check_input' => [
+                'label' => 'Does this course comply with these guidelines?',
+                'name' => 'accessible_audio',
+            ]
+        ],
+        [
+            'title' => 'Accessibility checklist for course contents.',
+            'items' => [
+                'Provide a table of contents for long documents and glossary.',
+                'Apply descriptive labels for headings, bullet points, or numbered lists on all documents.',
+                'Organize content in short paragraphs and/or simple tables.',
+                'Use descriptive language for external resource links.',
+                'Provide alternative text for all images in documents or slides.',
+                'Use strong color contrast for text and images.',
+            ],
+            'note' => [
+                'text' => 'Learn more about accessible course materials in the ',
+                'url' => 'http://www.udemy.local/teaching-center/accessibility-checklist',
+                'anchor_text' => 'Aqldemy Teaching Center'
+            ],
+            'check_input' => [
+                'label' => 'Does this course comply with these guidelines?',
+                'name' => 'accessible_content',
+            ]
+        ],
+
+    ],
     'publish_your_course' => 'Publish Your Course',
     'landing_page' => 'Landing Page',
     'pricing' => 'Pricing',

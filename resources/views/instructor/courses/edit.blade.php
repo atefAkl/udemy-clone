@@ -113,13 +113,13 @@
                     <li data-target="#courseLayout"><i class="fa fa-circle-stop"></i>{{__('courses.sidenav.course_layout')}}</li>
                     <li data-target="#setupTestVideo"><i class="fa fa-circle-stop"></i>{{__('courses.sidenav.setup_test_video')}}</li>
                     <!-- Create Your Content -->
-                    <h5>{{__('Create Your Content')}}</h5>
+                    <h5>{{__('courses.sidenav.create_your_content')}}</h5>
                     <li data-target="#snapEdit"><i class="fa fa-circle-stop"></i>{{__('courses.sidenav.snap_edit')}}</li>
                     <li data-target="#curriculum"><i class="fa fa-circle-stop"></i>{{__('courses.sidenav.curriculum')}}</li>
                     <li data-target="#captions"><i class="fa fa-circle-stop"></i>{{__('courses.sidenav.captions')}}</li>
                     <li data-target="#accessibility"><i class="fa fa-circle-stop"></i>{{__('courses.sidenav.accessibility')}}</li>
                     <!-- Publish Your Course -->
-                    <h5>{{__('Publish Your Course')}}</h5>
+                    <h5>{{__('courses.sidenav.publish_your_course')}}</h5>
                     <li data-target="#landingPage"><i class="fa fa-circle-stop"></i>{{__('courses.sidenav.landing_page')}}</li>
                     <li data-target="#pricing"><i class="fa fa-circle-stop"></i>{{__('courses.sidenav.pricing')}}</li>
                     <li data-target="#promotion"><i class="fa fa-circle-stop"></i>{{__('courses.sidenav.promotion')}}</li>
@@ -346,6 +346,54 @@
                                 <x-dismissable-note paragraph_text="{{__('courses.curriculum_paragraph')}}" btn_text="{{__('labels.dismiss')}}" />
                             </section>
                             <x-curriculum-builder :courseId="$course->id" :sections="$course->sections" />
+                        </div>
+                    </div>
+
+                    <!-- Snap & Edit Videos -->
+                    <div id="captions" class="form-section">
+                        <h4 class="form-section-title">{{__('courses.captions')}}</h4>
+                        <div class="p-3">
+                            <section>
+                                <x-dismissable-note paragraph_text="{{__('courses.curriculum_paragraph')}}" btn_text="{{__('labels.dismiss')}}" />
+                            </section>
+                            <x-captions-builder :courseId="$course->id" :sections="$course->sections" />
+                        </div>
+                    </div>
+
+                    <!-- Snap & Edit Videos -->
+                    <div id="accessibility" class="form-section">
+                        <h4 class="form-section-title">{{__('courses.accessibility')}}</h4>
+                        <div class="p-3">
+
+                            <x-accessibility :course="$course" />
+                        </div>
+                    </div>
+
+                    <!-- Landing Page -->
+                    <div id="landingPage" class="form-section">
+                        <h4 class="form-section-title">{{__('courses.landing_page')}}</h4>
+                        <div class="p-3">
+                            <section>
+                                <x-dismissable-note paragraph_text="{{__('courses.landing_page_paragraph')}}" btn_text="{{__('labels.dismiss')}}" />
+                            </section>
+                            <x-landingPage :course="$course" />
+                        </div>
+                    </div>
+
+                    <!-- promotion -->
+                    <div id="pricing" class="form-section">
+                        <h4 class="form-section-title">{{__('courses.pricing')}}</h4>
+
+                    </div>
+
+                    <!-- promotion -->
+                    <div id="promotion" class="form-section">
+                        <h4 class="form-section-title">{{__('courses.promotion')}}</h4>
+                        <div class="p-3">
+                            <section>
+                                <x-dismissable-note paragraph_text="{{__('courses.promotion_paragraph')}}" btn_text="{{__('labels.dismiss')}}" />
+                            </section>
+                            <x-promotion-info :course="$course" />
                         </div>
                     </div>
 

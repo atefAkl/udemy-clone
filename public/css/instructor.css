@@ -13,6 +13,7 @@
     --border-color: #e3e6f0;
     --labels-bg-color: #c3f0dde0;
 }
+
 #dashboardMain.dashboard-main {
     padding: 0;
     background-image: linear-gradient(45deg, #5f8664 0%, #47506b 100%);
@@ -329,6 +330,7 @@
 
 /* Dark Mode Support */
 @media (prefers-color-scheme: dark) {
+
     .sidebar,
     .top-nav,
     .page-header,
@@ -1036,6 +1038,7 @@ legend a {
 
 /* Dark Mode Support (Future Enhancement) */
 @media (prefers-color-scheme: dark) {
+
     .admin-card,
     .widget {
         background-color: #2d3748;
@@ -1097,6 +1100,7 @@ legend a {
 
 /* Responsive: stack panes on small screens */
 @media (max-width: 991.98px) {
+
     .course-pane-left,
     .course-pane-right {
         position: static;
@@ -1114,5 +1118,6 @@ legend a {
 
 /* Utility: floating label adjustments for tall textareas if used */
 .form-floating textarea.form-control {
-    min-height: 80px;
+
+    height: auto;
 }

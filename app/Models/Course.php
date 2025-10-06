@@ -125,7 +125,7 @@ class Course extends Model
      */
     public function reviews()
     {
-        return $this->hasMany(Review::class);
+        return $this->hasMany(Review::class, 'course_id', 'id');
     }
 
     /**
@@ -298,5 +298,37 @@ class Course extends Model
     public function getWishlistCountAttribute(): int
     {
         return $this->wishlists()->count();
+    }
+
+    /**
+     * Get the full URL for the banner image.
+     */
+    public function getBannerUrlAttribute(): ?string
+    {
+        if ($this->banner_source === 'url') {
+            return $this->attributes['banner_url'];
+        }
+
+        if ($this->banner) {
+            return asset('storage/courses/banners/' . $this->banner);
+        }
+
+        return null;
+    }
+
+    /**
+     * Get the full URL for the promo video.
+     */
+    public function getPromoVideoUrlAttribute(): ?string
+    {
+        if ($this->video_source === 'url') {
+            return $this->attributes['video_url'];
+        }
+
+        if ($this->promo_video) {
+            return asset('storage/courses/promo_videos/' . $this->promo_video);
+        }
+
+        return null;
     }
 }

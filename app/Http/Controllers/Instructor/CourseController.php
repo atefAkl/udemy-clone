@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Instructor;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\CreateCourseRequest;
-use App\Http\Requests\UpdateCourseGeneralInfoRequest;
+use App\Http\Requests\UpdateCourseGeneralInfoRequest as UpdateGeneralInfo;
 use App\Models\Course;
 use Illuminate\Support\Str;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -98,62 +98,11 @@ class CourseController extends Controller
      * @param Request $request
      * @param Course $course
      * @return RedirectResponse
-     */
-
-    public function updateGeneralInfo(UpdateCourseGeneralInfoRequest $request, Course $course)
+     * */
+    public function updateGeneralInfo(UpdateGeneralInfo $request, Course $course)
     {
-        $validated = $request->validated();
-
-        // Update basic fields
-        $course->update([
-            'title'             => $validated['title'],
-            'subtitle'          => $validated['subtitle'],
-            'slug'              => Str::slug($validated['title']),
-            'short_description' => $validated['short_description'],
-            'description'       => $validated['description'],
-            'category_id'       => $validated['category'], // Note: field name is 'category' in request
-            'level'             => $validated['level'],
-            'language'          => $validated['language'],
-            'price'             => $validated['price'],
-        ]);
-
         // Handle Banner
-        if ($request->input('banner_source') === 'upload' && $request->hasFile('banner')) {
-            if ($course->banner) {
-                Storage::disk('public')->delete('courses/banners/' . $course->banner);
-            }
-            $bannerPath = $request->file('banner')->store('courses/banners', 'public');
-            $course->banner = basename($bannerPath);
-            $course->banner_source = 'upload';
-            $course->banner_url = null;
-        } elseif ($request->input('banner_source') === 'link' && !empty($validated['banner_url'])) {
-            if ($course->banner) {
-                Storage::disk('public')->delete('courses/banners/' . $course->banner);
-            }
-            $course->banner = null;
-            $course->banner_source = 'link';
-            $course->banner_url = $validated['banner_url'];
-        }
-
-        // Handle Promo Video
-        if ($request->input('video_source') === 'upload' && $request->hasFile('promo_video')) {
-            if ($course->promo_video) {
-                Storage::disk('public')->delete('courses/promo_videos/' . $course->promo_video);
-            }
-            $videoPath = $request->file('promo_video')->store('courses/promo_videos', 'public');
-            $course->promo_video = basename($videoPath);
-            $course->video_source = 'upload';
-            $course->video_url = null;
-        } elseif ($request->input('video_source') === 'link' && !empty($validated['video_url'])) {
-            if ($course->promo_video) {
-                Storage::disk('public')->delete('courses/promo_videos/' . $course->promo_video);
-            }
-            $course->promo_video = null;
-            $course->video_source = 'link';
-            $course->video_url = $validated['video_url'];
-        }
-
-        $course->save();
+        $course->update($request->validated());
 
         return redirect()->back()->with('success', __('courses.general_info_updated'));
     }

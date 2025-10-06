@@ -211,13 +211,6 @@ Route::prefix('instructor')->name('instructor.')->middleware(['auth', 'role:inst
     // Course Management
     Route::prefix('courses')->name('courses.')->group(function () {
         // Section Management
-        Route::get('{course}/sections',                 [SectionController::class, 'index'])->name('sections.index');
-        Route::get('{course}/sections/create',          [SectionController::class, 'create'])->name('sections.create');
-        Route::post('{course}/sections',                [SectionController::class, 'store'])->name('sections.store');
-        Route::get('{course}/sections/{section}',       [SectionController::class, 'show'])->name('sections.show');
-        Route::get('{course}/sections/{section}/edit',  [SectionController::class, 'edit'])->name('sections.edit');
-        Route::put('{course}/sections/{section}',       [SectionController::class, 'update'])->name('sections.update');
-        Route::delete('{course}/sections/{section}',    [SectionController::class, 'destroy'])->name('sections.destroy');
         Route::get('/',                                 [InstructorCourseController::class, 'index'])->name('index');
         Route::get('/create',                           [InstructorCourseController::class, 'create'])->name('create');
         Route::get('/create/wide',                      [InstructorCourseController::class, 'createCourseWide'])->name('create.wide');
@@ -226,12 +219,22 @@ Route::prefix('instructor')->name('instructor.')->middleware(['auth', 'role:inst
         Route::get('/{course}/edit',                    [InstructorCourseController::class, 'edit'])->name('edit');
         Route::put('/{course}',                         [InstructorCourseController::class, 'update'])->name('update');
         Route::put('/{course}/general-info',            [InstructorCourseController::class, 'updateGeneralInfo'])->name('update.general-info');
+        Route::put('/{course}/promotion-info',          [InstructorCourseController::class, 'updatePromotionInfo'])->name('update.promotion-info');
+        Route::put('/{course}/instructor-info',         [InstructorCourseController::class, 'updateInstructorInfo'])->name('update.instructor-info');
         // Support JSON partial updates (autosave)
         Route::patch('/{course}',                       [InstructorCourseController::class, 'update'])->name('update.patch');
         Route::delete('/{course}',                      [InstructorCourseController::class, 'delete'])->name('delete');
         Route::patch('/{course}/publish',               [InstructorCourseController::class, 'publish'])->name('publish');
-    });
 
+        // Course Curriculum Sections/Units Management
+        Route::get('{course}/sections',                 [SectionController::class, 'index'])->name('sections.index');
+        Route::get('{course}/sections/create',          [SectionController::class, 'create'])->name('sections.create');
+        Route::post('{course}/sections',                [SectionController::class, 'store'])->name('sections.store');
+        Route::get('{course}/sections/{section}',       [SectionController::class, 'show'])->name('sections.show');
+        Route::get('{course}/sections/{section}/edit',  [SectionController::class, 'edit'])->name('sections.edit');
+        Route::put('{course}/sections/{section}',       [SectionController::class, 'update'])->name('sections.update');
+        Route::delete('{course}/sections/{section}',    [SectionController::class, 'destroy'])->name('sections.destroy');
+    });
     // Categories Management
     Route::prefix('categories')->name('categories.')->group(function () {
         Route::get('/',                 [InstructorController::class, 'categories'])->name('index');
