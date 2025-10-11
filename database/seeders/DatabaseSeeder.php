@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             // Comment out the old CategorySeeder if you want to use Udemy categories instead
             // CategorySeeder::class,
             UdemyCategorySeeder::class,
+            SampleCourseSeeder::class,
         ]);
     }
 }

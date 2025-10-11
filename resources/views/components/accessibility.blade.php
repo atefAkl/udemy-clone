@@ -5,7 +5,6 @@
 </section>
 
 <section>
-
     @forelse(__('courses.accessibility_tips_subtitles') as $title => $content)
     <h5>{{ $title }}</h5>
     <p>{{ $content }}</p>

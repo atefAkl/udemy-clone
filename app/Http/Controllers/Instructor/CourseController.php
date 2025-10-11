@@ -45,7 +45,17 @@ class CourseController extends Controller
     public function create()
     {
         $categories = Category::where('is_active', true)->get();
-        return view('instructor.courses.create', compact('categories'));
+        $course = new Course([
+            'title' => 'HTML Fundamentals',
+            'subtitle' => 'Subtitle',
+            'short_description' => 'HTML Fundamentals and more more more more',
+            'description' => 'HTML Fundamentals and moreHTML Fundamentals and more HTML Fundamentals and moreHTML Fundamentals and more',
+            'language' => 'ar',
+            'category_id' => Category::where('name', 'Development')->first()->id ?? null,
+            'target_level' => 'Beginner',
+            'price' => 0.00,
+        ]);
+        return view('instructor.courses.create', compact('categories', 'course'));
     }
 
     /**

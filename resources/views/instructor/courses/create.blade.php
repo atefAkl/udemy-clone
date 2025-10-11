@@ -2,76 +2,24 @@
 
 @section('title', __('instructor.create_course'))
 
-@section('content-header')
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <div>
-        <h1 class="m-0">{{ __('instructor.create_new_course') }}</h1>
-        <p class="text-muted mb-0">{{ __('instructor.create_course_description') }}</p>
-    </div>
-    <a href="{{ route('instructor.courses.index') }}" class="btn btn-outline-secondary">
-        <i class="fas fa-arrow-left me-2"></i>
-        {{ __('instructor.back_to_courses') }}
-    </a>
-</div>
 
-<!-- Progress Bar -->
-<div class="progress mb-4" style="height: 6px;">
-    <div class="progress-bar bg-primary" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
-
-<!-- Progress Steps -->
-<div class="d-flex justify-content-between mb-5 position-relative">
-    <div class="text-center">
-        <div class="mx-auto mb-2 d-flex align-items-center justify-content-center rounded-circle bg-primary text-white" style="width: 32px; height: 32px; font-size: 0.875rem;">1</div>
-        <span class="small">{{ __('courses.basic_information') }}</span>
-    </div>
-    <div class="text-center">
-        <div class="mx-auto mb-2 d-flex align-items-center justify-content-center rounded-circle bg-light border text-muted" style="width: 32px; height: 32px; font-size: 0.875rem;">2</div>
-        <span class="small text-muted">{{ __('app.course_curriculum') }}</span>
-    </div>
-    <div class="text-center">
-        <div class="mx-auto mb-2 d-flex align-items-center justify-content-center rounded-circle bg-light border text-muted" style="width: 32px; height: 32px; font-size: 0.875rem;">3</div>
-        <span class="small text-muted">{{ __('app.course_landing_page') }}</span>
-    </div>
-    <div class="text-center">
-        <div class="mx-auto mb-2 d-flex align-items-center justify-content-center rounded-circle bg-light border text-muted" style="width: 32px; height: 32px; font-size: 0.875rem;">4</div>
-        <span class="small text-muted">{{ __('app.pricing') }}</span>
-    </div>
-    <div class="position-absolute w-100" style="top: 16px; z-index: -1; height: 2px; background-color: #e9ecef;">
-        <div class="bg-primary" style="width: 25%; height: 100%;"></div>
-    </div>
-</div>
-@endsection
-
-@section('sidebar-nav')
-<a href="{{ route('instructor.dashboard') }}" class="nav-link">
-    <i class="fas fa-tachometer-alt" style="margin-inline-end: 10px;"></i>
-    {{ __('instructor.dashboard') }}
-</a>
-<a href="{{ route('instructor.courses.index') }}" class="nav-link">
-    <i class="fas fa-book" style="margin-inline-end: 10px;"></i>
-    {{ __('instructor.my_courses') }}
-</a>
-<a href="{{ route('instructor.courses.create') }}" class="nav-link active">
-    <i class="fas fa-plus-circle" style="margin-inline-end: 10px;"></i>
-    {{ __('instructor.create_course') }}
-</a>
-<a href="#" class="nav-link">
-    <i class="fas fa-chart-line" style="margin-inline-end: 10px;"></i>
-    {{ __('instructor.analytics') }}
-</a>
-<a href="#" class="nav-link">
-    <i class="fas fa-dollar-sign" style="margin-inline-end: 10px;"></i>
-    {{ __('instructor.earnings') }}
-</a>
-<a href="#" class="nav-link">
-    <i class="fas fa-cog" style="margin-inline-end: 10px;"></i>
-    {{ __('app.settings') }}
-</a>
-@endsection
 
 @section('content')
-<div class="container-fluid p-4">
+
+<div class="container-fluid p-4 my-5">
+    <div class="d-flex justify-content-between p-3 mb-3 rounded" style="background-image: linear-gradient(to right, #00b4d8, #0083b0);">
+        <div class="col col-auto">
+            <h1 class="m-0 text-white">{{ __('instructor.create_new_course') }}</h1>
+            <p class="text-muted mb-0 text-white">{{ __('instructor.create_course_description') }}</p>
+        </div>
+        <div class="col col-auto">
+            <a href="{{ route('instructor.courses.index') }}" class="btn btn-outline-light my-3">
+                <i class="fas fa-arrow-left me-2"></i>
+                {{ __('instructor.back_to_courses') }}
+            </a>
+        </div>
+    </div>
+    <!-- Parse Form Validation Errors -->
     @if($errors->any())
     <div class="alert alert-danger">
         <ul class="mb-0">
@@ -84,18 +32,19 @@
 
     <!-- Course Creation Form -->
     <div class="row">
-        <div class="col-lg-8">
-            <form action="{{ route('instructor.courses.store') }}" method="POST" enctype="multipart/form-data">
-                @csrf
+        <div class="col-lg-8 mb">
 
-                <!-- Basic Information Card -->
-                <div class="card dashboard-card mb-4 border-0 shadow-sm">
-                    <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
+            <!-- Basic Information Card -->
+            <div class="card dashboard-card mb-4 border-0 shadow-sm">
+                <form action="{{ route('instructor.courses.store') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+
+                    <div class="card-header bg-primary text-white border-0 py-3 d-flex justify-content-between align-items-center">
                         <h5 class="mb-0 fw-bold d-flex align-items-center">
                             <span class="d-flex align-items-center justify-content-center rounded-circle bg-primary text-white me-2" style="width: 24px; height: 24px; font-size: 12px;">1</span>
                             {{ __('courses.basic_information') }}
                         </h5>
-                        <span class="badge bg-light text-dark">Required</span>
+                        <span class="badge bg-light text-dark"> (<b class="text-danger mx-2">*</b>) Equals Required Field</span>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -149,12 +98,12 @@
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label for="language" class="form-label">{{ __('courses.language') }} <span class="text-danger">*</span></label>
-                                <select class="form-select @error('language') is-invalid @enderror"
-                                    id="language" name="language" required>
-                                    <option value="">{{ __('courses.select_language') }}</option>
-                                    <option value="ar" {{ old('language') == 'ar' ? 'selected' : '' }}>{{ __('courses.arabic') }}</option>
-                                    <option value="en" {{ old('language') == 'en' ? 'selected' : '' }}>{{ __('courses.english') }}</option>
+                                <label for="language" class="form-label">{{__('courses.language')}} <span class="text-danger px-2 fw-bold"> *</span></label>
+                                <select name="language" id="language" class="form-select" required>
+                                    <option value="">{{__('courses.select_language')}}</option>
+                                    @foreach (__('courses.languages') as $key => $language)
+                                    <option value="{{$key}}" @if ($key==$course->language) selected @endif>{{$language}}</option>
+                                    @endforeach
                                 </select>
                                 @error('language')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -181,7 +130,7 @@
                                 <div class="input-group">
                                     <span class="input-group-text">$</span>
                                     <input type="number" class="form-control @error('price') is-invalid @enderror"
-                                        id="price" name="price" value="{{ old('price', 0) }}" min="0" step="0.01" required>
+                                        id="price" name="price" value="{{ old('price', $course->price) }}" min="0" step="0.01" required>
                                 </div>
                                 <div class="form-text">{{ __('courses.set_zero_for_free_course') }}</div>
                                 @error('price')
@@ -190,129 +139,105 @@
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Launch Schedule Card -->
-                <div class="card dashboard-card mb-4 border-0 shadow-sm">
-                    <div class="card-header bg-white border-0 py-3 d-flex justify-content-between align-items-center">
+                    <!-- Intended Learners Card -->
+
+                    <div class="card-header bg-primary text-white border-0 py-3 d-flex justify-content-between align-items-center">
                         <h5 class="mb-0 fw-bold d-flex align-items-center">
                             <span class="d-flex align-items-center justify-content-center rounded-circle bg-light border text-muted me-2" style="width: 24px; height: 24px; font-size: 12px;">2</span>
-                            {{ __('courses.launch_schedule') }}
+                            {{ __('courses.intended_learners') }}
                         </h5>
-                        <span class="badge bg-light text-dark">Optional</span>
+                        <span class="badge bg-light text-dark"> (<b class="text-danger mx-2">*</b>) Equals Required Field</span>
                     </div>
                     <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="launch_date" class="form-label">{{ __('courses.launch_date') }}</label>
-                                <input type="date" class="form-control @error('launch_date') is-invalid @enderror"
-                                    id="launch_date" name="launch_date" value="{{ old('launch_date') }}">
-                                @error('launch_date')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                        <!-- What students will learn -->
+                        <div class="mb-4">
+                            <label for="learning_outcomes_input" class="form-label fw-bold">{{ __('courses.what_will_students_learn') }}</label>
+                            <p class="small text-muted">{{ __('courses.learning_outcomes_description') }}</p>
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="learning_outcomes_input" placeholder="{{ __('courses.learning_outcomes_placeholder') }}">
+                                <button class="input-group-text btn btn-outline-secondary" type="button" id="add_learning_outcome_btn">{{ __('courses.add_to_list') }}</button>
                             </div>
+                            <ul id="learning_outcomes_list" class="list-group list-group-flush ps-0">
+                                <!-- Learning outcomes will be added here -->
+                            </ul>
+                        </div>
 
-                            <div class="col-md-6 mb-3">
-                                <label for="launch_time" class="form-label">{{ __('courses.launch_time') }}</label>
-                                <input type="time" class="form-control @error('launch_time') is-invalid @enderror"
-                                    id="launch_time" name="launch_time" value="{{ old('launch_time') }}">
-                                @error('launch_time')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
+                        <!-- Course requirements -->
+                        <div class="mb-4">
+                            <label for="requirements_input" class="form-label fw-bold">{{ __('courses.course_requirements') }}</label>
+                            <p class="small text-muted">{{ __('courses.requirements_description') }}</p>
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="requirements_input" placeholder="{{ __('courses.requirements_placeholder') }}">
+                                <button class="input-group-text btn btn-outline-secondary" type="button" id="add_requirement_btn">{{ __('courses.add_to_list') }}</button>
                             </div>
-                        </div>
-                        <div class="form-check mb-3">
-                            <input class="form-check-input" type="checkbox" id="has_certificate"
-                                name="has_certificate" value="1" {{ old('has_certificate') ? 'checked' : '' }}>
-                            <label class="form-check-label" for="has_certificate">
-                                {{ __('courses.course_includes_certificate') }}
-                            </label>
+                            <ul id="requirements_list" class="list-group list-group-flush ps-0">
+                                <!-- Requirements will be added here -->
+                            </ul>
                         </div>
 
-                        <div class="col-md-6 mb-3">
-                            <label for="access_duration_type" class="form-label">{{ __('courses.content_access') }}</label>
-                            <select class="form-select @error('access_duration_type') is-invalid @enderror"
-                                id="access_duration_type" name="access_duration_type">
-                                <option value="lifetime" {{ old('access_duration_type', 'unlimited') == 'unlimited' ? 'selected' : '' }}>
-                                    {{ __('courses.unlimited_access') }}
-                                </option>
-                                <option value="limited" {{ old('access_duration_type') == 'limited' ? 'selected' : '' }}>
-                                    {{ __('courses.limited_access') }}
-                                </option>
-                            </select>
-                            @error('access_duration_type')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                        <!-- Target audience -->
+                        <div>
+                            <label for="target_audience_input" class="form-label fw-bold">{{ __('courses.target_audience') }}</label>
+                            <p class="small text-muted">{{ __('courses.target_audience_description') }}</p>
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" id="target_audience_input" placeholder="{{ __('courses.target_audience_placeholder') }}">
+                                <button class="input-group-text btn btn-outline-secondary" type="button" id="add_target_audience_btn">{{ __('courses.add_to_list') }}</button>
+                            </div>
+                            <ul id="target_audience_list" class="list-group list-group-flush ps-0">
+                                <!-- Target audience will be added here -->
+                            </ul>
                         </div>
 
-                        <div class="col-md-6 mb-3" id="access_duration_field" style="display: none;">
-                            <label for="access_duration_value" class="form-label">{{ __('courses.access_duration_days') }}</label>
-                            <input type="number" class="form-control @error('access_duration_value') is-invalid @enderror"
-                                id="access_duration_value" name="access_duration_value" value="{{ old('access_duration_value') }}" min="1">
-                            <div class="form-text">{{ __('courses.number_of_days_after_completion') }}</div>
-                            @error('access_duration_value')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                        <!-- Action Buttons -->
+                        <div class="d-flex justify-content-end bg-light gap-1 px-3 mb-3">
+
+                            <a href="{{ route('instructor.courses.index') }}" data-confirm-message="{{ __('courses.confirm_cancel_course_create') }}" onclick="return confirm(this.dataset.confirmMessage);" class="form-control btn-sm btn btn-outline-warning">
+                                <i class="fas fa-times me-1"></i>
+                                {{ __('courses.cancel') }}
+                            </a>
+                            <button type="submit" name="action" value="draft" class="form-control btn-sm btn btn-outline-success">
+                                <i class="fas fa-paper-plane me-1"></i>
+                                {{ __('courses.save_as_draft') }}
+                            </button>
+
                         </div>
                     </div>
-                </div>
-        </div>
+                </form>
+            </div>
 
-        <!-- Action Buttons -->
-        <div class="d-flex justify-content-between align-items-center mt-5 pt-4">
-            <div>
-                <a href="{{ route('instructor.courses.index') }}" class="btn btn-link text-muted px-0">
-                    <i class="fas fa-times me-1"></i>
-                    {{ __('courses.cancel') }}
-                </a>
-            </div>
-            <div class="d-flex gap-2">
-                <button type="button" class="btn btn-outline-secondary" disabled>
-                    <i class="fas fa-arrow-left me-1"></i>
-                    {{ __('courses.previous') }}
-                </button>
-                <button type="submit" name="action" value="draft" class="btn btn-outline-secondary">
-                    {{ __('courses.save_as_draft') }}
-                </button>
-                <button type="button" class="btn btn-primary px-4" id="continueButton">
-                    {{ __('courses.continue') }}
-                    <i class="fas fa-arrow-right ms-2"></i>
-                </button>
-            </div>
-        </div>
-        </form>
-    </div>
+            <!-- Sidebar Tips -->
 
-    <!-- Sidebar Tips -->
-    <div class="col-lg-4">
-        <div class="card dashboard-card">
-            <div class="card-header bg-primary text-white">
-                <h6 class="mb-0">
-                    <i class="fas fa-lightbulb" style="margin-inline-end: 10px;"></i>
-                    {{ __('courses.course_creation_tips') }}
-                </h6>
-            </div>
-            <div class="card-body">
-                <div class="mb-3">
-                    <h6 class="text-primary">{{ __('courses.compelling_title') }}</h6>
-                    <p class="small text-muted">{{ __('courses.title_tip') }}</p>
+        </div>
+        <div class="col col-4">
+            <div class="card dashboard-card">
+                <div class="card-header bg-primary text-white">
+                    <h6 class="mb-0">
+                        <i class="fas fa-lightbulb" style="margin-inline-end: 10px;"></i>
+                        {{ __('courses.course_creation_tips') }}
+                    </h6>
                 </div>
-                <div class="mb-3">
-                    <h6 class="text-success">{{ __('courses.clear_description') }}</h6>
-                    <p class="small text-muted">{{ __('courses.description_tip') }}</p>
-                </div>
-                <div class="mb-3">
-                    <h6 class="text-info">{{ __('courses.attractive_thumbnail') }}</h6>
-                    <p class="small text-muted">{{ __('courses.thumbnail_tip') }}</p>
-                </div>
-                <div class="mb-0">
-                    <h6 class="text-warning">{{ __('courses.competitive_pricing') }}</h6>
-                    <p class="small text-muted">{{ __('courses.pricing_tip') }}</p>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <h6 class="text-primary">{{ __('courses.compelling_title') }}</h6>
+                        <p class="small text-muted">{{ __('courses.title_tip') }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <h6 class="text-success">{{ __('courses.clear_description') }}</h6>
+                        <p class="small text-muted">{{ __('courses.description_tip') }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <h6 class="text-info">{{ __('courses.attractive_thumbnail') }}</h6>
+                        <p class="small text-muted">{{ __('courses.thumbnail_tip') }}</p>
+                    </div>
+                    <div class="mb-0">
+                        <h6 class="text-warning">{{ __('courses.competitive_pricing') }}</h6>
+                        <p class="small text-muted">{{ __('courses.pricing_tip') }}</p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </div>
 
 <style>
@@ -387,25 +312,56 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Access duration field toggle
-        const accessDurationType = document.getElementById('access_duration_type');
-        const accessDurationField = document.getElementById('access_duration_field');
+        // Function to handle dynamic list creation
+        function setupDynamicList(inputId, addButtonId, listId, inputName) {
+            const inputField = document.getElementById(inputId);
+            const addButton = document.getElementById(addButtonId);
+            const list = document.getElementById(listId);
+            const form = list.closest('form');
 
-        function toggleAccessDurationField() {
-            if (accessDurationType.value === 'limited') {
-                accessDurationField.style.display = 'block';
-                document.getElementById('access_duration_value').required = true;
-            } else {
-                accessDurationField.style.display = 'none';
-                document.getElementById('access_duration_value').required = false;
-            }
+            addButton.addEventListener('click', function() {
+                const value = inputField.value.trim();
+                if (value) {
+                    // Create list item
+                    const listItem = document.createElement('li');
+                    listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
+                    listItem.textContent = value;
+
+                    // Create hidden input
+                    const hiddenInput = document.createElement('input');
+                    hiddenInput.type = 'hidden';
+                    hiddenInput.name = `${inputName}[]`;
+                    hiddenInput.value = value;
+
+                    // Create delete button
+                    const deleteButton = document.createElement('button');
+                    deleteButton.type = 'button';
+                    deleteButton.className = 'btn-close';
+                    deleteButton.setAttribute('aria-label', 'Close');
+
+                    deleteButton.addEventListener('click', function() {
+                        listItem.remove();
+                        hiddenInput.remove();
+                    });
+
+                    listItem.appendChild(deleteButton);
+                    list.appendChild(listItem);
+                    form.appendChild(hiddenInput);
+
+                    // Clear input field
+                    inputField.value = '';
+                }
+            });
         }
 
-        // Initial check
-        toggleAccessDurationField();
+        // Setup for Learning Outcomes
+        setupDynamicList('learning_outcomes_input', 'add_learning_outcome_btn', 'learning_outcomes_list', 'learning_outcomes');
 
-        // Listen for changes
-        accessDurationType.addEventListener('change', toggleAccessDurationField);
+        // Setup for Requirements
+        setupDynamicList('requirements_input', 'add_requirement_btn', 'requirements_list', 'requirements');
+
+        // Setup for Target Audience
+        setupDynamicList('target_audience_input', 'add_target_audience_btn', 'target_audience_list', 'target_audience');
 
         // Character count for text fields
         const titleField = document.getElementById('title');

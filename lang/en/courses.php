@@ -514,6 +514,18 @@ return [
     'promotion' => 'Promotion',
     'course_messages' => 'Course Messages',
 
+    // Intended Learners New
+    'what_will_students_learn' => 'What will students learn in your course?',
+    'learning_outcomes_description' => 'You must enter at least 4 learning objectives or outcomes that learners can expect to achieve after completing your course.',
+    'learning_outcomes_placeholder' => 'Example: Define the roles and responsibilities of a project manager',
+    'add_to_list' => 'Add to List',
+    'course_requirements' => 'What are the requirements or prerequisites for taking your course?',
+    'requirements_description' => 'List the required skills, experience, tools or equipment learners should have prior to taking your course. If there are no requirements, use this space as an opportunity to lower the barrier for beginners.',
+    'requirements_placeholder' => 'Example: No programming experience needed',
+    'target_audience' => 'Who is this course for?',
+    'target_audience_description' => 'Write a clear description of the intended learners for your course who will find your course content valuable. This will help you attract the right learners to your course.',
+    'target_audience_placeholder' => 'Example: Beginner web developers looking to learn React',
+
     // Banner Upload Options
     'upload_banner' => 'Upload Banner',
     'upload_from_device' => 'Upload from Device',
