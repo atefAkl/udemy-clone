@@ -25,6 +25,7 @@ return [
     'announcement_media' => 'Announcement Media',
 
     // Labels and Buttons
+    'back_to_courses' => 'Back to Courses',
     'basic_information' => 'Basic Information',
     'subtitle' => 'Subtitle',
     'enter_course_title' => 'Enter course title',
@@ -132,6 +133,7 @@ return [
     'delete_course_warning' => 'Are you sure you want to delete this course? This action cannot be undone.',
 
     // Course Tips
+    'required_field' => 'Equals Required Field',
     'course_creation_tips' => 'Course Creation Tips',
     'compelling_title' => 'Compelling Title',
     'title_tip' => 'Choose a clear and specific title that attracts students',
@@ -547,4 +549,16 @@ return [
     'please_select_valid_video' => 'Please select a valid video file.',
     'media_library' => 'Media Library',
     'no_media_files' => 'No media files found in your library.',
+
+    // Intended Learners New
+    'what_will_students_learn' => 'What will students learn in your course?',
+    'learning_outcomes_description' => 'You must enter at least 4 learning objectives or outcomes that learners can expect to achieve after completing your course.',
+    'learning_outcomes_placeholder' => 'Example: Define the roles and responsibilities of a project manager',
+    'add_to_list' => 'Add to List',
+    'course_requirements' => 'What are the requirements or prerequisites for taking your course?',
+    'requirements_description' => 'List the required skills, experience, tools or equipment learners should have prior to taking your course. If there are no requirements, use this space as an opportunity to lower the barrier for beginners.',
+    'requirements_placeholder' => 'Example: No programming experience needed',
+    'target_audience' => 'Who is this course for?',
+    'target_audience_description' => 'Write a clear description of the intended learners for your course who will find your course content valuable. This will help you attract the right learners to your course.',
+    'target_audience_placeholder' => 'Example: Beginner web developers looking to learn React',
 ];

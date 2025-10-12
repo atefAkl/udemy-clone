@@ -7,18 +7,11 @@
 @section('content')
 
 <div class="container-fluid p-4 my-5">
-    <div class="d-flex justify-content-between p-3 mb-3 rounded" style="background-image: linear-gradient(to right, #00b4d8, #0083b0);">
-        <div class="col col-auto">
-            <h1 class="m-0 text-white">{{ __('instructor.create_new_course') }}</h1>
-            <p class="text-muted mb-0 text-white">{{ __('instructor.create_course_description') }}</p>
-        </div>
-        <div class="col col-auto">
-            <a href="{{ route('instructor.courses.index') }}" class="btn btn-outline-light my-3">
-                <i class="fas fa-arrow-left me-2"></i>
-                {{ __('instructor.back_to_courses') }}
-            </a>
-        </div>
-    </div>
+    <x-page-title
+        title="{{ __('instructor.create_new_course') }}"
+        description="{{ __('instructor.create_course_description') }}"
+        btn_url="{{ route('instructor.courses.index') }}"
+        btn_text="{{ __('courses.back_to_courses') }}" />
     <!-- Parse Form Validation Errors -->
     @if($errors->any())
     <div class="alert alert-danger">
@@ -39,9 +32,9 @@
                 <form action="{{ route('instructor.courses.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
-                    <div class="card-header bg-primary text-white border-0 py-3 d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0 fw-bold d-flex align-items-center">
-                            <span class="d-flex align-items-center justify-content-center rounded-circle bg-primary text-white me-2" style="width: 24px; height: 24px; font-size: 12px;">1</span>
+                    <div class="card-header bg-primary text-white border-0 py-2 d-flex justify-content-between align-items-center">
+                        <h5 class="fs-5 mb-0 d-flex align-items-center">
+                            <span class="d-flex align-items-center justify-content-center rounded-circle bg-light border text-muted me-2" style="width: 24px; height: 24px; font-size: 12px;">1</span>
                             {{ __('courses.basic_information') }}
                         </h5>
                         <span class="badge bg-light text-dark"> (<b class="text-danger mx-2">*</b>) Equals Required Field</span>
@@ -49,10 +42,12 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-12 mb-3">
-                                <label for="title" class="form-label">{{ __('courses.course_title') }} <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control @error('title') is-invalid @enderror"
-                                    id="title" name="title" value="{{ old('title') }}" maxlength="100"
-                                    placeholder="{{ __('courses.enter_course_title') }}" required>
+                                <div class="input-group">
+                                    <label for="title" class="input-group-text">{{ __('courses.course_title') }} <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control @error('title') is-invalid @enderror"
+                                        id="title" name="title" value="{{ old('title') }}" maxlength="100"
+                                        placeholder="{{ __('courses.enter_course_title') }}" required>
+                                </div>
                                 <div class="form-text">{{ __('courses.title_max_100_chars') }}</div>
                                 @error('title')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -60,10 +55,12 @@
                             </div>
 
                             <div class="col-md-12 mb-3">
-                                <label for="short_description" class="form-label">{{ __('courses.short_description') }} <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control @error('short_description') is-invalid @enderror"
-                                    id="short_description" name="short_description" value="{{ old('short_description') }}" maxlength="160"
-                                    placeholder="{{ __('courses.enter_short_description') }}" required>
+                                <div class="input-group">
+                                    <label for="short_description" class="input-group-text">{{ __('courses.short_description') }} <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control @error('short_description') is-invalid @enderror"
+                                        id="short_description" name="short_description" value="{{ old('short_description') }}" maxlength="160"
+                                        placeholder="{{ __('courses.enter_short_description') }}" required>
+                                </div>
                                 <div class="form-text">{{ __('courses.short_description_max_160_chars') }}</div>
                                 @error('short_description')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -71,10 +68,12 @@
                             </div>
 
                             <div class="col-md-12 mb-3">
-                                <label for="description" class="form-label">{{ __('courses.course_description') }} <span class="text-danger">*</span></label>
-                                <textarea class="form-control @error('description') is-invalid @enderror"
-                                    id="description" name="description" rows="4" maxlength="500"
-                                    placeholder="{{ __('app.enter_course_description') }}" required>{{ old('description') }}</textarea>
+                                <div class="form-floating">
+                                    <textarea class="form-control @error('description') is-invalid @enderror"
+                                        id="description" name="description" rows="4" maxlength="500"
+                                        placeholder="{{ __('app.enter_course_description') }}" required>{{ old('description') }}</textarea>
+                                    <label for="description">{{ __('courses.course_description') }} <span class="text-danger">*</span></label>
+                                </div>
                                 <div class="form-text">{{ __('app.description_max_500_chars') }}</div>
                                 @error('description')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -82,52 +81,58 @@
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label for="category_id" class="form-label">{{ __('courses.category') }} <span class="text-danger">*</span></label>
-                                <select class="form-select @error('category_id') is-invalid @enderror"
-                                    id="category_id" name="category_id" required>
-                                    <option value="">{{ __('app.select_category') }}</option>
-                                    @foreach($categories as $category)
-                                    <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
-                                        {{ $category->name }}
-                                    </option>
-                                    @endforeach
-                                </select>
+                                <div class="input-group">
+                                    <label for="category_id" class="input-group-text">{{ __('courses.category') }} <span class="text-danger">*</span></label>
+                                    <select class="form-select @error('category_id') is-invalid @enderror"
+                                        id="category_id" name="category_id" required>
+                                        <option value="">{{ __('courses.select_category') }}</option>
+                                        @foreach($categories as $category)
+                                        <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                            {{ $category->name }}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                </div>
                                 @error('category_id')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label for="language" class="form-label">{{__('courses.language')}} <span class="text-danger px-2 fw-bold"> *</span></label>
-                                <select name="language" id="language" class="form-select" required>
-                                    <option value="">{{__('courses.select_language')}}</option>
-                                    @foreach (__('courses.languages') as $key => $language)
-                                    <option value="{{$key}}" @if ($key==$course->language) selected @endif>{{$language}}</option>
-                                    @endforeach
-                                </select>
+                                <div class="input-group">
+                                    <label for="language" class="input-group-text">{{__('courses.language')}} <span class="text-danger px-2 fw-bold"> *</span></label>
+                                    <select name="language" id="language" class="form-select" required>
+                                        <option value="">{{__('courses.select_language')}}</option>
+                                        @foreach (__('courses.languages') as $key => $language)
+                                        <option value="{{$key}}" @if ($key==old('language')) selected @endif>{{$language}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                                 @error('language')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label for="target_level" class="form-label">{{ __('courses.target_level') }} <span class="text-danger">*</span></label>
-                                <select class="form-select @error('target_level') is-invalid @enderror"
-                                    id="target_level" name="target_level" required>
-                                    <option value="">{{ __('courses.select_target_level') }}</option>
-                                    <option value="beginner" {{ old('target_level') == 'beginner' ? 'selected' : '' }}>{{ __('courses.beginner') }}</option>
-                                    <option value="intermediate" {{ old('target_level') == 'intermediate' ? 'selected' : '' }}>{{ __('courses.intermediate') }}</option>
-                                    <option value="advanced" {{ old('target_level') == 'advanced' ? 'selected' : '' }}>{{ __('courses.advanced') }}</option>
-                                    <option value="professional" {{ old('target_level') == 'professional' ? 'selected' : '' }}>{{ __('courses.professional') }}</option>
-                                </select>
+                                <div class="input-group">
+                                    <label for="target_level" class="input-group-text">{{ __('courses.target_level') }} <span class="text-danger">*</span></label>
+                                    <select class="form-select @error('target_level') is-invalid @enderror"
+                                        id="target_level" name="target_level" required>
+                                        <option value="">{{ __('courses.select_target_level') }}</option>
+                                        <option value="beginner" {{ old('target_level') == 'beginner' ? 'selected' : '' }}>{{ __('courses.beginner') }}</option>
+                                        <option value="intermediate" {{ old('target_level') == 'intermediate' ? 'selected' : '' }}>{{ __('courses.intermediate') }}</option>
+                                        <option value="advanced" {{ old('target_level') == 'advanced' ? 'selected' : '' }}>{{ __('courses.advanced') }}</option>
+                                        <option value="professional" {{ old('target_level') == 'professional' ? 'selected' : '' }}>{{ __('courses.professional') }}</option>
+                                    </select>
+                                </div>
                                 @error('target_level')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label for="price" class="form-label">{{ __('courses.price') }} <span class="text-danger">*</span></label>
                                 <div class="input-group">
+                                    <label for="price" class="input-group-text">{{ __('courses.price') }} <span class="text-danger">*</span></label>
                                     <span class="input-group-text">$</span>
                                     <input type="number" class="form-control @error('price') is-invalid @enderror"
                                         id="price" name="price" value="{{ old('price', $course->price) }}" min="0" step="0.01" required>
@@ -142,17 +147,17 @@
 
                     <!-- Intended Learners Card -->
 
-                    <div class="card-header bg-primary text-white border-0 py-3 d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0 fw-bold d-flex align-items-center">
+                    <div class="card-header bg-primary text-white border-0 py-2 d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0 fs-5 d-flex align-items-center">
                             <span class="d-flex align-items-center justify-content-center rounded-circle bg-light border text-muted me-2" style="width: 24px; height: 24px; font-size: 12px;">2</span>
                             {{ __('courses.intended_learners') }}
                         </h5>
-                        <span class="badge bg-light text-dark"> (<b class="text-danger mx-2">*</b>) Equals Required Field</span>
+                        <span class="badge bg-light text-dark"> (<b class="text-danger mx-2">*</b>) {{__('courses.required_field')}}</span>
                     </div>
                     <div class="card-body">
                         <!-- What students will learn -->
                         <div class="mb-4">
-                            <label for="learning_outcomes_input" class="form-label fw-bold">{{ __('courses.what_will_students_learn') }}</label>
+                            <label for="learning_outcomes_input" class="form-label text-dark fs-6"><b>{{ __('courses.what_will_students_learn') }}</b></label>
                             <p class="small text-muted">{{ __('courses.learning_outcomes_description') }}</p>
                             <div class="input-group mb-2">
                                 <input type="text" class="form-control" id="learning_outcomes_input" placeholder="{{ __('courses.learning_outcomes_placeholder') }}">
@@ -189,8 +194,10 @@
                             </ul>
                         </div>
 
+                    </div>
+                    <div class="card-footer">
                         <!-- Action Buttons -->
-                        <div class="d-flex justify-content-end bg-light gap-1 px-3 mb-3">
+                        <div class="d-flex justify-content-end bg-light gap-1">
 
                             <a href="{{ route('instructor.courses.index') }}" data-confirm-message="{{ __('courses.confirm_cancel_course_create') }}" onclick="return confirm(this.dataset.confirmMessage);" class="form-control btn-sm btn btn-outline-warning">
                                 <i class="fas fa-times me-1"></i>
@@ -200,7 +207,6 @@
                                 <i class="fas fa-paper-plane me-1"></i>
                                 {{ __('courses.save_as_draft') }}
                             </button>
-
                         </div>
                     </div>
                 </form>
@@ -210,9 +216,9 @@
 
         </div>
         <div class="col col-4">
-            <div class="card dashboard-card">
-                <div class="card-header bg-primary text-white">
-                    <h6 class="mb-0">
+            <div class="card dashboard-card border-0 shadow-sm">
+                <div class="card-header py-2 bg-primary text-white">
+                    <h6 class="mb-0 fs-5">
                         <i class="fas fa-lightbulb" style="margin-inline-end: 10px;"></i>
                         {{ __('courses.course_creation_tips') }}
                     </h6>
@@ -239,6 +245,21 @@
         </div>
     </div>
 </div>
+
+<script>
+    ['target_audience_input', 'learning_outcomes_input', 'requirements_input'].forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+            element.addEventListener('keypress', function(e) {
+                // prevent enter key from submitting the form
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    element.nextElementSibling.click();
+                }
+            });
+        }
+    });
+</script>
 
 <style>
     .form-section {

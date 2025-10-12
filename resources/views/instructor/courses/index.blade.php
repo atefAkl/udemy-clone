@@ -2,75 +2,25 @@
 
 @section('title', __('instructor.my_courses'))
 
-@section('sidebar-nav')
-<a href="{{ route('instructor.dashboard') }}" class="nav-link">
-    <i class="fas fa-tachometer-alt" style="margin-inline-end: 10px;"></i>
-    {{ __('app.dashboard') }}
-</a>
-<a href="{{ route('instructor.courses.index') }}" class="nav-link active">
-    <i class="fas fa-book" style="margin-inline-end: 10px;"></i>
-    {{ __('instructor.my_courses') }}
-</a>
-<a href="{{ route('instructor.courses.create') }}" class="nav-link">
-    <i class="fas fa-plus-circle" style="margin-inline-end: 10px;"></i>
-    {{ __('instructor.create_new_course') }}
-</a>
-<a href="#" class="nav-link">
-    <i class="fas fa-chart-line" style="margin-inline-end: 10px;"></i>
-    {{ __('instructor.analytics') }}
-</a>
-<a href="#" class="nav-link">
-    <i class="fas fa-dollar-sign" style="margin-inline-end: 10px;"></i>
-    {{ __('instructor.earnings') }}
-</a>
-<a href="#" class="nav-link">
-    <i class="fas fa-cog" style="margin-inline-end: 10px;"></i>
-    {{ __('instructor.account_settings') }}
-</a>
+@section('breadcrumb')
+<li class="breadcrumb-item">
+    <a href="{{ route('instructor.dashboard') }}">{{ __('app.dashboard') }}</a>
+</li>
+<li class="breadcrumb-item active">{{ __('instructor.my_courses') }}</li>
 @endsection
-
 @section('content')
-<div class="container-fluid p-4">
-    <!-- Breadcrumb -->
-    <nav aria-label="breadcrumb" class="mb-4">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a href="{{ route('instructor.dashboard') }}">{{ __('app.dashboard') }}</a>
-            </li>
-            <li class="breadcrumb-item active">{{ __('instructor.my_courses') }}</li>
-        </ol>
-    </nav>
+<div class="container-fluid p-4 my-5">
+    <x-page-title
+        title="{{ __('instructor.my_courses') }}"
+        description="{{ __('instructor.manage_your_courses') }}"
+        btn_url="{{ route('instructor.courses.create') }}"
+        btn_text="{{ __('courses.create_new_course') }}" />
+
 
     <!-- Page Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h2 class="mb-1">{{ __('instructor.my_courses') }}</h2>
-            <p class="text-muted">{{ __('instructor.manage_your_courses') }}</p>
-        </div>
-        <div class="btn-group">
-            <a href="{{ route('instructor.courses.create') }}" class="btn btn-primary">
-                <i class="fas fa-plus me-1"></i> {{ __('instructor.create_new_course') }}
-            </a>
-            <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
-                <span class="visually-hidden">{{ __('app.toggle_dropdown') }}</span>
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end">
-                <li>
-                    <a class="dropdown-item" href="{{ route('instructor.courses.create') }}">
-                        <i class="fas fa-columns me-2"></i> {{ __('app.standard_layout') }}
-                    </a>
-                </li>
-                <li>
-                    <hr class="dropdown-divider">
-                </li>
-                <li>
-                    <a class="dropdown-item" href="{{ route('instructor.courses.create.wide') }}">
-                        <i class="fas fa-expand-alt me-2"></i> {{ __('app.wide_layout') }}
-                        <span class="badge bg-success ms-2">{{ __('app.new') }}</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
+
+
         <form method="GET" class="row g-3">
             <div class="col-md-4">
                 <label for="search" class="form-label">{{ __('courses.search') }}</label>
