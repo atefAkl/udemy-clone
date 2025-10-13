@@ -1,26 +1,24 @@
 @props([
 'course',
 'categories',
+'action',
 ])
 <div>
-    <!-- Toast Container -->
-    <div id="toastContainer" class="position-fixed top-0 end-0 p-3" style="z-index: 9999;"></div>
-    <form action="{{route('instructor.courses.update.general-info', [$course->id])}}" method="POST" enctype="multipart/form-data">
-
+    <form action="{{$action}}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
         <div class="input-group mb-3">
             <label for="title" class="input-group-text">{{__('courses.course_title')}}</label>
-            <input type="text" class="form-control" id="title" name="title" value="{{$course->title}}">
+            <input type="text" class="form-control" id="title" name="title" value="{{old('title',$course->title)}}">
         </div>
         <div class="input-group mb-3">
             <label for="subtitle" class="input-group-text">{{__('courses.subtitle')}}</label>
-            <input type="text" class="form-control" id="subtitle" name="subtitle" value="{{$course->subtitle}}">
+            <input type="text" class="form-control" id="subtitle" name="subtitle" value="{{old('subtitle',$course->subtitle)}}">
         </div>
         <div class="form-floating mb-3">
             <textarea name="short_description" placeholder="{{__('courses.enter_short_description')}}" id="short_description"
-                class="form-control">{{$course->short_description}}</textarea>
+                class="form-control">{{old('short_description',$course->short_description)}}</textarea>
             <label for="short_description">{{__('courses.short_description')}}</label>
         </div>
         <div class="form-floating mb-3">
@@ -77,7 +75,7 @@
 
 
         <fieldset class="mt-4 pt-4 pb-0">
-            <legend>Calculated Fields</legend>
+            <legend>{{__('courses.calculated_fields')}}</legend>
             <style>
                 .card-body {
                     border: 1px solid #ccc;
@@ -148,46 +146,14 @@
                 </div>
             </div>
         </fieldset>
-        <div class="btns d-flex justify-content-end gap-2 mt-3">
-            <button type="reset" class="btn btn-sm btn-warning">{{__('labels.reset')}}</button>
-            <button type="submit" class="btn btn-sm btn-primary">{{__('labels.update')}}</button>
+
+        <div class="card-footer border-1 border-top mt-3">
+            <div class="btns d-flex justify-content-end gap-2">
+                <button type="button" class="btn btn-sm text-muted disabled">{{__('labels.previous')}}</button>
+                <button type="reset" class="btn btn-sm btn-outline-warning">{{__('labels.reset')}}</button>
+                <button type="submit" class="btn btn-sm btn-outline-success">{{__('labels.update')}}</button>
+                <button type="button" class="btn btn-sm btn-outline-primary">{{__('labels.next')}}</button>
+            </div>
         </div>
-
-
     </form>
-
-
-
-
-    <style>
-        .toast {
-            min-width: 350px;
-            max-width: 500px;
-        }
-
-        .toast-header {
-            font-weight: 600;
-        }
-
-        .toast-body {
-            word-wrap: break-word;
-            line-height: 1.5;
-        }
-
-        .toast-body strong {
-            color: #721c24;
-        }
-
-        .toast.text-bg-success .toast-body strong {
-            color: #0f5132;
-        }
-
-        .toast.text-bg-warning .toast-body strong {
-            color: #664d03;
-        }
-
-        .toast.text-bg-info .toast-body strong {
-            color: #055160;
-        }
-    </style>
 </div>

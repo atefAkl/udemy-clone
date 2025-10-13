@@ -3,327 +3,391 @@
 @section('title', __('instructor.view_course'))
 
 
+@section('breadcrumb')
+<li class="breadcrumb-item">
+    <a href="{{ route('instructor.courses.index') }}">{{ __('instructor.my_courses') }}</a>
+</li>
+<li class="breadcrumb-item active" aria-current="page">{{ $course->title }}</li>
+@endsection
+
 @section('content')
-<!-- Breadcrumb -->
-<nav aria-label="breadcrumb" class="mb-4">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-            <a href="{{ route('instructor.dashboard') }}">{{ __('instructor.dashboard') }}</a>
-        </li>
-        <li class="breadcrumb-item">
-            <a href="{{ route('instructor.courses.index') }}">{{ __('instructor.my_courses') }}</a>
-        </li>
-        <li class="breadcrumb-item active" aria-current="page">{{ $course->title }}</li>
-    </ol>
-</nav>
 
-<!-- Course Header -->
-<div class="row mb-4">
-    <div class="col-12">
-        <div class="card border-0 shadow-sm">
-            <div class="card-body">
-                <div class="row align-items-center">
-                    <div class="col-md-3">
-                        <img src="{{ $course->thumbnail ?? 'https://via.placeholder.com/300x200?text=Course+Image' }}"
-                            alt="{{ $course->title }}" class="img-fluid rounded">
-                    </div>
-                    <div class="col-md-6">
-                        <h2 class="mb-2">{{ $course->title }}</h2>
-                        <p class="text-muted mb-3">{{ $course->description }}</p>
-                        <div class="d-flex flex-wrap gap-2 mb-3">
-                            <span class="badge bg-primary">{{ $course->category->name ?? __('instructor.category') }}</span>
-                            <span class="badge bg-secondary">{{ ucfirst($course->level) }}</span>
-                            <span class="badge bg-info">{{ $course->duration }} {{ __('instructor.hours') }}</span>
-                            @if($course->status === 'published')
-                            <span class="badge bg-success">{{ __('instructor.published') }}</span>
-                            @elseif($course->status === 'draft')
-                            <span class="badge bg-warning">{{ __('instructor.draft') }}</span>
-                            @else
-                            <span class="badge bg-secondary">{{ __('instructor.pending_review') }}</span>
-                            @endif
+<div class="container-fluid mt-5 pt-5">
+
+    <x-page-title
+        title="{{ $course->title }}"
+        description="{{ $course->subtitle }}"
+        icon="fa-solid fa-book"
+        btn_url="{{ route('instructor.courses.edit', $course) }}"
+        btn_text="{{ __('instructor.edit_course') }}" />
+    <!-- Course Statistics -->
+
+    <style>
+        #stats-cards .col {
+            padding: 0.1rem;
+        }
+
+        #stats-cards .card-body {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            padding: 0.1rem;
+            margin-bottom: 0.1rem;
+            transition: all 0.3s ease-in-out;
+            text-align: center;
+        }
+
+        #stats-cards .card-body h1 {
+            font-weight: bold;
+            font-size: 2rem;
+        }
+
+        #stats-cards .card-body h2 {
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        #stats-cards .card-body:hover {
+            box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+    <div class="shadow-sm bg-light p-3 mb-2">
+        <div id="stats-cards" class="row px-3">
+            <div class="col col-md-3">
+                <div class="card-body p-3">
+                    <h1>15<sup>hrs</sup></h1>
+                    <p><i class="fa-solid fa-clock"></i>
+                        {{__('courses.duration')}}
+                    </p>
+                </div>
+            </div>
+            <div class="col col-md-3">
+                <div class="card-body p-3">
+                    <h1>4</h1>
+                    <p><i class="fa-solid fa-puzzle-piece"></i>
+                        {{__('courses.total_units')}}
+                    </p>
+                </div>
+            </div>
+            <div class="col col-md-3">
+                <div class="card-body p-3">
+                    <h1>23</h1>
+                    <p><i class="fa-solid fa-chalkboard-user"></i>
+                        {{__('courses.total_lessons')}}
+                    </p>
+                </div>
+            </div>
+            <div class="col col-md-3">
+                <div class="card-body p-3">
+                    <h1>4000<sup>+</sup></h1>
+                    <p><i class="fa-solid fa-users"></i>
+                        {{__('courses.total_enrollments')}}
+                    </p>
+                </div>
+            </div>
+            <div class="col col-md-3">
+                <div class="card-body p-3">
+                    <h1>1</h1>
+                    <p><i class="fa fa-graduation-cap"></i>
+                        {{__('courses.certificate')}}
+                    </p>
+                </div>
+            </div>
+            <div class="col col-md-3">
+                <div class="card-body p-3">
+                    <h1>1</h1>
+                    <p><i class="fa fa-user-graduate"></i>
+                        {{__('courses.quizes')}}
+                    </p>
+                </div>
+            </div>
+            <div class="col col-md-3">
+                <div class="card-body p-3">
+                    <h1>1</h1>
+                    <p><i class="fa fa-laptop-code"></i>
+                        {{__('courses.training')}}
+                    </p>
+                </div>
+            </div>
+            <div class="col col-md-3">
+                <div class="card-body p-3">
+                    <h1>LifeTime</h1>
+                    <p><i class="fa-solid fa-infinity"></i>
+                        {{__('courses.accessible')}}
+                    </p>
+                </div>
+            </div>
+            <div class="col col-md-3">
+                <div class="card-body p-3">
+                    <h1>Limited</h1>
+                    <p><i class="fa-solid fa-clock"></i>
+                        {{__('courses.accessible')}}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Course Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-3">
+                            <img src="{{ $course->thumbnail ?? 'https://via.placeholder.com/300x200?text=Course+Image' }}"
+                                alt="{{ $course->title }}" class="img-fluid rounded">
                         </div>
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="d-flex align-items-center">
-                                <i class="fa fa-star-fill text-warning {{ session('locale', 'ar') === 'ar' ? 'ms-1' : 'me-1' }}"></i>
-                                <span class="fw-bold">4.5</span>
-                                <span class="text-muted">({{ $course->enrollments_count }} {{ __('instructor.students') }})</span>
-                            </div>
-                            <div class="text-muted">
-                                <i class="fa fa-play-circle {{ session('locale', 'ar') === 'ar' ? 'ms-1' : 'me-1' }}"></i>
-                                {{ $course->lessons_count }} {{ __('instructor.lessons') }}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 text-{{ session('locale', 'ar') === 'ar' ? 'start' : 'end' }}">
-                        <div class="mb-3">
-                            <h3 class="text-primary mb-0">
-                                @if($course->price > 0)
-                                ${{ number_format($course->price, 2) }}
+                        <div class="col-md-6">
+                            <h2 class="mb-2">{{ $course->title }}</h2>
+                            <p class="text-muted mb-3">{{ $course->description }}</p>
+                            <div class="d-flex flex-wrap gap-2 mb-3">
+                                <span class="badge bg-primary">{{ $course->category->name ?? __('instructor.category') }}</span>
+                                <span class="badge bg-secondary">{{ ucfirst($course->level) }}</span>
+                                <span class="badge bg-info">{{ $course->duration }} {{ __('instructor.hours') }}</span>
+                                @if($course->status === 'published')
+                                <span class="badge bg-success">{{ __('instructor.published') }}</span>
+                                @elseif($course->status === 'draft')
+                                <span class="badge bg-warning">{{ __('instructor.draft') }}</span>
                                 @else
-                                {{ __('instructor.free') }}
+                                <span class="badge bg-secondary">{{ __('instructor.pending_review') }}</span>
                                 @endif
-                            </h3>
-                        </div>
-                        <div class="d-grid gap-2">
-                            <a href="{{ route('instructor.courses.edit', $course) }}" class="btn btn-primary">
-                                <i class="fa fa-pencil {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
-                                {{ __('instructor.edit_course') }}
-                            </a>
-                            @if($course->status === 'draft')
-                            <button class="btn btn-success" data-course-id="{{ $course->id }}" onclick="publishCourse(this.getAttribute('course-id'))">
-                                <i class="fa fa-upload {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
-                                {{ __('instructor.publish_course') }}
-                            </button>
-                            @endif
-                            <button class="btn btn-outline-danger" data-course-id="{{ $course->id }}" onclick="deleteCourse(this.getAttribute('course-id'))">
-                                <i class="fa fa-trash {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
-                                {{ __('instructor.delete_course') }}
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Course Statistics -->
-<div class="row mb-4">
-    <div class="col-md-3">
-        <div class="card border-0 shadow-sm text-center" style="height: 10rem;">
-            <div class="card-body">
-                <div class="text-primary mb-2">
-                    <i class="fa fa-users fs-1"></i>
-                </div>
-                <h4 class="mb-1 fw-bold">{{ $course->enrollments_count ?? 0 }}</h4>
-                <p class="text-muted mb-0">{{ __('instructor.total_students') }}</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card border-0 shadow-sm text-center" style="height: 10rem;">
-            <div class="card-body">
-                <div class="text-success mb-2">
-                    <i class="fa fa-dollar fs-1"></i>
-                </div>
-                <h4 class="mb-1 fw-bold">${{ number_format($course->enrollments_count ?? 0 * $course->price, 2) }}</h4>
-                <p class="text-muted mb-0">{{ __('instructor.total_earnings') }}</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card border-0 shadow-sm text-center" style="height: 10rem;">
-            <div class="card-body">
-                <div class="text-warning mb-2">
-                    <i class="fa fa-star fs-1"></i>
-                </div>
-                <h4 class="mb-1 fw-bold">4.5</h4>
-                <p class="text-muted mb-0">{{ __('instructor.average_rating') }}</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card border-0 shadow-sm text-center" style="height: 10rem;">
-            <div class="card-body">
-                <div class="text-info mb-2">
-                    <i class="fa fa-play-circle fs-1"></i>
-                </div>
-                <h4 class="mb-1 fw-bold">{{ $course->lessons_count }}</h4>
-                <p class="text-muted mb-0">{{ __('instructor.lessons') }}</p>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Course Content Tabs -->
-<div class="card border-0 shadow-sm">
-    <div class="card-header bg-white">
-        <ul class="nav nav-tabs card-header-tabs" id="courseTab" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="lessons-tab" data-bs-toggle="tab" data-bs-target="#lessons" type="button" role="tab">
-                    <i class="fa fa-play-circle {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
-                    {{ __('instructor.lessons') }}
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="students-tab" data-bs-toggle="tab" data-bs-target="#students" type="button" role="tab">
-                    <i class="fa fa-people {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
-                    {{ __('instructor.students') }}
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab">
-                    <i class="fa fa-star {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
-                    {{ __('instructor.reviews') }}
-                </button>
-            </li>
-        </ul>
-    </div>
-    <div class="card-body">
-        <div class="tab-content" id="courseTabContent">
-            <!-- Lessons Tab -->
-            <div class="tab-pane fade show active" id="lessons" role="tabpanel">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h5 class="mb-0">{{ __('instructor.course_lessons') }}</h5>
-                    <button class="btn btn-primary">
-                        <i class="fa fa-plus {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
-                        {{ __('instructor.add_lesson') }}
-                    </button>
-                </div>
-
-                @forelse($course->lessons ?? [] as $index => $lesson)
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-md-1">
-                                <div class="text-center">
-                                    <span class="badge bg-primary rounded-pill">{{ $index + 1 }}</span>
+                            </div>
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="d-flex align-items-center">
+                                    <i class="fa fa-star-fill text-warning {{ session('locale', 'ar') === 'ar' ? 'ms-1' : 'me-1' }}"></i>
+                                    <span class="fw-bold">4.5</span>
+                                    <span class="text-muted">({{ $course->enrollments_count }} {{ __('instructor.students') }})</span>
                                 </div>
-                            </div>
-                            <div class="col-md-6">
-                                <h6 class="mb-1">{{ $lesson->title }}</h6>
-                                <p class="text-muted mb-0">{{ Str::limit($lesson->description, 100) }}</p>
-                            </div>
-                            <div class="col-md-2">
-                                <small class="text-muted">{{ $lesson->duration }} {{ __('instructor.minutes') }}</small>
-                            </div>
-                            <div class="col-md-2">
-                                <span class="badge bg-{{ $lesson->is_free ? 'success' : 'secondary' }}">
-                                    {{ $lesson->is_free ? __('instructor.free') : __('instructor.premium') }}
-                                </span>
-                            </div>
-                            <div class="col-md-1">
-                                <div class="dropdown">
-                                    <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="dropdown">
-                                        <i class="fa fa-three-dots-vertical"></i>
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="#"><i class="fa fa-pencil {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>{{ __('instructor.edit') }}</a></li>
-                                        <li><a class="dropdown-item text-danger" href="#"><i class="fa fa-trash {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>{{ __('instructor.delete') }}</a></li>
-                                    </ul>
+                                <div class="text-muted">
+                                    <i class="fa fa-play-circle {{ session('locale', 'ar') === 'ar' ? 'ms-1' : 'me-1' }}"></i>
+                                    {{ $course->lessons_count }} {{ __('instructor.lessons') }}
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                @empty
-                <div class="text-center py-5">
-                    <i class="fa fa-play-circle text-muted" style="font-size: 4rem;"></i>
-                    <h5 class="text-muted mt-3">{{ __('instructor.no_lessons_yet') }}</h5>
-                    <p class="text-muted">{{ __('instructor.start_adding_lessons') }}</p>
-                    <button class="btn btn-primary">
-                        <i class="fa fa-plus {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
-                        {{ __('instructor.add_first_lesson') }}
-                    </button>
-                </div>
-                @endforelse
-            </div>
-
-            <!-- Students Tab -->
-            <div class="tab-pane fade" id="students" role="tabpanel">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h5 class="mb-0">{{ __('instructor.enrolled_students') }}</h5>
-                    <div class="input-group" style="width: 300px;">
-                        <input type="text" class="form-control" placeholder="{{ __('instructor.search_students') }}">
-                        <button class="btn btn-outline-secondary">
-                            <i class="fa fa-search"></i>
-                        </button>
-                    </div>
-                </div>
-
-                @forelse($course->enrollments ?? [] as $enrollment)
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <div class="row align-items-center">
-                            <div class="col-md-2">
-                                <img src="https://via.placeholder.com/50x50?text=User" alt="Student" class="rounded-circle" width="50" height="50">
+                        <div class="col-md-3 text-{{ session('locale', 'ar') === 'ar' ? 'start' : 'end' }}">
+                            <div class="mb-3">
+                                <h3 class="text-primary mb-0">
+                                    @if($course->price > 0)
+                                    ${{ number_format($course->price, 2) }}
+                                    @else
+                                    {{ __('instructor.free') }}
+                                    @endif
+                                </h3>
                             </div>
-                            <div class="col-md-4">
-                                <h6 class="mb-1">{{ $enrollment->user->name }}</h6>
-                                <small class="text-muted">{{ $enrollment->user->email }}</small>
-                            </div>
-                            <div class="col-md-2">
-                                <small class="text-muted">{{ __('instructor.enrolled') }}: {{ $enrollment->created_at->format('M d, Y') }}</small>
-                            </div>
-                            <div class="col-md-2">
-                                <div class="progress" style="height: 8px;">
-                                    <div class="progress-bar" data-width="{{ $enrollment->progress }}"></div>
-                                </div>
-                                <small class="text-muted">{{ $enrollment->progress }}% {{ __('instructor.complete') }}</small>
-                            </div>
-                            <div class="col-md-2">
-                                <button class="btn btn-sm btn-outline-primary">
-                                    <i class="fa fa-envelope {{ session('locale', 'ar') === 'ar' ? 'ms-1' : 'me-1' }}"></i>
-                                    {{ __('instructor.message') }}
+                            <div class="d-grid gap-2">
+                                <a href="{{ route('instructor.courses.edit', $course) }}" class="btn btn-primary">
+                                    <i class="fa fa-pencil {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
+                                    {{ __('instructor.edit_course') }}
+                                </a>
+                                @if($course->status === 'draft')
+                                <button class="btn btn-success" data-course-id="{{ $course->id }}" onclick="publishCourse(this.getAttribute('course-id'))">
+                                    <i class="fa fa-upload {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
+                                    {{ __('instructor.publish_course') }}
+                                </button>
+                                @endif
+                                <button class="btn btn-outline-danger" data-course-id="{{ $course->id }}" onclick="deleteCourse(this.getAttribute('course-id'))">
+                                    <i class="fa fa-trash {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
+                                    {{ __('instructor.delete_course') }}
                                 </button>
                             </div>
                         </div>
                     </div>
                 </div>
-                @empty
-                <div class="text-center py-5">
-                    <i class="fa fa-people text-muted" style="font-size: 4rem;"></i>
-                    <h5 class="text-muted mt-3">{{ __('instructor.no_students_enrolled') }}</h5>
-                    <p class="text-muted">{{ __('instructor.promote_course_to_get_students') }}</p>
-                </div>
-                @endforelse
             </div>
+        </div>
+    </div>
 
-            <!-- Reviews Tab -->
-            <div class="tab-pane fade" id="reviews" role="tabpanel">
-                <div class="row mb-4">
-                    <div class="col-md-4">
-                        <div class="text-center">
-                            <h2 class="text-warning mb-2">4.5</h2>
-                            <div class="mb-2">
-                                <i class="fa fa-star-fill text-warning"></i>
-                                <i class="fa fa-star-fill text-warning"></i>
-                                <i class="fa fa-star-fill text-warning"></i>
-                                <i class="fa fa-star-fill text-warning"></i>
-                                <i class="fa fa-star-half text-warning"></i>
-                            </div>
-                            <p class="text-muted">{{ __('instructor.based_on') }} 25 {{ __('instructor.reviews') }}</p>
-                        </div>
+    <!-- Course Content Tabs -->
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white">
+            <ul class="nav nav-tabs card-header-tabs" id="courseTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="lessons-tab" data-bs-toggle="tab" data-bs-target="#lessons" type="button" role="tab">
+                        <i class="fa fa-play-circle {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
+                        {{ __('instructor.lessons') }}
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="students-tab" data-bs-toggle="tab" data-bs-target="#students" type="button" role="tab">
+                        <i class="fa fa-people {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
+                        {{ __('instructor.students') }}
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab">
+                        <i class="fa fa-star {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
+                        {{ __('instructor.reviews') }}
+                    </button>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body">
+            <div class="tab-content" id="courseTabContent">
+                <!-- Lessons Tab -->
+                <div class="tab-pane fade show active" id="lessons" role="tabpanel">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5 class="mb-0">{{ __('instructor.course_lessons') }}</h5>
+                        <button class="btn btn-primary">
+                            <i class="fa fa-plus {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
+                            {{ __('instructor.add_lesson') }}
+                        </button>
                     </div>
-                    <div class="col-md-8">
-                        @for($i = 5; $i >= 1; $i--)
-                        <div class="mb-2">
-                            <div class="d-flex align-items-center">
-                                <span class="me-2">{{ $i }}</span>
-                                <i class="fa fa-star-fill text-warning me-2"></i>
-                                <div class="progress flex-grow-1 me-2" style="height: 8px;">
-                                    <div class="progress-bar bg-warning" style="width: {{ rand(10, 80) }}%"></div>
-                                </div>
-                                <span class="text-muted">{{ rand(10, 80) }}%</span>
-                            </div>
-                        </div>
-                        @endfor
-                    </div>
-                </div>
 
-                <!-- Individual Reviews -->
-                <div class="border-top pt-4">
-                    @for($i = 1; $i <= 3; $i++)
-                        <div class="mb-4">
-                        <div class="d-flex align-items-start">
-                            <img src="https://via.placeholder.com/50x50?text=User" alt="Student" class="rounded-circle me-3" width="50" height="50">
-                            <div class="flex-grow-1">
-                                <div class="d-flex justify-content-between align-items-start mb-2">
-                                    <div>
-                                        <h6 class="mb-1">Student Name {{ $i }}</h6>
-                                        <div class="mb-1">
-                                            @for($j = 1; $j <= 5; $j++)
-                                                <i class="fa fa-star-fill text-warning small"></i>
-                                                @endfor
-                                        </div>
+                    @forelse($course->lessons ?? [] as $index => $lesson)
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-1">
+                                    <div class="text-center">
+                                        <span class="badge bg-primary rounded-pill">{{ $index + 1 }}</span>
                                     </div>
-                                    <small class="text-muted">{{ $i }} days ago</small>
                                 </div>
-                                <p class="mb-0">This is an excellent course! The instructor explains everything clearly and the content is very well structured.</p>
+                                <div class="col-md-6">
+                                    <h6 class="mb-1">{{ $lesson->title }}</h6>
+                                    <p class="text-muted mb-0">{{ Str::limit($lesson->description, 100) }}</p>
+                                </div>
+                                <div class="col-md-2">
+                                    <small class="text-muted">{{ $lesson->duration }} {{ __('instructor.minutes') }}</small>
+                                </div>
+                                <div class="col-md-2">
+                                    <span class="badge bg-{{ $lesson->is_free ? 'success' : 'secondary' }}">
+                                        {{ $lesson->is_free ? __('instructor.free') : __('instructor.premium') }}
+                                    </span>
+                                </div>
+                                <div class="col-md-1">
+                                    <div class="dropdown">
+                                        <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="dropdown">
+                                            <i class="fa fa-three-dots-vertical"></i>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="#"><i class="fa fa-pencil {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>{{ __('instructor.edit') }}</a></li>
+                                            <li><a class="dropdown-item text-danger" href="#"><i class="fa fa-trash {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>{{ __('instructor.delete') }}</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                    </div>
+                    @empty
+                    <div class="text-center py-5">
+                        <i class="fa fa-play-circle text-muted" style="font-size: 4rem;"></i>
+                        <h5 class="text-muted mt-3">{{ __('instructor.no_lessons_yet') }}</h5>
+                        <p class="text-muted">{{ __('instructor.start_adding_lessons') }}</p>
+                        <button class="btn btn-primary">
+                            <i class="fa fa-plus {{ session('locale', 'ar') === 'ar' ? 'ms-2' : 'me-2' }}"></i>
+                            {{ __('instructor.add_first_lesson') }}
+                        </button>
+                    </div>
+                    @endforelse
                 </div>
-                @endfor
+
+                <!-- Students Tab -->
+                <div class="tab-pane fade" id="students" role="tabpanel">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h5 class="mb-0">{{ __('instructor.enrolled_students') }}</h5>
+                        <div class="input-group" style="width: 300px;">
+                            <input type="text" class="form-control" placeholder="{{ __('instructor.search_students') }}">
+                            <button class="btn btn-outline-secondary">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    @forelse($course->enrollments ?? [] as $enrollment)
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-2">
+                                    <img src="https://via.placeholder.com/50x50?text=User" alt="Student" class="rounded-circle" width="50" height="50">
+                                </div>
+                                <div class="col-md-4">
+                                    <h6 class="mb-1">{{ $enrollment->user->name }}</h6>
+                                    <small class="text-muted">{{ $enrollment->user->email }}</small>
+                                </div>
+                                <div class="col-md-2">
+                                    <small class="text-muted">{{ __('instructor.enrolled') }}: {{ $enrollment->created_at->format('M d, Y') }}</small>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="progress" style="height: 8px;">
+                                        <div class="progress-bar" data-width="{{ $enrollment->progress }}"></div>
+                                    </div>
+                                    <small class="text-muted">{{ $enrollment->progress }}% {{ __('instructor.complete') }}</small>
+                                </div>
+                                <div class="col-md-2">
+                                    <button class="btn btn-sm btn-outline-primary">
+                                        <i class="fa fa-envelope {{ session('locale', 'ar') === 'ar' ? 'ms-1' : 'me-1' }}"></i>
+                                        {{ __('instructor.message') }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @empty
+                    <div class="text-center py-5">
+                        <i class="fa fa-people text-muted" style="font-size: 4rem;"></i>
+                        <h5 class="text-muted mt-3">{{ __('instructor.no_students_enrolled') }}</h5>
+                        <p class="text-muted">{{ __('instructor.promote_course_to_get_students') }}</p>
+                    </div>
+                    @endforelse
+                </div>
+
+                <!-- Reviews Tab -->
+                <div class="tab-pane fade" id="reviews" role="tabpanel">
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <h2 class="text-warning mb-2">4.5</h2>
+                                <div class="mb-2">
+                                    <i class="fa fa-star-fill text-warning"></i>
+                                    <i class="fa fa-star-fill text-warning"></i>
+                                    <i class="fa fa-star-fill text-warning"></i>
+                                    <i class="fa fa-star-fill text-warning"></i>
+                                    <i class="fa fa-star-half text-warning"></i>
+                                </div>
+                                <p class="text-muted">{{ __('instructor.based_on') }} 25 {{ __('instructor.reviews') }}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            @for($i = 5; $i >= 1; $i--)
+                            <div class="mb-2">
+                                <div class="d-flex align-items-center">
+                                    <span class="me-2">{{ $i }}</span>
+                                    <i class="fa fa-star-fill text-warning me-2"></i>
+                                    <div class="progress flex-grow-1 me-2" style="height: 8px;">
+                                        <div class="progress-bar bg-warning" style="width: {{ rand(10, 80) }}%"></div>
+                                    </div>
+                                    <span class="text-muted">{{ rand(10, 80) }}%</span>
+                                </div>
+                            </div>
+                            @endfor
+                        </div>
+                    </div>
+
+                    <!-- Individual Reviews -->
+                    <div class="border-top pt-4">
+                        @for($i = 1; $i <= 3; $i++)
+                            <div class="mb-4">
+                            <div class="d-flex align-items-start">
+                                <img src="https://via.placeholder.com/50x50?text=User" alt="Student" class="rounded-circle me-3" width="50" height="50">
+                                <div class="flex-grow-1">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <div>
+                                            <h6 class="mb-1">Student Name {{ $i }}</h6>
+                                            <div class="mb-1">
+                                                @for($j = 1; $j <= 5; $j++)
+                                                    <i class="fa fa-star-fill text-warning small"></i>
+                                                    @endfor
+                                            </div>
+                                        </div>
+                                        <small class="text-muted">{{ $i }} days ago</small>
+                                    </div>
+                                    <p class="mb-0">This is an excellent course! The instructor explains everything clearly and the content is very well structured.</p>
+                                </div>
+                            </div>
+                    </div>
+                    @endfor
+                </div>
             </div>
         </div>
     </div>

@@ -9,26 +9,6 @@
     .ck.ck-editor {
         margin-bottom: 1rem;
     }
-</style>
-@endpush
-
-@section('title', __('instructor.edit_course'))
-
-@section('breadcrumb')
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{{ route('instructor.dashboard') }}">{{ __('instructor.instructor_dashboard') }}</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('instructor.courses.index') }}">{{ __('instructor.my_courses') }}</a></li>
-        <li class="breadcrumb-item active">{{ __('instructor.edit_course') }}</li>
-    </ol>
-</nav>
-@endsection
-
-@section('content')
-<style>
-    body {
-        background-color: #f9f9f9;
-    }
 
     #updateCourseForm ul.nav {
         list-style: none;
@@ -100,37 +80,59 @@
         box-shadow: 0 0 10px 3px #ccc;
     }
 </style>
-<div class="d-flex justify-content-between align-items-center pt-5 mb-4">
+@endpush
+
+@section('title', __('instructor.edit_course'))
+
+@section('breadcrumb')
+<li class="breadcrumb-item"><a href="{{ route('instructor.courses.index') }}">{{ __('instructor.my_courses') }}</a></li>
+<li class="breadcrumb-item active">{{ __('instructor.edit_course') }}</li>
+@endsection
+
+@section('content')
+
+<div class="d-flex justify-content-between align-items-center pt-3 mb-4">
     <div id="updateCourseForm" class="container pt-5">
-        <h3 class="mb-4 text-white"><i class="fa fa-edit outline-secondary"></i> {{__('courses.edit_course_main_heading')}}</h3>
+        <x-page-title
+            title="{{__('courses.edit_course_main_heading')}}"
+            description="{{__('courses.edit_course_main_description')}}"
+            icon="fa fa-edit outline-secondary"
+            btn_url="{{route('instructor.courses.index')}}"
+            btn_text="{{__('courses.back_to_courses')}}" />
         <div class="row ">
             <div class="col col-3">
-                <ul class="nav flex-column border">
+                <ul class="nav flex-column border-0">
                     <!-- Planning -->
-                    <h5>{{__('courses.sidenav.plan_your_course')}}</h5>
+                    <h5 class="primary-gradient-bg">{{__('courses.sidenav.plan_your_course')}}</h5>
                     <li class="active" data-target="#generalInfo"><i class="fa fa-circle-stop"></i>{{__('courses.sidenav.general_info')}}</li>
                     <li class="" data-target="#intendedLearners"><i class="fa fa-circle-stop"></i>{{__('courses.sidenav.intended_learners')}}</li>
                     <li data-target="#courseLayout"><i class="fa fa-circle-stop"></i>{{__('courses.sidenav.course_layout')}}</li>
                     <li data-target="#setupTestVideo"><i class="fa fa-circle-stop"></i>{{__('courses.sidenav.setup_test_video')}}</li>
                     <!-- Create Your Content -->
-                    <h5>{{__('courses.sidenav.create_your_content')}}</h5>
+                    <h5 class="primary-gradient-bg">{{__('courses.sidenav.create_your_content')}}</h5>
                     <li data-target="#snapEdit"><i class="fa fa-circle-stop"></i>{{__('courses.sidenav.snap_edit')}}</li>
                     <li data-target="#curriculum"><i class="fa fa-circle-stop"></i>{{__('courses.sidenav.curriculum')}}</li>
                     <li data-target="#captions"><i class="fa fa-circle-stop"></i>{{__('courses.sidenav.captions')}}</li>
                     <li data-target="#accessibility"><i class="fa fa-circle-stop"></i>{{__('courses.sidenav.accessibility')}}</li>
                     <!-- Publish Your Course -->
-                    <h5>{{__('courses.sidenav.publish_your_course')}}</h5>
+                    <h5 class="primary-gradient-bg">{{__('courses.sidenav.publish_your_course')}}</h5>
                     <li data-target="#landingPage"><i class="fa fa-circle-stop"></i>{{__('courses.sidenav.landing_page')}}</li>
                     <li data-target="#pricing"><i class="fa fa-circle-stop"></i>{{__('courses.sidenav.pricing')}}</li>
                     <li data-target="#promotion"><i class="fa fa-circle-stop"></i>{{__('courses.sidenav.promotion')}}</li>
                     <li data-target="#courseMessages"><i class="fa fa-circle-stop"></i>{{__('courses.sidenav.course_messages')}}</li>
-                    <li><button type="submit" class="btn btn-secondary my-3"><i class="fa fa-upload"></i>{{__('labels.send_for_review')}}</button></li>
+                    <li>
+                        <form action="{{route('instructor.courses.send-for-review', $course)}}" method="POST">
+                            @csrf
+                            @method('PUT')
+                            <button type="submit" class="btn btn-secondary my-3"><i class="fa fa-upload"></i>{{__('labels.send_for_review')}}</button>
+                        </form>
+                    </li>
                 </ul>
             </div>
             <div class="col col-lg-9">
-                <div id="form-sections">
+                <div id="form-sections" class="border-0">
                     <div id="generalInfo" class="form-section active">
-                        <h4 class="form-section-title">{{__('courses.general_info_title')}}</h4>
+                        <h4 class="form-section-title primary-gradient-bg">{{__('courses.general_info_title')}}</h4>
 
                         <div class="p-3">
                             <!-- Validation Errors -->
@@ -143,7 +145,10 @@
                                 </ul>
                             </div>
                             @endif
-                            <x-general-info :course="$course" :categories="$categories" />
+                            <x-general-info
+                                :course="$course"
+                                :categories="$categories"
+                                :action="route('instructor.courses.update.general-info', $course)" />
                         </div>
                     </div>
 
@@ -210,7 +215,7 @@
                                 <hr class="mt-1 mb-3 p-0">
                             </section>
 
-                            <!-- Course Requirements Section -->
+                            <!-- Course Resources Section -->
                             <section>
                                 <h4>{{__('courses.resources_title')}}</h4>
 
@@ -244,7 +249,7 @@
 
                             </section>
 
-                            <!-- Course Creation Tips Section -->
+                            <!-- Setup & Test Course Videos Section -->
                             <section>
                                 <h4>{{__('courses.tips_title')}}</h4>
                                 @foreach (__('courses.setup_test_video_tips_subtitles') as $tip)

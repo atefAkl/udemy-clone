@@ -16,7 +16,6 @@
         btn_url="{{ route('instructor.courses.create') }}"
         btn_text="{{ __('courses.create_new_course') }}" />
 
-
     <!-- Page Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
 

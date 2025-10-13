@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Courses;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class UpdateCourseGeneralInfoRequest extends FormRequest
+class UpdateGeneralInfoRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -47,9 +47,9 @@ class UpdateCourseGeneralInfoRequest extends FormRequest
             'subtitle.required'              => __('courses.subtitle_is_required'),
             'subtitle.between'               => __('courses.subtitle_max_32_chars'),
             'short_description.required'     => __('courses.short_description_is_required'),
-            'short_description.between'      => __('courses.short_description_max_1024_chars'),
+            'short_description.between'      => __('courses.short_description_between'),
             'description.required'           => __('courses.description_is_required'),
-            'description.between'            => __('courses.description_max_1024_chars'),
+            'description.between'            => __('courses.description_between'),
             'category_id.required'           => __('courses.category_is_required'),
             'language.required'              => __('courses.language_is_required'),
             'language.max'                   => __('courses.language_max_3_chars'),

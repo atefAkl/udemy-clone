@@ -50,6 +50,7 @@
 
 .primary-gradient-bg {
     background-image: linear-gradient(var(--g-direction), #007be0f0, #5000b9f0);
+    color: #cfcfcf;
 }
 
 * i.fa:first-child,

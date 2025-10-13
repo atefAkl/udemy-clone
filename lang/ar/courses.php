@@ -54,14 +54,17 @@ return [
     'price' => 'السعر',
 
     // Calculated Fields
+    'calculated_fields' => 'احصائيات محسوبة',
     'duration' => 'المدة',
     'total_units' => 'إجمالي الوحدات',
     'total_lessons' => 'إجمالي الدروس',
     'total_enrollments' => 'إجمالي التسجيلات',
-    'has_certificate' => 'تحتوي على شهادة',
-    'has_quizes' => 'تحتوي على اختبارات',
-    'has_training' => 'تحتوي على تدريب',
-    'access_type' => 'نوع الوصول',
+    'certificate' => 'الشهادات',
+    'quizes' => 'الاختبارات',
+    'training' => 'التدريب',
+    'accessible' => 'الوصول إلى المحتوى',
+    'access_type_life_time' => 'وصول لا نهائي للمحتوى',
+    'access_type_limited' => 'وصول محدود للمحتوى',
 
     // Course Media
     'recommended_size_1280x720' => 'الحجم المُوصى به: 1280x720 بكسل',
@@ -148,9 +151,9 @@ return [
     'subtitle_is_required' => 'العنوان الفرعي مطلوب',
     'subtitle_max_32_chars' => 'الحد الأقصى 32 حرفًا',
     'short_description_is_required' => 'الوصف المختصر مطلوب',
-    'short_description_max_1024_chars' => 'الحد الأقصى 1024 حرفًا',
+    'short_description_between' => 'الوصف المختصر بين 45 و160 حرف',
     'description_is_required' => 'الوصف مطلوب',
-    'description_max_1024_chars' => 'الحد الأقصى 1024 حرفًا',
+    'description_between' => 'الوصف بين 160 و5000 حرف',
     'category_is_required' => 'التصنيف مطلوب',
     'language_is_required' => 'اللغة مطلوبة',
     'language_max_3_chars' => 'الحد الأقصى 3 أحرف',

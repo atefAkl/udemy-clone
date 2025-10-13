@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Instructor;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Requests\CreateCourseRequest;
-use App\Http\Requests\UpdateCourseGeneralInfoRequest as UpdateGeneralInfo;
+use App\Http\Requests\Courses\CreateRequest;
+use App\Http\Requests\Courses\UpdateGeneralInfoRequest;
 use App\Models\Course;
 use Illuminate\Support\Str;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -61,7 +61,7 @@ class CourseController extends Controller
     /**
      * Store new course
      */
-    public function store(CreateCourseRequest $request)
+    public function store(CreateRequest $request)
     {
         $validated = $request->validated();
 
@@ -109,12 +109,24 @@ class CourseController extends Controller
      * @param Course $course
      * @return RedirectResponse
      * */
-    public function updateGeneralInfo(UpdateGeneralInfo $request, Course $course)
+    public function updateGeneralInfo(UpdateGeneralInfoRequest $request, Course $course)
     {
         // Handle Banner
         $course->update($request->validated());
 
         return redirect()->back()->with('success', __('courses.general_info_updated'));
+    }
+
+    /**
+     * Update course status to be Wait for approval
+     */
+    public function sendForReview(Request $request, Course $course)
+    {
+        $course->update(['status' => Course::STATUS_PENDING]);
+
+        return redirect()
+            ->route('instructor.courses.show', $course->id)
+            ->with('success', __('courses.wait_for_approval'));
     }
 
     /**

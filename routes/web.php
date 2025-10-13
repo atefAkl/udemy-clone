@@ -221,6 +221,7 @@ Route::prefix('instructor')->name('instructor.')->middleware(['auth', 'role:inst
         Route::put('/{course}/general-info',            [InstructorCourseController::class, 'updateGeneralInfo'])->name('update.general-info');
         Route::put('/{course}/promotion-info',          [InstructorCourseController::class, 'updatePromotionInfo'])->name('update.promotion-info');
         Route::put('/{course}/instructor-info',         [InstructorCourseController::class, 'updateInstructorInfo'])->name('update.instructor-info');
+        Route::put('/{course}/send-for-review',         [InstructorCourseController::class, 'sendForReview'])->name('send-for-review');
         // Support JSON partial updates (autosave)
         Route::patch('/{course}',                       [InstructorCourseController::class, 'update'])->name('update.patch');
         Route::delete('/{course}',                      [InstructorCourseController::class, 'delete'])->name('delete');

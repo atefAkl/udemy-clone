@@ -62,6 +62,7 @@ class Course extends Model
     const STATUS_PUBLISHED      = 'published';
     const STATUS_REJECTED       = 'rejected';
 
+
     // Course Level Constants
     const LEVEL_BEGINNER        = 'beginner';
     const LEVEL_INTERMEDIATE    = 'intermediate';

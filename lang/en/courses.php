@@ -55,14 +55,17 @@ return [
     'price' => 'Price',
 
     // Calculated Fields
+    'calculated_fields' => 'Calculated Fields',
     'duration' => 'Duration',
     'total_units' => 'Total Units',
     'total_lessons' => 'Total Lessons',
     'total_enrollments' => 'Total Enrollments',
-    'has_certificate' => 'Has Certificate',
-    'has_quizes' => 'Has Quizes',
-    'has_training' => 'Has Training',
-    'access_type' => 'Access Type',
+    'certificate' => 'Has Certificate',
+    'quizes' => 'Has Quizes',
+    'training' => 'Has Training',
+    'accessible' => 'Course Content Access',
+    'access_type_life_time' => 'Life Time Access',
+    'access_type_limited' => 'Limited Access',
 
 
     // Course Media
@@ -150,9 +153,9 @@ return [
     'subtitle_is_required' => 'Subtitle is required',
     'subtitle_max_32_chars' => 'Maximum 32 characters',
     'short_description_is_required' => 'Short description is required',
-    'short_description_max_1024_chars' => 'Maximum 1024 characters',
+    'short_description_between' => 'Short description length between 45 and 160 characters',
     'description_is_required' => 'Description is required',
-    'description_max_1024_chars' => 'Maximum 1024 characters',
+    'description_between' => 'Description length between 160 and 5000 characters',
     'category_is_required' => 'Category is required',
     'language_is_required' => 'Language is required',
     'language_max_3_chars' => 'Maximum 3 characters',
