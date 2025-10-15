@@ -26,7 +26,7 @@
     @stack('styles')
 </head>
 
-<body class="p-0">
+<body class="p-0"><!-- data-bg-image="{{ asset('storage/courses/backgrounds/' . rand(1, 8) . '.jpg') }}" -->
     <!-- Sidebar Toggle Button (Mobile) -->
     <button class="sidebar-toggle" id="sidebarToggle">
         <i class="fas fa-bars"></i>
@@ -199,6 +199,28 @@
             const width = $(this).data('width');
             $(this).css('width', width + '%');
         });
+        // $(document).ready(function() {
+        //     let n = 1;
+        //     const baseUrl = $('bode').data('bg-image');
+        //     $('bod2').css({
+        //         'background-color': '#fff1aa',
+        //         'background-image': 'url("' + baseUrl + '")',
+        //         'background-size': '100vw 100vh',
+        //         'background-position': 'center',
+        //         'background-attachment': 'fixed'
+        //     });
+        //     setInterval(
+        //         function() {
+        //             const url = baseUrl.replace(/(\d+)(\.jpg)$/, n + '$2');
+        //             $('body').css({
+        //                 'background-image': 'url("' + url + '")'
+        //             });
+        //             console.log('Current image:', n, 'URL:', url);
+        //             n < 8 ? n++ : n = 1;
+        //         },
+        //         30000
+        //     );
+        // })
     </script>
     @stack('scripts')
 </body>

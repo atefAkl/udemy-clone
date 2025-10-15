@@ -2,7 +2,8 @@
 'title',
 'description',
 'btn_url',
-'btn_text'
+'btn_text',
+'icon'
 ])
 <div class="d-flex justify-content-between py-1 px-3 mb-3 rounded primary-gradient-bg" style="">
     <div class="col col-auto">
@@ -11,7 +12,7 @@
     </div>
     <div class="col col-auto d-flex align-items-center">
         <a href="{{ $btn_url }}" class="btn btn-outline-light">
-            <i class="fas fa-arrow-left me-2"></i>
+            <i class="{{$icon}} me-2"></i>
             {{ $btn_text }}
         </a>
     </div>

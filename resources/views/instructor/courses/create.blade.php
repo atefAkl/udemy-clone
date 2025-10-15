@@ -10,6 +10,7 @@
     <x-page-title
         title="{{ __('instructor.create_new_course') }}"
         description="{{ __('instructor.create_course_description') }}"
+        icon="fa fa-home"
         btn_url="{{ route('instructor.courses.index') }}"
         btn_text="{{ __('courses.back_to_courses') }}" />
     <!-- Parse Form Validation Errors -->

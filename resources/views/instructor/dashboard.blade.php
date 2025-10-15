@@ -45,23 +45,19 @@
 @section('content')
 <div class="container mt-5 pt-3 px-4">
     <!-- Welcome Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h1 class="h3 text-white mb-1">{{ __('instructor.welcome_back') }}, {{ Auth::user()->name }}!</h1>
-            <p class="text-light mb-0">{{ __('instructor.dashboard_overview') }}</p>
-        </div>
-        <div>
-            <a href="{{ route('instructor.courses.create') }}" class="btn btn-primary">
-                <i class="fas fa-plus me-2"></i>{{ __('instructor.create_course') }}
-            </a>
-        </div>
-    </div>
+
+    <x-page-title
+        title="{{ __('instructor.welcome_back') }}, {{ Auth::user()->name }}"
+        description="{{  __('instructor.dashboard_overview') }}"
+        icon="fa fa-plus-circle"
+        btn_url="{{  route('instructor.courses.create') }}"
+        btn_text="{{ __('instructor.create_course') }}" />
 
     <!-- Stats Cards -->
     <div class="row g-4 mb-4">
         <!-- Total Courses -->
-        <div class="col-md-6 col-xl-3">
-            <div class="dashboard-card p-4">
+        <div class="col-md-6 col-xl-3 ">
+            <div class="dashboard-card p-4 drop-shadow-on-hover">
                 <div class="d-flex justify-content-between align-items-start">
                     <div>
                         <div class="card-icon primary">
@@ -77,7 +73,7 @@
                     </div>
                 </div>
                 <div class="mt-3 pt-3 border-top">
-                    <span class="badge bg-soft-success text-success">
+                    <span class="text-muted small">
                         <i class="fas fa-check-circle me-1"></i>
                         {{ $stats['published_courses'] ?? 0 }} {{ __('instructor.published') }}
                     </span>
@@ -87,7 +83,7 @@
 
         <!-- Total Students -->
         <div class="col-md-6 col-xl-3">
-            <div class="dashboard-card p-4">
+            <div class="dashboard-card p-4 drop-shadow-on-hover">
                 <div class="d-flex justify-content-between align-items-start">
                     <div>
                         <div class="card-icon success">
@@ -112,7 +108,7 @@
 
         <!-- Total Earnings -->
         <div class="col-md-6 col-xl-3">
-            <div class="dashboard-card p-4">
+            <div class="dashboard-card p-4 drop-shadow-on-hover">
                 <div class="d-flex justify-content-between align-items-start">
                     <div>
                         <div class="card-icon warning">
@@ -137,7 +133,7 @@
 
         <!-- Average Rating -->
         <div class="col-md-6 col-xl-3">
-            <div class="dashboard-card p-4">
+            <div class="dashboard-card p-4 drop-shadow-on-hover">
                 <div class="d-flex justify-content-between align-items-start">
                     <div>
                         <div class="card-icon danger">
@@ -153,12 +149,8 @@
                     </div>
                 </div>
                 <div class="mt-3 pt-3 border-top">
-                    <div class="text-warning">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star-half-alt"></i>
+                    <div class="text-success">
+
                         <small class="text-muted ms-2">(1,024 {{ __('instructor.ratings') }})</small>
                     </div>
                 </div>
@@ -166,18 +158,15 @@
         </div>
     </div>
 
-    <!-- Main Content -->
-    <div class="row g-4">
-        <!-- Recent Courses -->
-        <div class="col-lg-9">
 
-            <div class="px-3 bg-white border-0 d-flex justify-content-between align-items-center py-1">
-                <h6 class="mb-0 fw-bold">{{ __('instructor.recent_courses') }}</h6>
-                <a href="{{ route('instructor.courses.index') }}" class="btn btn-sm btn-outline-primary">
-                    {{ __('instructor.view_all') }}
-                </a>
-            </div>
-
+    <div id="instructor-courses" class="card drop-shadow-on-hover rounded">
+        <div class=" card-header px-3 bg-white d-flex justify-content-between align-items-center py-3">
+            <h6 class="mb-0 fw-bold">{{ __('instructor.recent_courses') }}</h6>
+            <a href="{{ route('instructor.courses.index') }}" class="btn btn-sm btn-outline-primary">
+                {{ __('instructor.view_all') }}
+            </a>
+        </div>
+        <div class="card-body">
             <table class="table mb-0" style="overflow: show;">
                 <thead class="bg-light">
                     <tr style="text-align: center">
@@ -192,15 +181,16 @@
                     @foreach($recentCourses ?? [] as $course)
                     <tr>
                         <td>
+                            @php $basURL = $course->base_url ? asset($course->base_url) : asset('storage/courses/backgrounds/OIP.webp') @endphp
                             <div class="d-flex align-items-center">
-                                <img src="{{ asset($course->banner_url) ?? 'https://via.placeholder.com/60' }}"
+                                <img src="{{ $basURL }}"
                                     alt="{{ $course->title }}"
                                     class="rounded me-3"
                                     width="40" height="40" style="object-fit: cover;">
-                                <div>
+                                <a href="{{ route('instructor.courses.show', [$course->id]) }}">
                                     <h6 class="mb-0">{{ $course->title }}</h6>
                                     <small class="text-muted">{{ $course->category->name ?? 'Uncategorized' }}</small>
-                                </div>
+                                </a>
                             </div>
                         </td>
                         <td>{{ $course->students->count() ?? 0 }}</td>
@@ -268,150 +258,11 @@
                     @endforeach
                 </tbody>
             </table>
-
-
         </div>
     </div>
 
+
 </div>
-@endsection
-
-@section('widgets')
-<!-- Quick Stats -->
-<div class="card border-0 shadow-sm mb-4">
-    <div class="card-header bg-white">
-        <h6 class="mb-0">
-            <i class="fa fa-speedometer text-success me-2"></i>
-            {{ __('instructor.quick_stats') }}
-        </h6>
-    </div>
-    <div class="card-body">
-        <div class="row text-center">
-            <div class="col-6 mb-3">
-                <div class="border-end">
-                    <h4 class="text-primary mb-1">4.7</h4>
-                    <small class="text-muted">{{ __('instructor.average_rating') }}</small>
-                </div>
-            </div>
-            <div class="col-6 mb-3">
-                <h4 class="text-success mb-1">89%</h4>
-                <small class="text-muted">{{ __('instructor.completion_rate') }}</small>
-            </div>
-            <div class="col-6">
-                <div class="border-end">
-                    <h4 class="text-info mb-1">234</h4>
-                    <small class="text-muted">{{ __('instructor.total_reviews') }}</small>
-                </div>
-            </div>
-            <div class="col-6">
-                <h4 class="text-warning mb-1">12</h4>
-                <small class="text-muted">{{ __('instructor.this_month') }}</small>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Recent Activity -->
-<div class="card border-0 shadow-sm mb-4">
-    <div class="card-header bg-white">
-        <h6 class="mb-0">
-            <i class="fa fa-activity text-info me-2"></i>
-            {{ __('app.recent_activity') }}
-        </h6>
-    </div>
-    <div class="card-body">
-        @php
-        $activities = [
-        [
-        'type' => 'new_enrollment',
-        'message' => __('app.new_student_enrolled'),
-        'time' => __('app.one_hour_ago'),
-        'icon' => 'fa fa-person-plus text-success'
-        ],
-        [
-        'type' => 'new_review',
-        'message' => __('app.new_five_star_review'),
-        'time' => __('app.three_hours_ago'),
-        'icon' => 'fa fa-star text-warning'
-        ],
-        [
-        'type' => 'course_completed',
-        'message' => __('app.student_completed_course'),
-        'time' => __('app.yesterday'),
-        'icon' => 'fa fa-trophy text-primary'
-        ],
-        [
-        'type' => 'question',
-        'message' => __('app.new_question_posted'),
-        'time' => __('app.two_days_ago'),
-        'icon' => 'fa fa-question-circle text-info'
-        ]
-        ];
-        @endphp
-
-        @foreach($activities as $activity)
-        <div class="d-flex align-items-start mb-3 {{ !$loop->last ? 'pb-3 border-bottom' : '' }}">
-            <div class="me-3">
-                <i class="{{ $activity['icon'] }}"></i>
-            </div>
-            <div class="flex-grow-1">
-                <p class="mb-1 small">{{ $activity['message'] }}</p>
-                <small class="text-muted">{{ $activity['time'] }}</small>
-            </div>
-        </div>
-        @endforeach
-    </div>
-</div>
-
-<!-- Quick Actions -->
-<div class="card border-0 shadow-sm">
-    <div class="card-header bg-white">
-        <h6 class="mb-0">
-            <i class="fa fa-lightning text-warning me-2"></i>
-            {{ __('app.quick_actions') }}
-        </h6>
-    </div>
-    <div class="card-body">
-        <div class="d-grid gap-2">
-            <a href="{{ route('instructor.courses.create') }}" class="btn btn-primary">
-                <i class="fa fa-plus me-2"></i>
-                {{ __('instructor.create_new_course') }}
-            </a>
-            <a href="{{ route('instructor.courses.index') }}" class="btn btn-outline-primary">
-                <i class="fa fa-list me-2"></i>
-                {{ __('instructor.manage_courses_btn') }}
-            </a>
-            <a href="#" class="btn btn-outline-success">
-                <i class="fa fa-bar-chart me-2"></i>
-                {{ __('instructor.performance_reports') }}
-            </a>
-            <a href="#" class="btn btn-outline-info">
-                <i class="fa fa-chat-dots me-2"></i>
-                {{ __('instructor.student_messages') }}
-            </a>
-            <a href="#" class="btn btn-outline-secondary">
-                <i class="fa fa-gear me-2"></i>
-                {{ __('app.profile_settings') }}
-            </a>
-        </div>
-    </div>
-</div>
-@endsection
-
-
-<style>
-    .bg-gradient-primary {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    }
-
-    .card-header {
-        border-bottom: 1px solid #dee2e6;
-    }
-
-    .nav-pills .nav-link.active {
-        background-color: #0d6efd;
-    }
-</style>
 
 <div id="chart-data"
     data-labels='{{ json_encode(session('locale', 'ar') === 'ar' ? ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو'] : ['January', 'February', 'March', 'April', 'May', 'June']) }}'
@@ -471,5 +322,5 @@
         });
     });
 </script>
-
 @include('components.welcome-message')
+@endsection

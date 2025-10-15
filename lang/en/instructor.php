@@ -2,7 +2,7 @@
 
 return [
     // Instructor Dashboard
-    'instructor_dashboard' => 'Instructor Dashboard',
+    'instructor_dashboard' => 'Dashboard',
     'instructor_panel' => 'Instructor Panel',
     'welcome_instructor' => 'Welcome',
     'instructor_welcome_message' => 'Manage your courses and track student performance from one place',

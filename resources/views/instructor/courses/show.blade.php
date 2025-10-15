@@ -51,8 +51,8 @@
             box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.2);
         }
     </style>
-    <div class="shadow-sm bg-light p-3 mb-2">
-        <div id="stats-cards" class="row px-3">
+    <div class="shadow-sm bg-light p-3 mb-2 rounded">
+        <div id="stats-cards" class="row px-3 ">
             <div class="col col-md-3">
                 <div class="card-body p-3">
                     <h1>15<sup>hrs</sup></h1>
@@ -129,7 +129,7 @@
     </div>
 
     <!-- Course Header -->
-    <div class="row mb-4">
+    <div class="row mb-2">
         <div class="col-12">
             <div class="card border-0 shadow-sm">
                 <div class="card-body">

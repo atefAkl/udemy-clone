@@ -14,6 +14,7 @@
         title="{{ __('instructor.my_courses') }}"
         description="{{ __('instructor.manage_your_courses') }}"
         btn_url="{{ route('instructor.courses.create') }}"
+        icon="fa fa-plus-circle"
         btn_text="{{ __('courses.create_new_course') }}" />
 
     <!-- Page Header -->

@@ -85,6 +85,7 @@
 @section('title', __('instructor.edit_course'))
 
 @section('breadcrumb')
+<li class="breadcrumb-item"><a href="{{ route('instructor.dashboard') }}">{{ __('instructor.instructor_dashboard') }}</a></li>
 <li class="breadcrumb-item"><a href="{{ route('instructor.courses.index') }}">{{ __('instructor.my_courses') }}</a></li>
 <li class="breadcrumb-item active">{{ __('instructor.edit_course') }}</li>
 @endsection

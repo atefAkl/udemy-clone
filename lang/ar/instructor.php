@@ -2,7 +2,7 @@
 
 return [
     // Instructor Dashboard
-    'instructor_dashboard'          => 'لوحة تحكم المدرب',
+    'instructor_dashboard'          => 'لوحة التحكم',
     'instructor_panel'              => 'لوحة المدرب',
     'welcome_instructor'            => 'مرحباً',
     'instructor_welcome_message'    => 'إدارة دوراتك وتتبع أداء الطلاب من مكان واحد',
