@@ -118,6 +118,53 @@ class CourseController extends Controller
     }
 
     /**
+     * Update course promotion info (banner and promo video)
+     * @param Request $request
+     * @param Course $course
+     * @return RedirectResponse
+     */
+    public function updatePromotionInfo(Request $request, Course $course)
+    {
+        $this->authorize('update', $course);
+
+        // Handle Banner Upload
+        if ($request->hasFile('banner')) {
+            // Delete old banner if exists
+            if ($course->banner_url) {
+                $oldPath = str_replace('/storage/', '', parse_url($course->banner_url, PHP_URL_PATH));
+                Storage::disk('public')->delete($oldPath);
+            }
+            
+            $bannerPath = $request->file('banner')->store('courses/banners', 'public');
+            $course->banner_url = Storage::url($bannerPath);
+        } 
+        // Handle banner from URL
+        elseif ($request->filled('banner_url') && $request->banner_source === 'url') {
+            $course->banner_url = $request->banner_url;
+        }
+
+        // Handle Promo Video Upload
+        if ($request->hasFile('promo_video')) {
+            // Delete old video if exists
+            if ($course->promo_video_url) {
+                $oldPath = str_replace('/storage/', '', parse_url($course->promo_video_url, PHP_URL_PATH));
+                Storage::disk('public')->delete($oldPath);
+            }
+            
+            $videoPath = $request->file('promo_video')->store('courses/promo_videos', 'public');
+            $course->promo_video_url = Storage::url($videoPath);
+        }
+        // Handle video from URL
+        elseif ($request->filled('video_url') && $request->video_source === 'url') {
+            $course->promo_video_url = $request->video_url;
+        }
+
+        $course->save();
+
+        return redirect()->back()->with('success', __('courses.promotion_info_updated'));
+    }
+
+    /**
      * Update course status to be Wait for approval
      */
     public function sendForReview(Request $request, Course $course)

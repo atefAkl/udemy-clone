@@ -564,4 +564,8 @@ return [
     'target_audience' => 'لمن هذه الدورة؟',
     'target_audience_description' => 'اكتب وصفًا واضحًا للمتعلمين المستهدفين الذين سيجدون محتوى دورتك ذا قيمة. سيساعدك هذا في جذب الطلاب المناسبين لدورتك.',
     'target_audience_placeholder' => 'مثال: مطورو الويب المبتدئون الذين يتطلعون إلى تعلم React',
+    
+    // Success Messages
+    'general_info_updated' => 'تم تحديث المعلومات العامة بنجاح',
+    'promotion_info_updated' => 'تم تحديث معلومات الترويج بنجاح',
 ];

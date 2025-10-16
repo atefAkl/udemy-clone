@@ -2,6 +2,9 @@
 :root {
     --sidebar-width: 250px;
     --topbar-height: 60px;
+    --main-color-dark: #9b3015;
+    --main-color: #c98272;
+    --main-color-light: #cfc4b1bb;
     --primary-color: #4e73df;
     --secondary-color: #858796;
     --success-color: #1cc88a;
@@ -10,18 +13,16 @@
     --danger-color: #e74a3b;
     --light-color: #f8f9fc;
     --dark-color: #5a5c69;
-    --border-color: #e3e6f0;
-    --labels-bg-color: #c3f0dde0;
+    --labels-bg-color: #c5705dab;
     --g-direction: to right;
+    --linear-gradient-light: linear-gradient(135deg, #fefefe, #eeeeee, #f4f4f4);
+
+    /* Measurements */
+    --header-height: 64px;
 }
 
 [dir="rtl"] {
     --g-direction: to left;
-}
-
-#dashboardMain.dashboard-main {
-    padding: 0;
-    background-image: radial-gradient(circle, #ccc7be 20, #f7e8e8 70%);
 }
 
 .hidden {
@@ -30,16 +31,30 @@
 
 /* Dashboard header (fixed) */
 #dashboardMain .dashboard-header {
-    background-color: #e4e4e4;
+    background-color: var(--main-color-dark);
+    box-shadow: 0 2px 5px 0 var(--dark-color);
     position: fixed;
     top: 0;
     width: 100%;
     z-index: 1000;
 }
 
+#dashboardMain .dashboard-header nav ol li.breadcrumb-item a,
+#dashboardMain .dashboard-header nav ol li.breadcrumb-item.active {
+    color: var(--main-color-light) !important;
+    text-shadow: 1px 1px 1px var(--dark-color);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+#dashboardMain .dashboard-header nav ol li.breadcrumb-item a:hover,
+#dashboardMain .dashboard-header nav ol li.breadcrumb-item.active {
+    color: var(--light-color) !important;
+}
+
 /* Define a header height variable to be used by panes */
 #dashboardMain {
-    --header-height: 64px;
+
     margin-bottom: calc(var(--header-height) + 1rem);
     /* adjust if header height changes */
 }
@@ -48,14 +63,20 @@
     box-shadow: none;
 }
 
-.primary-gradient-bg {
-    background-image: linear-gradient(var(--g-direction), #007be0f0, #5000b9f0);
-    color: #cfcfcf;
+.primary-bg {
+    background-color: var(--main-color);
+    color: var(--light-color);
+    text-shadow: 1px 1px 1px var(--dark-color);
 }
 
-* i.fa:first-child,
-* i.fa:not(:only-child) {
-    margin-inline-end: 0.5rem;
+.primary-dark-bg {
+    background-color: var(--main-color-dark);
+    color: var(--light-color-light);
+    text-shadow: 1px 1px 1px var(--dark-color);
+}
+
+* i.fa+span {
+    margin-inline-start: 0.5rem;
 }
 
 /* Modern Card Styles */
@@ -66,13 +87,12 @@
     overflow: hidden;
     height: auto;
     position: relative;
-    background: linear-gradient(135deg, #fefefe, #eeeeee, #f4f4f4);
+    background: var(--linear-gradient-light);
 }
 
 .drop-shadow-on-hover {
     box-shadow: 0 0px 4px 1px #5554;
     transition: all 0.3s ease-in-out;
-    background-color: #fff;
 }
 
 .drop-shadow-on-hover:hover {
@@ -202,20 +222,22 @@
     padding: 1rem 0;
 }
 
+/* Navigation Links */
+
 .nav-link {
-    color: var(--secondary-color);
-    padding: 0.75rem 1.5rem;
+    font-size: 1.5em;
     display: flex;
     align-items: center;
     transition: all 0.2s;
-    border-left: 3px solid transparent;
+    border-bottom: 3px solid transparent;
+    color: var(--main-color-light);
 }
 
 .nav-link:hover,
 .nav-link.active {
-    color: var(--primary-color);
-    background-color: rgba(78, 115, 223, 0.1);
-    border-left-color: var(--primary-color);
+    color: var(--light-color);
+    text-shadow: 1px 1px 1px (var(--dark-color));
+    border-bottom-color: var(--main-color);
 }
 
 .nav-link i {
@@ -240,8 +262,8 @@
 /* Top Navigation */
 .top-nav {
     height: var(--topbar-height);
-    background: #fff;
-    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+    background: var(--light-color);
+    box-shadow: 0 0.15rem 1.75rem 0 var(--dark-color);
     padding: 0.5rem 1rem;
     z-index: 999;
 }
@@ -250,7 +272,7 @@
 .page-header {
     padding: 1.5rem 0;
     margin-bottom: 1.5rem;
-    background-color: #fff;
+    background-color: var(--light-color);
     border-bottom: 1px solid var(--border-color);
 }
 
@@ -382,7 +404,8 @@
 
 body {
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #fefefe, #eeeeee, #f4f4f4);
+    /* lite coffee color */
+    background-color: #cfc4b1bb;
     overflow-x: hidden;
 }
 

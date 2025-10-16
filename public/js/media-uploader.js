@@ -7,8 +7,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const bannerFileInput = document.getElementById("bannerFileInput");
 
     if (uploadBannerBtn && bannerFileInput) {
-        uploadBannerBtn.addEventListener("click", () => {
+        uploadBannerBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
             bannerFileInput.click();
+            console.log("Banner file input clicked");
         });
 
         bannerFileInput.addEventListener("change", (e) => {
@@ -27,28 +30,34 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // 2. Choose from Library
     const libraryBannerBtn = document.getElementById("libraryBannerBtn");
-    const libraryBannerModal = new bootstrap.Modal(
-        document.getElementById("libraryBannerModal")
-    );
 
     if (libraryBannerBtn) {
-        libraryBannerBtn.addEventListener("click", () => {
-            libraryBannerModal.show();
-            loadMediaLibrary("image", "bannerLibraryContent");
+        libraryBannerBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const modalElement = document.getElementById("libraryBannerModal");
+            if (modalElement) {
+                const libraryBannerModal = new bootstrap.Modal(modalElement);
+                libraryBannerModal.show();
+                loadMediaLibrary("image", "bannerLibraryContent");
+            }
         });
     }
 
     // 3. From URL
     const urlBannerBtn = document.getElementById("urlBannerBtn");
-    const urlBannerModal = new bootstrap.Modal(
-        document.getElementById("urlBannerModal")
-    );
     const submitBannerUrl = document.getElementById("submitBannerUrl");
     const bannerUrlInput = document.getElementById("bannerUrlInput");
 
     if (urlBannerBtn) {
-        urlBannerBtn.addEventListener("click", () => {
-            urlBannerModal.show();
+        urlBannerBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const modalElement = document.getElementById("urlBannerModal");
+            if (modalElement) {
+                const urlBannerModal = new bootstrap.Modal(modalElement);
+                urlBannerModal.show();
+            }
         });
     }
 
@@ -69,7 +78,12 @@ document.addEventListener("DOMContentLoaded", function () {
             displayBannerPreview(url);
             document.getElementById("bannerSource").value = "url";
             document.getElementById("bannerUrl").value = url;
-            urlBannerModal.hide();
+
+            const modalElement = document.getElementById("urlBannerModal");
+            if (modalElement) {
+                const modal = bootstrap.Modal.getInstance(modalElement);
+                if (modal) modal.hide();
+            }
             bannerUrlInput.value = "";
         });
     }
@@ -78,7 +92,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const pasteBannerBtn = document.getElementById("pasteBannerBtn");
 
     if (pasteBannerBtn) {
-        pasteBannerBtn.addEventListener("click", async () => {
+        pasteBannerBtn.addEventListener("click", async (e) => {
+            e.preventDefault();
+            e.stopPropagation();
             try {
                 const clipboardItems = await navigator.clipboard.read();
                 let imageFound = false;
@@ -127,7 +143,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const videoFileInput = document.getElementById("videoFileInput");
 
     if (uploadVideoBtn && videoFileInput) {
-        uploadVideoBtn.addEventListener("click", () => {
+        uploadVideoBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
             videoFileInput.click();
         });
 
@@ -144,28 +162,34 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // 2. Choose from Library
     const libraryVideoBtn = document.getElementById("libraryVideoBtn");
-    const libraryVideoModal = new bootstrap.Modal(
-        document.getElementById("libraryVideoModal")
-    );
 
     if (libraryVideoBtn) {
-        libraryVideoBtn.addEventListener("click", () => {
-            libraryVideoModal.show();
-            loadMediaLibrary("video", "videoLibraryContent");
+        libraryVideoBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const modalElement = document.getElementById("libraryVideoModal");
+            if (modalElement) {
+                const libraryVideoModal = new bootstrap.Modal(modalElement);
+                libraryVideoModal.show();
+                loadMediaLibrary("video", "videoLibraryContent");
+            }
         });
     }
 
     // 3. From URL
     const urlVideoBtn = document.getElementById("urlVideoBtn");
-    const urlVideoModal = new bootstrap.Modal(
-        document.getElementById("urlVideoModal")
-    );
     const submitVideoUrl = document.getElementById("submitVideoUrl");
     const videoUrlInput = document.getElementById("videoUrlInput");
 
     if (urlVideoBtn) {
-        urlVideoBtn.addEventListener("click", () => {
-            urlVideoModal.show();
+        urlVideoBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const modalElement = document.getElementById("urlVideoModal");
+            if (modalElement) {
+                const urlVideoModal = new bootstrap.Modal(modalElement);
+                urlVideoModal.show();
+            }
         });
     }
 
@@ -183,7 +207,12 @@ document.addEventListener("DOMContentLoaded", function () {
             displayVideoPreview(url);
             document.getElementById("videoSource").value = "url";
             document.getElementById("videoUrl").value = url;
-            urlVideoModal.hide();
+
+            const modalElement = document.getElementById("urlVideoModal");
+            if (modalElement) {
+                const modal = bootstrap.Modal.getInstance(modalElement);
+                if (modal) modal.hide();
+            }
             videoUrlInput.value = "";
         });
     }
@@ -194,8 +223,9 @@ document.addEventListener("DOMContentLoaded", function () {
         const container = document.querySelector(".banner-preview-container");
         const placeholder = document.getElementById("bannerPlaceholder");
 
+        // Hide placeholder instead of removing it
         if (placeholder) {
-            placeholder.remove();
+            placeholder.style.display = "none";
         }
 
         let img = document.getElementById("bannerPreview");
@@ -210,14 +240,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
         img.src = url;
         img.alt = "Banner Preview";
+        img.style.display = "block";
     }
 
     function displayVideoPreview(url) {
         const container = document.querySelector(".video-preview-container");
         const placeholder = document.getElementById("videoPlaceholder");
 
+        // Hide placeholder instead of removing it
         if (placeholder) {
-            placeholder.remove();
+            placeholder.style.display = "none";
         }
 
         let video = document.getElementById("videoPreview");
@@ -231,6 +263,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         video.src = url;
+        video.style.display = "block";
     }
 
     function isValidImageUrl(url) {
@@ -272,18 +305,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 data.files.forEach((file) => {
                     html += `
                         <div class="col-md-3 mb-3">
-                            <div class="card media-item" style="cursor: pointer;" data-url="${
-                                file.url
-                            }" data-type="${type}">
-                                ${
-                                    type === "image"
-                                        ? `<img src="${file.url}" class="card-img-top" alt="${file.name}" style="height: 150px; object-fit: cover;">`
-                                        : `<video src="${file.url}" class="card-img-top" style="height: 150px; object-fit: cover;"></video>`
-                                }
+                            <div class="card media-item" style="cursor: pointer;" data-url="${file.url
+                        }" data-type="${type}">
+                                ${type === "image"
+                            ? `<img src="${file.url}" class="card-img-top" alt="${file.name}" style="height: 150px; object-fit: cover;">`
+                            : `<video src="${file.url}" class="card-img-top" style="height: 150px; object-fit: cover;"></video>`
+                        }
                                 <div class="card-body p-2">
-                                    <small class="text-truncate d-block">${
-                                        file.name
-                                    }</small>
+                                    <small class="text-truncate d-block">${file.name
+                        }</small>
                                 </div>
                             </div>
                         </div>

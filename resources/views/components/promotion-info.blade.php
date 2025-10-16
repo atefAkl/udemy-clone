@@ -89,6 +89,82 @@
     </form>
 </div>
 
-<script>
-    // Paste the entire JavaScript block here
-</script>
+<!-- Banner URL Modal -->
+<div class="modal fade" id="urlBannerModal" tabindex="-1" aria-labelledby="urlBannerModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="urlBannerModalLabel">{{__('courses.enter_banner_url')}}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="url" class="form-control" id="bannerUrlInput" placeholder="https://example.com/image.jpg">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{__('courses.cancel')}}</button>
+                <button type="button" class="btn btn-primary" id="submitBannerUrl">{{__('courses.submit')}}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Banner Library Modal -->
+<div class="modal fade" id="libraryBannerModal" tabindex="-1" aria-labelledby="libraryBannerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="libraryBannerModalLabel">{{__('courses.choose_from_library')}}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row" id="bannerLibraryContent">
+                    <div class="col-12 text-center p-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">{{__('courses.loading')}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Video URL Modal -->
+<div class="modal fade" id="urlVideoModal" tabindex="-1" aria-labelledby="urlVideoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="urlVideoModalLabel">{{__('courses.enter_video_url')}}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="url" class="form-control" id="videoUrlInput" placeholder="https://example.com/video.mp4">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{__('courses.cancel')}}</button>
+                <button type="button" class="btn btn-primary" id="submitVideoUrl">{{__('courses.submit')}}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Video Library Modal -->
+<div class="modal fade" id="libraryVideoModal" tabindex="-1" aria-labelledby="libraryVideoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="libraryVideoModalLabel">{{__('courses.choose_from_library')}}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row" id="videoLibraryContent">
+                    <div class="col-12 text-center p-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">{{__('courses.loading')}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

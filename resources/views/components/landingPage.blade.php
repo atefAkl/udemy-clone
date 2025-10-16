@@ -12,14 +12,14 @@
 
                 <div class="banner-preview-container border rounded p-2 text-center" style="height: 250px; background-color: #f8f9fa;">
                     @if($course->banner)
-                        <img id="bannerPreview" src="{{ asset('storage/courses/banners/' . $course->banner) }}" alt="Banner Preview" style="max-width: 100%; max-height: 100%; object-fit: contain;">
-                        <div id="bannerPlaceholder" style="display: none;"></div>
+                    <img id="bannerPreview" src="{{ asset('storage/courses/banners/' . $course->banner) }}" alt="Banner Preview" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                    <div id="bannerPlaceholder" style="display: none;"></div>
                     @else
-                        <img id="bannerPreview" src="" alt="Banner Preview" style="max-width: 100%; max-height: 100%; object-fit: contain; display: none;">
-                        <div id="bannerPlaceholder" class="d-flex flex-column justify-content-center align-items-center h-100">
-                            <i class="fa-solid fa-image fa-3x text-muted"></i>
-                            <p class="mt-2">{{__('courses.no_banner_uploaded')}}</p>
-                        </div>
+                    <img id="bannerPreview" src="" alt="Banner Preview" style="max-width: 100%; max-height: 100%; object-fit: contain; display: none;">
+                    <div id="bannerPlaceholder" class="d-flex flex-column justify-content-center align-items-center h-100">
+                        <i class="fa-solid fa-image fa-3x text-muted"></i>
+                        <p class="mt-2">{{__('courses.no_banner_uploaded')}}</p>
+                    </div>
                     @endif
                 </div>
 
@@ -39,15 +39,15 @@
                 <p class="text-muted">{{__('courses.video_instructions')}}</p>
 
                 <div class="video-preview-container border rounded p-2 text-center" style="height: 250px; background-color: #f8f9fa;">
-                     @if($course->promo_video)
-                        <video id="videoPreview" src="{{ asset('storage/courses/promo_videos/' . $course->promo_video) }}" controls style="max-width: 100%; max-height: 100%;"></video>
-                        <div id="videoPlaceholder" style="display: none;"></div>
+                    @if($course->promo_video)
+                    <video id="videoPreview" src="{{ asset('storage/courses/promo_videos/' . $course->promo_video) }}" controls style="max-width: 100%; max-height: 100%;"></video>
+                    <div id="videoPlaceholder" style="display: none;"></div>
                     @else
-                        <video id="videoPreview" src="" controls style="max-width: 100%; max-height: 100%; display: none;"></video>
-                        <div id="videoPlaceholder" class="d-flex flex-column justify-content-center align-items-center h-100">
-                            <i class="fa-solid fa-video fa-3x text-muted"></i>
-                            <p class="mt-2">{{__('courses.no_video_uploaded')}}</p>
-                        </div>
+                    <video id="videoPreview" src="" controls style="max-width: 100%; max-height: 100%; display: none;"></video>
+                    <div id="videoPlaceholder" class="d-flex flex-column justify-content-center align-items-center h-100">
+                        <i class="fa-solid fa-video fa-3x text-muted"></i>
+                        <p class="mt-2">{{__('courses.no_video_uploaded')}}</p>
+                    </div>
                     @endif
                 </div>
 
@@ -160,5 +160,5 @@
 </div>
 
 @push('scripts')
-<script src="{{ asset('js/general-info.js') }}"></script>
+
 @endpush

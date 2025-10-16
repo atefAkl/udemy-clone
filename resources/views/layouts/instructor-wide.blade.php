@@ -42,7 +42,7 @@
         <!-- Header -->
         <div class=" dashboard-header w-100">
             <div class="container d-flex px-4 py-3 justify-content-between align-items-center">
-                <div>
+                <div class="col">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb mb-0 small">
                             <li class="breadcrumb-item">
@@ -54,13 +54,15 @@
                         </ol>
                     </nav>
                 </div>
-                <div class="d-flex gap-2">
+                <div class="d-flex col">
                     <!-- Search Form -->
                     <form class="d-flex" method="GET" action="{{ route('search') }}">
-                        <input class="form-control form-control-sm me-2" type="search" placeholder="{{ __('app.search') }}" aria-label="Search" name="query">
-                        <button class="btn btn-sm btn-outline-secondary" type="submit">
-                            <i class="fas fa-search"></i>
-                        </button>
+                        <div class="input-group">
+                            <input class="form-control form-control-sm" type="search" placeholder="{{ __('app.search') }}" aria-label="Search" name="query">
+                            <button class="input-group-text" type="submit">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
                     </form>
                 </div>
 
