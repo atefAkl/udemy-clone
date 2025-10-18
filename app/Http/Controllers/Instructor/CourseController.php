@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Category;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class CourseController extends Controller
 {
@@ -125,41 +126,76 @@ class CourseController extends Controller
      */
     public function updatePromotionInfo(Request $request, Course $course)
     {
+
+        return [$course, $request->all()];
         $this->authorize('update', $course);
+
+        // Validation
+        $request->validate([
+            'banner' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120', // 5MB
+            'promo_video' => 'nullable|mimes:mp4,mov,avi,wmv|max:102400', // 100MB
+            'banner_url' => 'nullable|url',
+            'video_url' => 'nullable|url',
+        ]);
+
+        Log::info('Promotion update request', [
+            'has_banner_file' => $request->hasFile('banner'),
+            'has_video_file' => $request->hasFile('promo_video'),
+            'banner_source' => $request->banner_source,
+            'video_source' => $request->video_source,
+        ]);
 
         // Handle Banner Upload
         if ($request->hasFile('banner')) {
+            Log::info('Processing banner file upload');
+
             // Delete old banner if exists
-            if ($course->banner_url) {
+            if ($course->banner_url && strpos($course->banner_url, '/storage/') !== false) {
                 $oldPath = str_replace('/storage/', '', parse_url($course->banner_url, PHP_URL_PATH));
                 Storage::disk('public')->delete($oldPath);
             }
-            
+
             $bannerPath = $request->file('banner')->store('courses/banners', 'public');
             $course->banner_url = Storage::url($bannerPath);
-        } 
+            $course->banner_source = 'device';
+
+            Log::info('Banner uploaded successfully', ['path' => $course->banner_url]);
+        }
         // Handle banner from URL
         elseif ($request->filled('banner_url') && $request->banner_source === 'url') {
             $course->banner_url = $request->banner_url;
+            $course->banner_source = 'url';
+
+            Log::info('Banner set from URL', ['url' => $course->banner_url]);
         }
 
         // Handle Promo Video Upload
         if ($request->hasFile('promo_video')) {
+            Log::info('Processing video file upload');
+
             // Delete old video if exists
-            if ($course->promo_video_url) {
+            if ($course->promo_video_url && strpos($course->promo_video_url, '/storage/') !== false) {
                 $oldPath = str_replace('/storage/', '', parse_url($course->promo_video_url, PHP_URL_PATH));
                 Storage::disk('public')->delete($oldPath);
             }
-            
+
             $videoPath = $request->file('promo_video')->store('courses/promo_videos', 'public');
             $course->promo_video_url = Storage::url($videoPath);
+            $course->video_source = 'device';
+
+            Log::info('Video uploaded successfully', ['path' => $course->promo_video_url]);
         }
         // Handle video from URL
         elseif ($request->filled('video_url') && $request->video_source === 'url') {
             $course->promo_video_url = $request->video_url;
+            $course->video_source = 'url';
+
+            Log::info('Video set from URL', ['url' => $course->promo_video_url]);
         }
 
         $course->save();
+
+        Log::info('Course promotion info saved', ['course_id' => $course->id]);
 
         return redirect()->back()->with('success', __('courses.promotion_info_updated'));
     }

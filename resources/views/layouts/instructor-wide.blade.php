@@ -101,7 +101,7 @@
         </div>
 
         <!-- Content -->
-        <div class="container p-4">
+        <div class="container p-4 mt-5">
             <!-- Flash Messages -->
             @if(session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -182,13 +182,7 @@
                 }
             });
 
-            // Initialize based on screen size
-            if (window.innerWidth < 768) {
-                sidebar.classList.add('collapsed');
-            }
-            if (window.innerWidth < 1200) {
-                widgets.classList.add('collapsed');
-            }
+
         });
 
         // Initialize Bootstrap tooltips

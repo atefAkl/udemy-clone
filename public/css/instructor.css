@@ -201,8 +201,15 @@
 }
 
 .input-group label.input-group-text {
-    background-color: #c3f0dde0;
+    background-color: var(--labels-bg-color);
+    color: var(--light-color);
     line-height: 1;
+    font-weight: 600;
+}
+
+.form-floating textarea+label,
+.form-floating input+label {
+    color: var(--main-color-dark);
     font-weight: 600;
 }
 
@@ -698,6 +705,7 @@ legend {
     border-radius: 0.5rem;
     top: -1rem;
     background-color: var(--labels-bg-color);
+    color: var(--light-color);
     font-size: 1rem;
     font-weight: 600;
 }

@@ -27,7 +27,7 @@
         </div>
 
         <div class="row">
-            <div class="col col-md-6">
+            <div class="col col-12 col-md-6">
                 <div class="input-group mb-3">
                     <label for="category" class="input-group-text">{{__('courses.category')}}</label>
                     <select name="category_id" id="category" class="form-select">
@@ -38,7 +38,7 @@
                     </select>
                 </div>
             </div>
-            <div class="col col-md-6">
+            <div class="col col-12 col-md-6">
                 <div class="input-group mb-3">
                     <label for="language" class="input-group-text">{{__('courses.language')}}</label>
                     <select name="language" id="language" class="form-select">
@@ -52,7 +52,7 @@
         </div>
 
         <div class="row">
-            <div class="col col-md-6">
+            <div class="col col-12 col-md-6">
                 <div class="input-group mb-3">
                     <label for="level" class="input-group-text">{{__('courses.level')}}</label>
                     <select name="level" id="level" class="form-select">
@@ -64,7 +64,7 @@
                 </div>
             </div>
 
-            <div class="col col-md-6">
+            <div class="col col-12 col-md-6">
                 <div class="input-group mb-3">
                     <label for="language" class="input-group-text">{{__('courses.price')}}</label>
                     <input type="number" name="price" id="price" class="form-control" value="{{$course->price}}">
@@ -96,49 +96,49 @@
                 }
             </style>
             <div class="row">
-                <div class="col col-md-3">
+                <div class="col col-12 col-sm-6 col-md-3">
                     <div class="card-body p-3">
                         <h3>15<sup>hrs</sup></h3>
                         {{__('courses.duration')}}
                     </div>
                 </div>
-                <div class="col col-md-3">
+                <div class="col col-12 col-sm-6 col-md-3">
                     <div class="card-body p-3">
                         <h3>4</h3>
                         {{__('courses.total_units')}}
                     </div>
                 </div>
-                <div class="col col-md-3">
+                <div class="col col-12 col-sm-6 col-md-3">
                     <div class="card-body p-3">
                         <h3>23</h3>
                         {{__('courses.total_lessons')}}
                     </div>
                 </div>
-                <div class="col col-md-3">
+                <div class="col col-12 col-sm-6 col-md-3">
                     <div class="card-body p-3">
                         <h3>4000<sup>+</sup></h3>
                         {{__('courses.total_enrollments')}}
                     </div>
                 </div>
-                <div class="col col-md-3">
+                <div class="col col-12 col-sm-6 col-md-3">
                     <div class="card-body p-3">
                         <h3>Yes</h3>
                         {{__('courses.has_certificate')}}
                     </div>
                 </div>
-                <div class="col col-md-3">
+                <div class="col col-12 col-sm-6 col-md-3">
                     <div class="card-body p-3">
                         <h3>Yes</h3>
                         {{__('courses.has_quizes')}}
                     </div>
                 </div>
-                <div class="col col-md-3">
+                <div class="col col-12 col-sm-6 col-md-3">
                     <div class="card-body p-3">
                         <h3>Yes</h3>
                         {{__('courses.has_training')}}
                     </div>
                 </div>
-                <div class="col col-md-3">
+                <div class="col col-12 col-sm-6 col-md-3">
                     <div class="card-body p-3">
                         <h3><i class="fa-solid fa-infinity"></i></h3>
                         {{__('courses.access_type')}}

@@ -1,170 +1,136 @@
 @props(['course'])
 
-<div>
-    <form action="{{ route('instructor.courses.update.promotion-info', [$course->id]) }}" method="POST" enctype="multipart/form-data">
+<div class="promotion-info-component">
+    <form action="{{ route('instructor.courses.update.promotion-info', [$course->id]) }}" method="POST" enctype="multipart/form-data" id="promotionForm">
         @csrf
         @method('PUT')
 
-        {{-- Banner and thumbnail --}}
-        <fieldset class="my-3 pt-4 pb-0">
-            <legend>{{__('courses.announcement_media')}}</legend>
+        <fieldset class="my-4">
+            <legend class="h5 mb-4">{{__('courses.announcement_media')}}</legend>
 
             {{-- Banner Upload Section --}}
-            <div class="row mb-4">
-                <div class="col col-md-4 p-3">
-                    <h6 class="mb-3">{{__('courses.upload_banner')}}</h6>
-                    <button type="button" class="btn btn-outline-primary w-100 mb-2" id="uploadBannerBtn">
+            <div class="row mb-5">
+                <div class="col-md-4">
+                    <h6 class="mb-3 fw-bold">{{__('courses.upload_banner')}}</h6>
+
+                    <button id="browseBannerBtn" type="button" class="btn btn-primary w-100 mb-2" data-action="upload-banner">
                         <i class="fa fa-upload me-2"></i>{{__('courses.upload_from_device')}}
                     </button>
-                    <input type="file" name="banner" id="bannerFileInput" class="d-none" accept="image/*">
-                    <input type="hidden" name="banner_source" id="bannerSource" value="">
-                    <input type="hidden" name="banner_url" id="bannerUrl" value="">
 
-                    <button type="button" class="btn btn-outline-secondary w-100 mb-2" id="libraryBannerBtn">
+                    <button id="libraryBannerBtn" type="button" class="btn btn-outline-secondary w-100 mb-2" data-action="library-banner">
                         <i class="fa fa-folder-open me-2"></i>{{__('courses.choose_from_library')}}
                     </button>
 
-                    <button type="button" class="btn btn-outline-secondary w-100 mb-2" id="urlBannerBtn">
+                    <button type="button" class="btn btn-outline-secondary w-100 mb-2" data-action="url-banner">
                         <i class="fa fa-link me-2"></i>{{__('courses.from_url')}}
                     </button>
 
-                    <button type="button" class="btn btn-outline-secondary w-100 mb-2" id="pasteBannerBtn">
+                    <button type="button" class="btn btn-outline-secondary w-100 mb-2" data-action="paste-banner">
                         <i class="fa fa-clipboard me-2"></i>{{__('courses.paste_from_clipboard')}}
                     </button>
+
+                    {{-- Hidden file input for banner --}}
+                    <input type="file" name="banner" id="bannerFileInput" class="d-none" accept="image/jpeg,image/png,image/jpg,image/gif">
+                    <input type="hidden" name="banner_source" id="bannerSource" value="">
+                    <input type="hidden" name="banner_url" id="bannerUrlInput" value="">
                 </div>
-                <div class="col col-md-8">
-                    <h6 class="mb-3">{{__('courses.recommended_size_1920x1080')}}</h6>
-                    <div class="banner-preview-container" style="height: 250px; border: 2px dashed #ddd; border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center; background-color: #f8f9fa;">
-                        @if($course->banner_url)
-                        <img src="{{ $course->banner_url }}" alt="Banner" id="bannerPreview" style="max-width: 100%; max-height: 100%; object-fit: contain;">
-                        @else
-                        <div class="text-center text-muted" id="bannerPlaceholder">
-                            <i class="fa fa-image fa-3x mb-2"></i>
-                            <p>{{__('courses.upload_banner')}}</p>
+
+                <div class="col-md-8">
+                    <h6 class="mb-3 text-muted">{{__('courses.recommended_size_1920x1080')}}</h6>
+                    <div id="bannerPreviewContainer" class="preview-container">
+                        <img src="{{ $course->banner_url }}" alt="Banner" id="bannerPreview" class="preview-image ">
+
+                        <div id="bannerPlaceholder" class="preview-placeholder {{ $course->banner_url ? 'd-none' : '' }}">
+                            <i class="fa fa-image fa-4x mb-3 text-muted"></i>
+                            <p class="text-muted">{{__('courses.upload_banner')}}</p>
                         </div>
-                        @endif
                     </div>
                 </div>
             </div>
 
             {{-- Promo Video Upload Section --}}
-            <div class="row">
-                <div class="col col-md-4 p-3">
-                    <h6 class="mb-3">{{__('courses.upload_promo_video')}}</h6>
-                    <button type="button" class="btn btn-outline-primary w-100 mb-2" id="uploadVideoBtn">
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <h6 class="mb-3 fw-bold">{{__('courses.upload_promo_video')}}</h6>
+
+                    <button type="button" class="btn btn-primary w-100 mb-2" data-action="upload-video">
                         <i class="fa fa-upload me-2"></i>{{__('courses.upload_from_device')}}
                     </button>
-                    <input type="file" name="promo_video" id="videoFileInput" class="d-none" accept="video/*">
-                    <input type="hidden" name="video_source" id="videoSource" value="">
-                    <input type="hidden" name="video_url" id="videoUrl" value="">
 
-                    <button type="button" class="btn btn-outline-secondary w-100 mb-2" id="libraryVideoBtn">
+                    <button type="button" class="btn btn-outline-secondary w-100 mb-2" data-action="library-video">
                         <i class="fa fa-folder-open me-2"></i>{{__('courses.choose_from_library')}}
                     </button>
 
-                    <button type="button" class="btn btn-outline-secondary w-100 mb-2" id="urlVideoBtn">
+                    <button type="button" class="btn btn-outline-secondary w-100 mb-2" data-action="url-video">
                         <i class="fa fa-link me-2"></i>{{__('courses.from_url')}}
                     </button>
+
+                    {{-- Hidden file input for video --}}
+                    <input type="file" name="promo_video" id="videoFileInput" class="d-none" accept="video/mp4,video/mov,video/avi,video/wmv">
+                    <input type="hidden" name="video_source" id="videoSource" value="">
+                    <input type="hidden" name="video_url" id="videoUrlInput" value="">
                 </div>
-                <div class="col col-md-8">
-                    <h6 class="mb-3">{{__('courses.duration_3_to_10_minutes')}}</h6>
-                    <div class="video-preview-container" style="height: 250px; border: 2px dashed #ddd; border-radius: 8px; overflow: hidden; display: flex; align-items: center; justify-content: center; background-color: #f8f9fa;">
+
+                <div class="col-md-8">
+                    <h6 class="mb-3 text-muted">{{__('courses.duration_3_to_10_minutes')}}</h6>
+                    <div id="videoPreviewContainer" class="preview-container">
                         @if($course->promo_video_url)
-                        <video src="{{ $course->promo_video_url }}" controls id="videoPreview" style="max-width: 100%; max-height: 100%;"></video>
+                        <video src="{{ $course->promo_video_url }}" controls id="videoPreview" class="preview-video"></video>
                         @else
-                        <div class="text-center text-muted" id="videoPlaceholder">
-                            <i class="fa fa-video fa-3x mb-2"></i>
-                            <p>{{__('courses.upload_promo_video')}}</p>
-                        </div>
+                        <video src="" controls id="videoPreview" class="preview-video d-none"></video>
                         @endif
+                        <div id="videoPlaceholder" class="preview-placeholder {{ $course->promo_video_url ? 'd-none' : '' }}">
+                            <i class="fa fa-video fa-4x mb-3 text-muted"></i>
+                            <p class="text-muted">{{__('courses.upload_promo_video')}}</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </fieldset>
 
-        <div class="btns d-flex justify-content-end gap-2 mt-3">
-            <button type="reset" class="btn btn-sm btn-warning">{{__('courses.reset')}}</button>
-            <button type="submit" class="btn btn-sm btn-primary">{{__('courses.update')}}</button>
+        <div class="d-flex justify-content-end gap-2 mt-4">
+            <button type="reset" class="btn btn-warning">
+                <i class="fa fa-rotate-left me-2"></i>{{__('courses.reset')}}
+            </button>
+            <button type="submit" class="btn btn-primary">
+                <i class="fa fa-save me-2"></i>{{__('courses.update')}}
+            </button>
         </div>
     </form>
-</div>
 
-<!-- Banner URL Modal -->
-<div class="modal fade" id="urlBannerModal" tabindex="-1" aria-labelledby="urlBannerModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="urlBannerModalLabel">{{__('courses.enter_banner_url')}}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <input type="url" class="form-control" id="bannerUrlInput" placeholder="https://example.com/image.jpg">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{__('courses.cancel')}}</button>
-                <button type="button" class="btn btn-primary" id="submitBannerUrl">{{__('courses.submit')}}</button>
-            </div>
-        </div>
-    </div>
-</div>
+    {{-- Modals --}}
+    @include('components.promotion-modals')
 
-<!-- Banner Library Modal -->
-<div class="modal fade" id="libraryBannerModal" tabindex="-1" aria-labelledby="libraryBannerModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="libraryBannerModalLabel">{{__('courses.choose_from_library')}}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row" id="bannerLibraryContent">
-                    <div class="col-12 text-center p-5">
-                        <div class="spinner-border text-primary" role="status">
-                            <span class="visually-hidden">{{__('courses.loading')}}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+    {{-- CSS Styles --}}
+    <style>
+        .preview-container {
+            position: relative;
+            height: 300px;
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-<!-- Video URL Modal -->
-<div class="modal fade" id="urlVideoModal" tabindex="-1" aria-labelledby="urlVideoModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="urlVideoModalLabel">{{__('courses.enter_video_url')}}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <input type="url" class="form-control" id="videoUrlInput" placeholder="https://example.com/video.mp4">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{__('courses.cancel')}}</button>
-                <button type="button" class="btn btn-primary" id="submitVideoUrl">{{__('courses.submit')}}</button>
-            </div>
-        </div>
-    </div>
-</div>
+        .preview-image,
+        .preview-video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
 
-<!-- Video Library Modal -->
-<div class="modal fade" id="libraryVideoModal" tabindex="-1" aria-labelledby="libraryVideoModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="libraryVideoModalLabel">{{__('courses.choose_from_library')}}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row" id="videoLibraryContent">
-                    <div class="col-12 text-center p-5">
-                        <div class="spinner-border text-primary" role="status">
-                            <span class="visually-hidden">{{__('courses.loading')}}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+        .preview-placeholder {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+    </style>
+
+    {{-- Include JS file --}}
+    <script src="{{ asset('js/promotion-upload.js') }}" defer></script>
 </div>
