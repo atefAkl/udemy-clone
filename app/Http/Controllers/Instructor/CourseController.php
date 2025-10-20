@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\Courses\CreateRequest;
 use App\Http\Requests\Courses\UpdateGeneralInfoRequest;
+use App\Http\Requests\Courses\UpdatePromotionInfoRequest;
 use App\Models\Course;
 use Illuminate\Support\Str;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -119,24 +120,10 @@ class CourseController extends Controller
     }
 
     /**
-     * Update course promotion info (banner and promo video)
-     * @param Request $request
-     * @param Course $course
-     * @return RedirectResponse
+     * Update course promotion information
      */
-    public function updatePromotionInfo(Request $request, Course $course)
+    public function updatePromotionInfo(UpdatePromotionInfoRequest $request, Course $course)
     {
-
-        return [$course, $request->all()];
-        $this->authorize('update', $course);
-
-        // Validation
-        $request->validate([
-            'banner' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120', // 5MB
-            'promo_video' => 'nullable|mimes:mp4,mov,avi,wmv|max:102400', // 100MB
-            'banner_url' => 'nullable|url',
-            'video_url' => 'nullable|url',
-        ]);
 
         Log::info('Promotion update request', [
             'has_banner_file' => $request->hasFile('banner'),
@@ -156,10 +143,10 @@ class CourseController extends Controller
             }
 
             $bannerPath = $request->file('banner')->store('courses/banners', 'public');
-            $course->banner_url = Storage::url($bannerPath);
+            $course->banner = basename($bannerPath);
             $course->banner_source = 'device';
 
-            Log::info('Banner uploaded successfully', ['path' => $course->banner_url]);
+            Log::info('Banner uploaded successfully', ['path' => $bannerPath]);
         }
         // Handle banner from URL
         elseif ($request->filled('banner_url') && $request->banner_source === 'url') {
@@ -174,30 +161,33 @@ class CourseController extends Controller
             Log::info('Processing video file upload');
 
             // Delete old video if exists
-            if ($course->promo_video_url && strpos($course->promo_video_url, '/storage/') !== false) {
-                $oldPath = str_replace('/storage/', '', parse_url($course->promo_video_url, PHP_URL_PATH));
+            if ($course->video_url && strpos($course->video_url, '/storage/') !== false) {
+                $oldPath = str_replace('/storage/', '', parse_url($course->video_url, PHP_URL_PATH));
                 Storage::disk('public')->delete($oldPath);
             }
 
             $videoPath = $request->file('promo_video')->store('courses/promo_videos', 'public');
-            $course->promo_video_url = Storage::url($videoPath);
+            $course->promo_video = basename($videoPath);
             $course->video_source = 'device';
 
-            Log::info('Video uploaded successfully', ['path' => $course->promo_video_url]);
+            Log::info('Video uploaded successfully', ['path' => $videoPath]);
         }
         // Handle video from URL
         elseif ($request->filled('video_url') && $request->video_source === 'url') {
-            $course->promo_video_url = $request->video_url;
+            $course->video_url = $request->video_url;
             $course->video_source = 'url';
 
-            Log::info('Video set from URL', ['url' => $course->promo_video_url]);
+            Log::info('Video set from URL', ['url' => $course->video_url]);
         }
 
         $course->save();
 
         Log::info('Course promotion info saved', ['course_id' => $course->id]);
 
-        return redirect()->back()->with('success', __('courses.promotion_info_updated'));
+        return redirect()
+            ->route('instructor.courses.edit', $course->id)
+            ->with('success', __('courses.promotion_info_updated'))
+            ->with('_scroll_to', '#promotion');
     }
 
     /**

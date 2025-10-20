@@ -16,11 +16,15 @@ return new class extends Migration
 
             $table->id();
             $table->string('title');
+            $table->string('content_type')->default('video');
+            $table->string('description')->default('No description');
             $table->unsignedBigInteger('course_id')->references('id')->on('courses')->onDelete('cascade');
             $table->unsignedBigInteger('section_id')->references('id')->on('sections')->onDelete('cascade');
             $table->integer('sort_order')->nullable();
             $table->string('slug')->nullable();
+            $table->string('duration')->nullable();
             $table->string('video_url')->nullable();
+            $table->string('video_file')->nullable();
             $table->string('thumbnail')->nullable();
             $table->string('preview_video')->nullable();
             $table->string('lecture_file')->nullable();

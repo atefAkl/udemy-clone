@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title')->nullable();
             $table->unsignedBigInteger('course_id')->references('id')->on('courses')->onDelete('cascade');
-            $table->string('description');
+            $table->text('description')->nullable();
             $table->integer('sort_order');
             $table->boolean('is_published')->default(1);
             $table->boolean('has_quiz')->default(0);

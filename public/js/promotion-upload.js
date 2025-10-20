@@ -57,8 +57,7 @@
      */
     function initBannerUpload() {
         const fileInput = document.getElementById('bannerFileInput');
-        const bannerPreview = document.getElementById('bannerPreview');
-        const bannerPlaceholder = document.getElementById('bannerPlaceholder');
+        const preview = document.getElementById('bannerPreview');
         const placeholder = document.getElementById('bannerPlaceholder');
         const sourceInput = document.getElementById('bannerSource');
         const urlInput = document.getElementById('bannerUrlInput');
@@ -93,7 +92,7 @@
             }
             
             // Preview
-            previewImage(file, bannerPreview, bannerPlaceholder);
+            previewImage(file, preview, placeholder);
             
             // Set source
             if (sourceInput) sourceInput.value = 'device';
@@ -107,7 +106,6 @@
      */
     function initVideoUpload() {
         const fileInput = document.getElementById('videoFileInput');
-        const bannerPreview = document.getElementById('bannerPreview');
         const preview = document.getElementById('videoPreview');
         const placeholder = document.getElementById('videoPlaceholder');
         const sourceInput = document.getElementById('videoSource');
@@ -209,11 +207,9 @@
         const reader = new FileReader();
         
         reader.onload = function(e) {
-            preview.setAttribute('src', e.target.result);
-            preview.style.display = 'block';
+            preview.src = e.target.result;
             preview.classList.remove('d-none');
-
-            placeholder.style.display = 'none';
+            placeholder.classList.add('d-none');
             console.log('✅ Image preview loaded');
         };
         

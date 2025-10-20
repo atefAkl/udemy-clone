@@ -8,6 +8,7 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\Instructor\InstructorController;
 use App\Http\Controllers\Instructor\CourseController as InstructorCourseController;
 use App\Http\Controllers\Instructor\SectionController;
+use App\Http\Controllers\Instructor\CurriculumController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Instructor\MediaLibraryController;
 use App\Http\Controllers\ResourceController;
@@ -227,7 +228,7 @@ Route::prefix('instructor')->name('instructor.')->middleware(['auth', 'role:inst
         Route::delete('/{course}',                      [InstructorCourseController::class, 'delete'])->name('delete');
         Route::patch('/{course}/publish',               [InstructorCourseController::class, 'publish'])->name('publish');
 
-        // Course Curriculum Sections/Units Management
+        // Course Curriculum Sections/Units Management (Old System)
         Route::get('{course}/sections',                 [SectionController::class, 'index'])->name('sections.index');
         Route::get('{course}/sections/create',          [SectionController::class, 'create'])->name('sections.create');
         Route::post('{course}/sections',                [SectionController::class, 'store'])->name('sections.store');
@@ -236,6 +237,20 @@ Route::prefix('instructor')->name('instructor.')->middleware(['auth', 'role:inst
         Route::put('{course}/sections/{section}',       [SectionController::class, 'update'])->name('sections.update');
         Route::delete('{course}/sections/{section}',    [SectionController::class, 'destroy'])->name('sections.destroy');
     });
+
+    // ==========================================
+    // Curriculum Builder v2.0 (Progressive Save)
+    // ==========================================
+    
+    // Section Management
+    Route::post('/courses/{course}/sections', [CurriculumController::class, 'storeSection']);
+    Route::put('/sections/{section}', [CurriculumController::class, 'updateSection']);
+    Route::delete('/sections/{section}', [CurriculumController::class, 'deleteSection']);
+    
+    // Lesson Management
+    Route::post('/sections/{section}/lessons', [CurriculumController::class, 'storeLesson']);
+    Route::post('/lessons/{lesson}', [CurriculumController::class, 'updateLesson']); // Using POST with FormData
+    Route::delete('/lessons/{lesson}', [CurriculumController::class, 'deleteLesson']);
     // Categories Management
     Route::prefix('categories')->name('categories.')->group(function () {
         Route::get('/',                 [InstructorController::class, 'categories'])->name('index');
