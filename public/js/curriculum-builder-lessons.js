@@ -6,6 +6,7 @@
 // Extend CurriculumBuilder prototype
 CurriculumBuilder.prototype.showLessonForm = function (lessonEl, type) {
     const container = lessonEl.querySelector('.lesson-form-container');
+    console.log('Creating form for type:', type, 'in container:', container);
 
     if (type === 'video') {
         this.createVideoForm(container);
@@ -14,6 +15,8 @@ CurriculumBuilder.prototype.showLessonForm = function (lessonEl, type) {
     } else if (type === 'file') {
         this.createFileForm(container);
     }
+    
+    console.log('Form created, container HTML:', container.innerHTML.substring(0, 100));
 };
 
 // ==========================================
@@ -233,19 +236,33 @@ CurriculumBuilder.prototype.saveLesson = async function (lessonEl) {
     // Type-specific validation
     if (type === 'video') {
         const videoFile = lessonEl.querySelector('.video-file-input')?.files[0];
-        if (!videoFile) {
+        const existingVideo = lessonEl.querySelector('.video-preview-container video');
+        
+        // للدروس الجديدة: يجب اختيار فيديو
+        // للدروس القديمة: اختياري (إذا لم يختر فيديو جديد، سيبقى القديم)
+        if (!videoFile && !existingVideo) {
             this.showToast('الرجاء اختيار ملف فيديو', 'error');
             return;
         }
-        formData.append('video', videoFile);  // ✅ تم التصحيح: 'video' بدلاً من 'video_url'
+        
+        if (videoFile) {
+            formData.append('video', videoFile);
+        }
     }
     else if (type === 'article') {
         const image = lessonEl.querySelector('.article-image-input')?.files[0];
-        if (!image) {
+        const existingImage = lessonEl.querySelector('.image-preview img');
+        
+        // للدروس الجديدة: يجب اختيار صورة
+        // للدروس القديمة: اختياري (إذا لم يختر صورة جديدة، ستبقى القديمة)
+        if (!image && !existingImage) {
             this.showToast('الرجاء اختيار صورة البوستر', 'error');
             return;
         }
-        formData.append('image', image);
+        
+        if (image) {
+            formData.append('image', image);
+        }
 
         // الحصول على محتوى المقال من textarea
         const editor = lessonEl.querySelector('.article-content-editor');
@@ -347,11 +364,114 @@ CurriculumBuilder.prototype.saveLesson = async function (lessonEl) {
 // ==========================================
 // Edit Lesson
 // ==========================================
-CurriculumBuilder.prototype.enableLessonEdit = function (lessonEl) {
+CurriculumBuilder.prototype.enableLessonEdit = async function (lessonEl) {
+    const lessonId = lessonEl.dataset.lessonId;
+    const type = lessonEl.dataset.type;
+    
     lessonEl.querySelector('.lesson-title-input').disabled = false;
     lessonEl.querySelector('.lesson-type-select').disabled = false;
 
     const formContainer = lessonEl.querySelector('.lesson-form-container');
+    
+    // إنشاء النموذج أولاً (تحقق من وجود .lesson-form بدلاً من innerHTML)
+    if (!formContainer.querySelector('.lesson-form')) {
+        this.showLessonForm(lessonEl, type);
+    }
+    
+    // جلب بيانات الدرس من الخادم
+    try {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+        console.log('Fetching lesson data for ID:', lessonId);
+        
+        const response = await fetch(`/instructor/lessons/${lessonId}`, {
+            headers: {
+                'X-CSRF-TOKEN': csrfToken
+            }
+        });
+        
+        const data = await response.json();
+        console.log('Lesson data received:', data);
+        
+        if (data.success) {
+            const lesson = data.lesson;
+            
+            // ملء الحقول الأساسية
+            const descriptionField = lessonEl.querySelector('.lesson-description');
+            if (descriptionField && lesson.description) {
+                descriptionField.value = lesson.description;
+                // تحديث عداد الأحرف
+                const charCount = lessonEl.querySelector('.char-count');
+                if (charCount) {
+                    charCount.textContent = lesson.description.length;
+                }
+            }
+            
+            // ملء البيانات حسب النوع
+            if (type === 'video' && lesson.video_url) {
+                const previewContainer = lessonEl.querySelector('.video-preview-container');
+                const durationEl = lessonEl.querySelector('#video-duration');
+                
+                if (previewContainer) {
+                    const video = document.createElement('video');
+                    video.src = lesson.video_url;
+                    video.style.width = '100%';
+                    video.style.height = '100%';
+                    video.style.objectFit = 'cover';
+                    video.controls = true;
+                    previewContainer.innerHTML = '';
+                    previewContainer.appendChild(video);
+                }
+                
+                if (durationEl && lesson.duration) {
+                    const minutes = Math.floor(lesson.duration / 60);
+                    const seconds = lesson.duration % 60;
+                    durationEl.innerHTML = `<i class="fas fa-clock"></i> المدة: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+                }
+            }
+            else if (type === 'article') {
+                if (lesson.content) {
+                    const contentEditor = lessonEl.querySelector('.article-content-editor');
+                    if (contentEditor) {
+                        contentEditor.value = lesson.content;
+                    }
+                }
+                
+                if (lesson.image_url) {
+                    const imagePreview = lessonEl.querySelector('.image-preview');
+                    if (imagePreview) {
+                        imagePreview.innerHTML = `<img src="${lesson.image_url}" class="img-thumbnail" style="max-width: 100%; border-radius: 8px;">`;
+                    }
+                }
+            }
+            else if (type === 'file' && lesson.resources) {
+                const filesList = lessonEl.querySelector('.files-list');
+                if (filesList && lesson.resources.length > 0) {
+                    let html = '<div class="border rounded p-2 bg-white"><small class="fw-bold d-block mb-2"><i class="fas fa-paperclip"></i> الملفات الحالية:</small><ul class="list-unstyled mb-0">';
+                    lesson.resources.forEach(resource => {
+                        const size = (resource.size / 1024 / 1024).toFixed(2);
+                        const icon = this.getFileIcon(resource.filename);
+                        html += `<li class="small mb-1">
+                            <i class="${icon} me-1"></i>${resource.filename} 
+                            <span class="text-muted">(${size} MB)</span>
+                            <a href="${resource.url}" target="_blank" class="btn btn-xs btn-link p-0 ms-2">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                        </li>`;
+                    });
+                    html += '</ul></div>';
+                    filesList.innerHTML = html;
+                }
+                
+                const downloadableCheckbox = lessonEl.querySelector('.downloadable-checkbox');
+                if (downloadableCheckbox) {
+                    downloadableCheckbox.checked = lesson.downloadable;
+                }
+            }
+        }
+    } catch (error) {
+        console.error('Error loading lesson data:', error);
+    }
+    
     formContainer.style.display = 'block';
 
     const saveBtn = lessonEl.querySelector('.save-lesson-btn');

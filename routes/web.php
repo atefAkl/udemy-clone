@@ -248,6 +248,7 @@ Route::prefix('instructor')->name('instructor.')->middleware(['auth', 'role:inst
     Route::delete('/sections/{section}', [CurriculumController::class, 'deleteSection']);
     
     // Lesson Management
+    Route::get('/lessons/{lesson}', [CurriculumController::class, 'showLesson']);
     Route::post('/sections/{section}/lessons', [CurriculumController::class, 'storeLesson']);
     Route::post('/lessons/{lesson}', [CurriculumController::class, 'updateLesson']); // Using POST with FormData
     Route::delete('/lessons/{lesson}', [CurriculumController::class, 'deleteLesson']);

@@ -63,7 +63,7 @@
             <div class="section-content">
                 <div class="lessons-container">
                     @foreach($section->lessons as $lesson)
-                    <div class="lesson-item" data-lesson-id="{{ $lesson->id }}" data-status="saved" data-type="{{ $lesson->content_type }}">
+                    <div class="lesson-item" data-lesson-id="{{ $lesson->id }}" data-status="saved" data-type="{{ $lesson->content_type == 'download' ? 'file' : $lesson->content_type }}">
                         <div class="lesson-header">
                             <div class="d-flex align-items-center justify-content-between">
                                 <div class="d-flex align-items-center flex-grow-1">
@@ -91,6 +91,7 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="lesson-form-container" style="display: none;"></div>
                     </div>
                     @endforeach
                 </div>

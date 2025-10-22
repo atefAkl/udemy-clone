@@ -26,12 +26,14 @@ class CurriculumController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
+            'description' => 'nullable|string|max:255',
         ]);
 
         try {
             $section = Section::create([
                 'course_id' => $course->id,
                 'title' => $request->title,
+                'description' => $request->description,
                 'sort_order' => $course->sections()->count() + 1,
             ]);
 
@@ -55,11 +57,13 @@ class CurriculumController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
+            'description' => 'nullable|string|max:255',
         ]);
 
         try {
             $section->update([
                 'title' => $request->title,
+                'description' => $request->description,
             ]);
 
             return response()->json([
@@ -113,14 +117,14 @@ class CurriculumController extends Controller
             'title' => 'required|string|max:255',
             'type' => 'required|in:video,article,file',
             'description' => 'nullable|string|max:255',
-            
+
             // Video validation
             'video' => 'nullable|file|mimes:mp4,avi,mov,wmv,flv,mkv|max:512000', // max 500MB
-            
+
             // Article validation
             'image' => 'nullable|file|mimes:jpeg,jpg,png,gif,webp|max:5120', // max 5MB
             'content' => 'nullable|string',
-            
+
             // Files validation
             'files.*' => 'nullable|file|max:20480', // max 20MB per file
             'downloadable' => 'nullable|boolean',
@@ -172,14 +176,14 @@ class CurriculumController extends Controller
             'title' => 'required|string|max:255',
             'type' => 'required|in:video,article,file',
             'description' => 'nullable|string|max:255',
-            
+
             // Video validation
             'video' => 'nullable|file|mimes:mp4,avi,mov,wmv,flv,mkv|max:512000', // max 500MB
-            
+
             // Article validation
             'image' => 'nullable|file|mimes:jpeg,jpg,png,gif,webp|max:5120', // max 5MB
             'content' => 'nullable|string',
-            
+
             // Files validation
             'files.*' => 'nullable|file|max:20480', // max 20MB per file
             'downloadable' => 'nullable|boolean',
@@ -236,6 +240,55 @@ class CurriculumController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => __('courses.error_deleting_lesson')
+            ], 500);
+        }
+    }
+
+    /**
+     * Get lesson data for editing
+     */
+    public function showLesson(Lesson $lesson)
+    {
+        try {
+            $lessonData = [
+                'id' => $lesson->id,
+                'title' => $lesson->title,
+                'description' => $lesson->description,
+                'content_type' => $lesson->content_type,
+            ];
+
+            // Add type-specific data
+            if ($lesson->content_type === 'video') {
+                $lessonData['video_url'] = $lesson->video_file
+                    ? asset('storage/lessons/videos/' . $lesson->video_file)
+                    : null;
+                $lessonData['duration'] = $lesson->duration;
+            } elseif ($lesson->content_type === 'article') {
+                $lessonData['image_url'] = $lesson->thumbnail
+                    ? asset('storage/lessons/articles/' . $lesson->thumbnail)
+                    : null;
+                $lessonData['content'] = $lesson->article_content;
+            } elseif ($lesson->content_type === 'download') {
+                // Get downloadable status from first resource (all should have same value)
+                $lessonData['downloadable'] = $lesson->resources->first()?->is_downloadable ?? true;
+                $lessonData['resources'] = $lesson->resources->map(function ($resource) {
+                    return [
+                        'id' => $resource->id,
+                        'filename' => $resource->original_name ?? $resource->file_name,
+                        'url' => asset('storage/' . $resource->file_path),
+                        'size' => $resource->file_size,
+                    ];
+                });
+            }
+
+            return response()->json([
+                'success' => true,
+                'lesson' => $lessonData
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error fetching lesson data'
             ], 500);
         }
     }
