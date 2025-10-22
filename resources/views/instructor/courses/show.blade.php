@@ -12,7 +12,7 @@
 
 @section('content')
 
-<div class="container-fluid mt-5 pt-5">
+<div class="container-fluid m-0">
 
     <x-page-title
         title="{{ $course->title }}"

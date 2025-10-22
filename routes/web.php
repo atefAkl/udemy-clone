@@ -10,6 +10,7 @@ use App\Http\Controllers\Instructor\CourseController as InstructorCourseControll
 use App\Http\Controllers\Instructor\SectionController;
 use App\Http\Controllers\Instructor\CurriculumController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Instructor\LessonController;
 use App\Http\Controllers\Instructor\MediaLibraryController;
 use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\Student\StudentController;
@@ -234,25 +235,19 @@ Route::prefix('instructor')->name('instructor.')->middleware(['auth', 'role:inst
         Route::post('{course}/sections',                [SectionController::class, 'store'])->name('sections.store');
         Route::get('{course}/sections/{section}',       [SectionController::class, 'show'])->name('sections.show');
         Route::get('{course}/sections/{section}/edit',  [SectionController::class, 'edit'])->name('sections.edit');
-        Route::put('{course}/sections/{section}',       [SectionController::class, 'update'])->name('sections.update');
-        Route::delete('{course}/sections/{section}',    [SectionController::class, 'destroy'])->name('sections.destroy');
+        Route::put('/sections/{section}',               [SectionController::class, 'update'])->name('sections.update');
+        Route::delete('/sections/{section}',            [SectionController::class, 'destroy'])->name('sections.destroy');
+
+        // Course Lessons Management
+
+        Route::post('/{section}/lessons/video',            [LessonController::class, 'storeVideo'])->name('lessons.store.video');
+        Route::get('/{course}/{section}/lessons/{lesson}',          [LessonController::class, 'show'])->name('lessons.show');
+        Route::get('/{course}/{section}/lessons/{lesson}/edit',     [LessonController::class, 'edit'])->name('lessons.edit');
+        Route::put('/lessons/{lesson}',                             [LessonController::class, 'update'])->name('lessons.update');
+        Route::delete('/lessons/{lesson}',                          [LessonController::class, 'destroy'])->name('lessons.destroy');
     });
 
-    // ==========================================
-    // Curriculum Builder v2.0 (Progressive Save)
-    // ==========================================
-    
-    // Section Management
-    Route::post('/courses/{course}/sections', [CurriculumController::class, 'storeSection']);
-    Route::put('/sections/{section}', [CurriculumController::class, 'updateSection']);
-    Route::delete('/sections/{section}', [CurriculumController::class, 'deleteSection']);
-    
-    // Lesson Management
-    Route::get('/lessons/{lesson}', [CurriculumController::class, 'showLesson']);
-    Route::post('/sections/{section}/lessons', [CurriculumController::class, 'storeLesson']);
-    Route::post('/lessons/{lesson}', [CurriculumController::class, 'updateLesson']); // Using POST with FormData
-    Route::delete('/lessons/{lesson}', [CurriculumController::class, 'deleteLesson']);
-    // Categories Management
+
     Route::prefix('categories')->name('categories.')->group(function () {
         Route::get('/',                 [InstructorController::class, 'categories'])->name('index');
         Route::get('/create',           [InstructorController::class, 'createCategory'])->name('create');

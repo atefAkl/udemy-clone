@@ -9,7 +9,7 @@
 <li class="breadcrumb-item active">{{ __('instructor.my_courses') }}</li>
 @endsection
 @section('content')
-<div class="container-fluid p-4 my-5">
+<div class="container-fluid m-0">
     <x-page-title
         title="{{ __('instructor.my_courses') }}"
         description="{{ __('instructor.manage_your_courses') }}"

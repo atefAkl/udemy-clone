@@ -212,6 +212,30 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
+    <!-- Initialize Bootstrap Tooltips & Popovers -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Enable tooltips for elements with data-bs-toggle="tooltip"
+            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+            tooltipTriggerList.forEach(tooltipTriggerEl => {
+                new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+
+            // Enable native title tooltips by converting them to Bootstrap tooltips
+            const titleElements = document.querySelectorAll('[title]:not([data-bs-toggle])');
+            titleElements.forEach(element => {
+                // Skip if already initialized or if it's an input/select
+                if (element.hasAttribute('data-bs-original-title') || 
+                    element.tagName === 'INPUT' || 
+                    element.tagName === 'SELECT' || 
+                    element.tagName === 'TEXTAREA') {
+                    return;
+                }
+                new bootstrap.Tooltip(element);
+            });
+        });
+    </script>
+
     @stack('scripts')
 </body>
 

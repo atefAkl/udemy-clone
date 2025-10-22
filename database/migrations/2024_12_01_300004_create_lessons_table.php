@@ -16,7 +16,7 @@ return new class extends Migration
 
             $table->id();
             $table->string('title');
-            $table->string('content_type')->default('video');
+            $table->string('lesson_type')->inEnum(['video', 'article', 'assets', 'quiz', 'assignment'])->default('video');
             $table->string('description')->default('No description');
             $table->unsignedBigInteger('course_id')->references('id')->on('courses')->onDelete('cascade');
             $table->unsignedBigInteger('section_id')->references('id')->on('sections')->onDelete('cascade');

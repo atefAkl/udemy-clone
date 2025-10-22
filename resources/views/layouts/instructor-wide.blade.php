@@ -102,7 +102,7 @@
         </div>
 
         <!-- Content -->
-        <div class="container p-4 mt-5">
+        <div class="container p-0" style="margin-top: 5.5rem;">
             <!-- Flash Messages -->
             @if(session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -220,6 +220,31 @@
         //     );
         // })
     </script>
+
+    <!-- Initialize Bootstrap Tooltips & Popovers -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Enable tooltips for elements with data-bs-toggle="tooltip"
+            const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+            tooltipTriggerList.forEach(tooltipTriggerEl => {
+                new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+
+            // Enable native title tooltips by converting them to Bootstrap tooltips
+            const titleElements = document.querySelectorAll('[title]:not([data-bs-toggle])');
+            titleElements.forEach(element => {
+                // Skip if already initialized or if it's an input/select
+                if (element.hasAttribute('data-bs-original-title') ||
+                    element.tagName === 'INPUT' ||
+                    element.tagName === 'SELECT' ||
+                    element.tagName === 'TEXTAREA') {
+                    return;
+                }
+                new bootstrap.Tooltip(element);
+            });
+        });
+    </script>
+
     @stack('scripts')
 </body>
 

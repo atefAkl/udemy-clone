@@ -2,11 +2,8 @@
 
 @section('title', __('instructor.create_course'))
 
-
-
 @section('content')
-
-<div class="container-fluid p-4 my-5">
+<div class="container-fluid p-0">
     <x-page-title
         title="{{ __('instructor.create_new_course') }}"
         description="{{ __('instructor.create_course_description') }}"

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Instructor;
 use App\Http\Controllers\Controller;
 use App\Models\Section;
 use App\Models\Course;
+use App\Http\Requests\Courses\SectionRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
@@ -15,202 +16,97 @@ class SectionController extends Controller
 {
     use AuthorizesRequests;
 
-    /**
-     * Display a listing of the sections for a course.
-     *
-     * @param  int  $courseId
-     * @return \Illuminate\Http\Response
-     */
     public function index($courseId)
     {
         $course = Course::findOrFail($courseId);
 
+        return response()->json([
+            'course' => $course
+        ]);
+    }
 
-        // If this is an API request, return JSON
-        if (request()->wantsJson()) {
-            $sections = $course->sections()
-                ->withCount('lessons')
-                ->ordered()
-                ->get();
 
-            return response()->json([
-                'sections' => $sections,
-                'course' => $course
-            ]);
+    public function store(SectionRequest $request, Course $course)
+    {
+        $vtd = $request->validated();
+        $vtd['course_id'] = $course->id;
+        $vtd['sort_order'] = $course->sections->max('sort_order') + 1;
+
+        try {
+            Section::create($vtd);
+            return redirect()->back()->with('success', 'Section created successfully');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Section creation failed: ' . $e->getMessage());
         }
-
-        // For web requests, return the view
-        return view('instructor.sections.index', compact('course'));
     }
 
-    /**
-     * Show the form for creating a new section.
-     *
-     * @param  int  $courseId
-     * @return \Illuminate\Http\Response
-     */
-    public function create($courseId)
+    public function update(SectionRequest $request, Section $section)
     {
-        $course = Course::findOrFail($courseId);
-        $this->authorize('create', [Section::class, $course]);
+        try {
+            $validated = $request->validated();
+            $oldOrder = $section->sort_order;
+            $newOrder = $validated['sort_order'] ?? $oldOrder;
 
-        return view('instructor.sections.create', compact('course'));
+            DB::transaction(function () use ($section, $validated, $oldOrder, $newOrder) {
+                // If sort_order changed, reorder other sections
+                if ($newOrder != $oldOrder) {
+                    $course = $section->course;
+                    
+                    // Ensure new order is within valid range
+                    $maxOrder = $course->sections()->count();
+                    $newOrder = max(1, min($newOrder, $maxOrder));
+                    
+                    if ($newOrder > $oldOrder) {
+                        // Moving down: decrement sections between old and new position
+                        $course->sections()
+                            ->where('sort_order', '>', $oldOrder)
+                            ->where('sort_order', '<=', $newOrder)
+                            ->decrement('sort_order');
+                    } else {
+                        // Moving up: increment sections between new and old position
+                        $course->sections()
+                            ->where('sort_order', '>=', $newOrder)
+                            ->where('sort_order', '<', $oldOrder)
+                            ->increment('sort_order');
+                    }
+                    
+                    $validated['sort_order'] = $newOrder;
+                }
+
+                // Update the section
+                $section->update($validated);
+            });
+
+            return redirect()->back()->with('success', 'Section updated successfully');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Section update failed: ' . $e->getMessage());
+        }
     }
 
-
-    /**
-     * Store a newly created section in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $courseId
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request, $courseId)
+    public function destroy(Section $section)
     {
-        $course = Course::findOrFail($courseId);
-        $this->authorize('update', $course);
+        try {
+            DB::transaction(function () use ($section) {
+                // Get sections with higher sort_order from the SAME COURSE
+                $affectedSections = $section->course->sections()
+                    ->where('sort_order', '>', $section->sort_order)
+                    ->get();
 
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'is_published' => 'sometimes|boolean',
-            'is_free_preview' => 'sometimes|boolean',
-        ]);
+                // Delete all lessons in this section
+                $section->lessons()->delete();
 
-        $section = DB::transaction(function () use ($course, $validated) {
-            $section = new Section($validated);
-            $section->course_id = $course->id;
-            $section->sort_order = $course->sections()->max('sort_order') + 1;
-            $section->save();
+                // Delete the section
+                $section->delete();
 
-            return $section->load('lessons');
-        });
+                // Decrement sort_order for sections that came after this one
+                foreach ($affectedSections as $affectedSection) {
+                    $affectedSection->decrement('sort_order');
+                }
+            });
 
-        return response()->json([
-            'success' => true,
-            'message' => __('Section created successfully'),
-            'section' => $section
-        ], 201);
-    }
-
-    /**
-     * Display the specified section with its lessons.
-     *
-     * @param  int  $courseId
-     * @param  \App\Models\Section  $section
-     * @return \Illuminate\Http\Response
-     */
-    public function show($courseId, Section $section)
-    {
-        $this->authorize('view', $section);
-
-        $section->load(['lessons' => function ($query) {
-            $query->ordered();
-        }]);
-
-        return response()->json([
-            'section' => $section
-        ]);
-    }
-
-    /**
-     * Show the form for editing the specified section.
-     *
-     * @param  int  $courseId
-     * @param  \App\Models\Section  $section
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($courseId, Section $section)
-    {
-        $this->authorize('update', $section);
-
-        return response()->json([
-            'section' => $section->load('course')
-        ]);
-    }
-
-    /**
-     * Update the specified section in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $courseId
-     * @param  \App\Models\Section  $section
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $courseId, Section $section)
-    {
-        $this->authorize('update', $section);
-
-        $validated = $request->validate([
-            'title' => 'sometimes|required|string|max:255',
-            'description' => 'nullable|string',
-            'is_published' => 'sometimes|boolean',
-            'is_free_preview' => 'sometimes|boolean',
-            'sort_order' => 'sometimes|integer',
-        ]);
-
-        $section->update($validated);
-
-        return response()->json([
-            'success' => true,
-            'message' => __('Section updated successfully'),
-            'section' => $section->fresh()
-        ]);
-    }
-
-    /**
-     * Remove the specified section from storage.
-     *
-     * @param  int  $courseId
-     * @param  \App\Models\Section  $section
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($courseId, Section $section)
-    {
-        $this->authorize('delete', $section);
-
-        DB::transaction(function () use ($section) {
-            // Delete all lessons in this section
-            $section->lessons()->delete();
-
-            // Delete the section
-            $section->delete();
-        });
-
-        return response()->json([
-            'success' => true,
-            'message' => __('Section deleted successfully')
-        ]);
-    }
-
-    /**
-     * Reorder sections.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $courseId
-     * @return \Illuminate\Http\Response
-     */
-    public function reorder(Request $request, $courseId)
-    {
-        $course = Course::findOrFail($courseId);
-        $this->authorize('update', $course);
-
-        $request->validate([
-            'sections' => 'required|array',
-            'sections.*.id' => 'required|exists:sections,id',
-            'sections.*.sort_order' => 'required|integer',
-        ]);
-
-        DB::transaction(function () use ($request) {
-            foreach ($request->sections as $item) {
-                Section::where('id', $item['id'])
-                    ->update(['sort_order' => $item['sort_order']]);
-            }
-        });
-
-        return response()->json([
-            'success' => true,
-            'message' => __('Sections reordered successfully')
-        ]);
+            return redirect()->back()->with('success', 'Section and all its lessons deleted successfully');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Section deletion failed: ' . $e->getMessage());
+        }
     }
 }

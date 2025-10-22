@@ -92,9 +92,9 @@
 @endsection
 
 @section('content')
+<div class="container-fluid">
 
-<div class="d-flex justify-content-between align-items-center pt-3 mb-4">
-    <div id="updateCourseForm" class="container pt-5">
+    <div id="updateCourseForm" class="">
         <x-page-title
             title="{{__('courses.edit_course_main_heading')}}"
             description="{{__('courses.edit_course_main_description')}}"
@@ -106,14 +106,14 @@
                 <ul class="nav flex-column border-0">
                     <!-- Planning -->
                     <h5 class="primary-gradient-bg">{{__('courses.sidenav.plan_your_course')}}</h5>
-                    <li class="active" data-target="#generalInfo"><i class="fa fa-circle-stop"></i><span>{{__('courses.sidenav.general_info')}}</span></li>
+                    <li class="active" data-target="#curriculum"><i class="fa fa-circle-stop"></i><span>{{__('courses.sidenav.curriculum')}}</span></li>
+                    <li data-target="#generalInfo"><i class="fa fa-circle-stop"></i><span>{{__('courses.sidenav.general_info')}}</span></li>
                     <li class="" data-target="#intendedLearners"><i class="fa fa-circle-stop"></i><span>{{__('courses.sidenav.intended_learners')}}</span></li>
                     <li data-target="#courseLayout"><i class="fa fa-circle-stop"></i><span>{{__('courses.sidenav.course_layout')}}</span></li>
                     <li data-target="#setupTestVideo"><i class="fa fa-circle-stop"></i><span>{{__('courses.sidenav.setup_test_video')}}</span></li>
                     <!-- Create Your Content -->
                     <h5 class="primary-gradient-bg">{{__('courses.sidenav.create_your_content')}}</h5>
                     <li data-target="#snapEdit"><i class="fa fa-circle-stop"></i><span>{{__('courses.sidenav.snap_edit')}}</span></li>
-                    <li data-target="#curriculum"><i class="fa fa-circle-stop"></i><span>{{__('courses.sidenav.curriculum')}}</span></li>
                     <li data-target="#captions"><i class="fa fa-circle-stop"></i><span>{{__('courses.sidenav.captions')}}</span></li>
                     <li data-target="#accessibility"><i class="fa fa-circle-stop"></i><span>{{__('courses.sidenav.accessibility')}}</span></li>
                     <!-- Publish Your Course -->
@@ -132,8 +132,21 @@
                 </ul>
             </div>
             <div class="col col-lg-9">
+
+
                 <div id="form-sections" class="border-0">
-                    <div id="generalInfo" class="form-section active">
+
+                    <!-- Snap & Edit Videos -->
+                    <div id="curriculum" class="form-section active">
+                        <h4 class="form-section-title">{{__('courses.curriculum')}}</h4>
+                        <div class="p-3">
+                            <section>
+                                <x-dismissable-note paragraph_text="{{__('courses.curriculum_paragraph')}}" btn_text="{{__('labels.dismiss')}}" />
+                            </section>
+                            <x-curriculum-builder :courseId="$course->id" :sections="$course->sections" />
+                        </div>
+                    </div>
+                    <div id="generalInfo" class="form-section">
                         <h4 class="form-section-title primary-gradient-bg">{{__('courses.general_info_title')}}</h4>
 
                         <div class="p-3">
@@ -177,6 +190,7 @@
 
                     <!-- Course Layout & instructions -->
                     <div id="courseLayout" class="form-section">
+
                         <h4 class="form-section-title">{{__('Course Layout')}}</h4>
                         <div class="p-3">
                             <section>
@@ -343,18 +357,7 @@
                         </div>
                     </div>
 
-
-
                     <!-- Snap & Edit Videos -->
-                    <div id="curriculum" class="form-section">
-                        <h4 class="form-section-title">{{__('courses.curriculum')}}</h4>
-                        <div class="p-3">
-                            <section>
-                                <x-dismissable-note paragraph_text="{{__('courses.curriculum_paragraph')}}" btn_text="{{__('labels.dismiss')}}" />
-                            </section>
-                            <x-curriculum-builder :courseId="$course->id" :sections="$course->sections" />
-                        </div>
-                    </div>
 
                     <!-- Snap & Edit Videos -->
                     <div id="captions" class="form-section">
@@ -412,6 +415,7 @@
 
 
 </div>
+
 
 @endsection
 

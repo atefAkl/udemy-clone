@@ -27,6 +27,35 @@ return [
             'aspect_ratio' => 'The video dimensions must be in 16:9 aspect ratio (with 10% tolerance).',
             'quality' => 'The video quality must be at least HD (720p).',
         ],
+        'sort_order' => [
+            'int' => 'The order must be a valid number.',
+            'min' => 'The order must be at least 1.',
+        ],
+        'section_id' => [
+            'required' => 'Section ID is required.',
+            'exists' => 'The selected section does not exist.',
+        ],
+        'title' => [
+            'required' => 'Title is required.',
+            'between' => 'Title must be between :min and :max characters.',
+        ],
+        'description' => [
+            'between' => 'Description must be between :min and :max characters.',
+        ],
+        'video_source' => [
+            'required' => 'Video source is required.',
+            'in' => 'Video source must be either upload or URL.',
+        ],
+        'video_url' => [
+            'required_if' => 'Video URL is required when video source is URL.',
+            'url' => 'Video URL must be a valid URL.',
+        ],
+        'video_file' => [
+            'required_if' => 'Video file is required when video source is upload.',
+            'file' => 'Video must be a valid file.',
+            'mimes' => 'Video must be a file of type: mp4, avi, wmv, flv, mpg, mpeg, mov, webm.',
+            'max' => 'Video file size must not exceed 100MB.',
+        ],
     ],
 
     /*
@@ -45,5 +74,6 @@ return [
         'promo_video' => 'Promo Video',
         'banner_url' => 'Banner URL',
         'video_url' => 'Video URL',
+        'sort_order' => 'Order',
     ],
 ];

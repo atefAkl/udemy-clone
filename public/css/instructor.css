@@ -29,6 +29,135 @@
     display: none;
 }
 
+/* modals */
+.modal-header {
+    background-color: var(--main-color-dark);
+    color: var(--light-color);
+}
+
+.modal-body {
+    background-color: var(--main-color-light);
+
+}
+
+.modal-footer {
+    background-color: var(--main-color-dark);
+}
+
+/* Curriculum Builder - Section Actions */
+.accordion-header {
+    position: relative;
+}
+
+.modal-footer button {
+    color: var(--light-color);
+    border-color: var(--light-color)
+}
+
+.modal-footer button:hover {
+    color: var(--main-color);
+    background-color: #fff;
+    border-color: var(--main-color)
+}
+
+.accordion-header .btn-group {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 5;
+}
+
+.accordion-header .btn-group .btn {
+    border-radius: 4px;
+    padding: 0.25rem 0.5rem;
+}
+
+.accordion-header .btn-group .btn:hover {
+    transform: scale(1.1);
+    transition: transform 0.2s;
+}
+
+/* Curriculum Builder - Lesson Type Dropdown */
+.curriculum-builder .dropdown-menu {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.curriculum-builder .dropdown-item {
+    padding: 0.5rem 1rem;
+    transition: all 0.2s ease;
+}
+
+.curriculum-builder .dropdown-item:hover {
+    background-color: var(--main-color-light);
+    padding-left: 1.25rem;
+}
+
+.curriculum-builder .dropdown-item i {
+    width: 20px;
+    text-align: center;
+}
+
+/* Curriculum Builder - Lesson Cards */
+.lesson-card {
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border: 1px solid #e0e0e0;
+}
+
+.lesson-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15) !important;
+}
+
+.lesson-card .card-header {
+    padding: 0.75rem 1rem;
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+}
+
+.lesson-preview {
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lesson-preview i {
+    transition: transform 0.3s ease;
+}
+
+.lesson-card:hover .lesson-preview i {
+    transform: scale(1.1);
+}
+
+.lesson-description {
+    min-height: 40px;
+    line-clamp: 2;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    display: -webkit-box;
+}
+
+.lesson-card .badge {
+    font-size: 0.7rem;
+    padding: 0.35rem 0.5rem;
+}
+
+.lesson-card .card-footer {
+    padding: 0.75rem 1rem;
+}
+
+.lesson-card .btn-sm {
+    padding: 0.375rem 0.5rem;
+    font-size: 0.875rem;
+}
+
+.lessons-grid {
+    margin-top: 1rem;
+}
+
 /* Dashboard header (fixed) */
 #dashboardMain .dashboard-header {
     background-color: var(--main-color-dark);
@@ -823,6 +952,12 @@ legend a {
     border: none;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     margin-bottom: 1.5rem;
+}
+
+* .card .card-body,
+* .card .car-body:hover {
+    box-shadow: none !important;
+    border: 0
 }
 
 .stats-card:hover {
