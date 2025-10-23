@@ -414,6 +414,29 @@
     border-color: #dee2e6 !important;
 }
 
+/* CRITICAL FIX: TinyMCE in Bootstrap Modal */
+.tox-tinymce-aux {
+    z-index: 9999 !important;
+}
+
+.tox .tox-dialog-wrap {
+    z-index: 9999 !important;
+}
+
+.tox .tox-dialog {
+    z-index: 9999 !important;
+}
+
+/* Ensure modal doesn't block TinyMCE */
+#lectureLessonModal {
+    overflow: visible !important;
+}
+
+#lectureLessonModal .modal-body {
+    overflow: visible !important;
+    min-height: 600px;
+}
+
 /* Form Check */
 .form-check-input:checked {
     background-color: #667eea;

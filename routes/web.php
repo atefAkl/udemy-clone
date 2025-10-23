@@ -240,7 +240,10 @@ Route::prefix('instructor')->name('instructor.')->middleware(['auth', 'role:inst
 
         // Course Lessons Management
 
-        Route::post('/{section}/lessons/video',            [LessonController::class, 'storeVideo'])->name('lessons.store.video');
+        Route::post('/{section}/lessons/video',                     [LessonController::class, 'storeVideo'])->name('lessons.store.video');
+        Route::post('/{section}/lessons/article',                   [LessonController::class, 'storeArticle'])->name('lessons.store.article');
+        Route::post('/{section}/lessons/assets',                    [LessonController::class, 'storeAssets'])->name('lessons.store.assets');
+        Route::get('/lessons/upload-progress/{uploadKey}',          [LessonController::class, 'checkUploadProgress'])->name('lessons.upload.progress');
         Route::get('/{course}/{section}/lessons/{lesson}',          [LessonController::class, 'show'])->name('lessons.show');
         Route::get('/{course}/{section}/lessons/{lesson}/edit',     [LessonController::class, 'edit'])->name('lessons.edit');
         Route::put('/lessons/{lesson}',                             [LessonController::class, 'update'])->name('lessons.update');

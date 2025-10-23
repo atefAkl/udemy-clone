@@ -245,6 +245,9 @@
         });
     </script>
 
+    <!-- TinyMCE CDN -->
+    <script src="https://cdn.tiny.cloud/1/lwcfngr917m08gjlwbr327e0j3i7fl165zbgg39zr0hin5za/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+
     @stack('scripts')
 </body>
 

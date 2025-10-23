@@ -56,6 +56,24 @@ return [
             'mimes' => 'Video must be a file of type: mp4, avi, wmv, flv, mpg, mpeg, mov, webm.',
             'max' => 'Video file size must not exceed 100MB.',
         ],
+        'article_body' => [
+            'required' => 'Article content is required.',
+            'min' => 'Article content must be at least :min characters.',
+        ],
+        'poster_source' => [
+            'required' => 'Poster source is required.',
+            'in' => 'Poster source must be either upload or URL.',
+        ],
+        'poster_url' => [
+            'required_if' => 'Poster URL is required when poster source is URL.',
+            'url' => 'Poster URL must be a valid URL.',
+        ],
+        'poster_file' => [
+            'required_if' => 'Poster image is required when poster source is upload.',
+            'image' => 'Poster must be an image file.',
+            'mimes' => 'Poster must be a file of type: jpeg, jpg, png, gif, webp.',
+            'max' => 'Poster file size must not exceed 5MB.',
+        ],
     ],
 
     /*
