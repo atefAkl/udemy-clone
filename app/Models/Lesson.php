@@ -22,6 +22,7 @@ class Lesson extends Model
         'video_url',
         'video_file',
         'video_source',
+        'lecture_file',
         'duration',
         'article_content',
         'article_body',

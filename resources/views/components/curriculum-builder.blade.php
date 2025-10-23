@@ -906,8 +906,28 @@
             const progressModal = new bootstrap.Modal(document.getElementById('uploadProgressModal'));
             progressModal.show();
             
+            let pollAttempts = 0;
+            const maxPollAttempts = 60; // 60 seconds max
+            
             // Start polling for progress
             const progressInterval = setInterval(function() {
+                pollAttempts++;
+                
+                // Timeout after 60 seconds if no response
+                if (pollAttempts >= maxPollAttempts) {
+                    clearInterval(progressInterval);
+                    document.getElementById('uploadStatusText').textContent = 'Upload timeout - Please check if queue worker is running';
+                    document.getElementById('uploadDetailsText').innerHTML = 
+                        'Run: <code>php artisan queue:work</code> or use <code>start-queue-worker.bat</code>';
+                    document.getElementById('uploadProgressBar').classList.remove('bg-success');
+                    document.getElementById('uploadProgressBar').classList.add('bg-warning');
+                    
+                    setTimeout(function() {
+                        progressModal.hide();
+                        location.reload();
+                    }, 5000);
+                    return;
+                }
                 fetch(`{{ url('instructor/courses/lessons/upload-progress') }}/${uploadKey}`)
                     .then(response => response.json())
                     .then(data => {

@@ -115,41 +115,31 @@ class LessonController extends Controller
                 'sort_order' => $section->lessons()->max('sort_order') + 1,
             ];
 
-            // Create lesson (without files yet)
+            // Create lesson
             $lesson = Lesson::create($lessonData);
 
-            // Handle multiple file uploads via Queue
+            // Handle multiple file uploads - DIRECT UPLOAD
             if ($request->hasFile('assets_files')) {
-                $filesData = [];
+                $uploadedFiles = [];
                 
-                // Store files temporarily
                 foreach ($request->file('assets_files') as $file) {
-                    $tempPath = $file->store('temp/assets', 'public');
+                    $originalName = $file->getClientOriginalName();
+                    $path = $file->store('lessons/assets', 'public');
                     
-                    $filesData[] = [
-                        'original_name' => $file->getClientOriginalName(),
-                        'temp_path' => $tempPath,
+                    $uploadedFiles[] = [
+                        'original_name' => $originalName,
+                        'path' => $path,
                         'size' => $file->getSize(),
                         'mime_type' => $file->getMimeType(),
                     ];
                 }
                 
-                // Generate unique upload key for progress tracking
-                $uploadKey = 'assets_upload_' . $lesson->id . '_' . uniqid();
-                
-                // Dispatch job to queue
-                \App\Jobs\ProcessAssetsUpload::dispatch($lesson->id, $filesData, $uploadKey);
-                
-                // Store upload key in session for progress tracking
-                session(['upload_key' => $uploadKey]);
-                
-                return redirect()->back()->with([
-                    'success' => 'Assets lesson created! Files are being uploaded in the background.',
-                    'upload_key' => $uploadKey,
-                    'lesson_id' => $lesson->id,
-                    'files_count' => count($filesData),
-                    'show_progress' => true
+                // Store files information as JSON
+                $lesson->update([
+                    'lecture_file' => json_encode($uploadedFiles)
                 ]);
+                
+                return redirect()->back()->with('success', 'Assets lesson created successfully with ' . count($uploadedFiles) . ' file(s)');
             }
 
             return redirect()->back()->with('success', 'Assets lesson created successfully');
