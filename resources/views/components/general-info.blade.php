@@ -3,7 +3,7 @@
 'categories',
 'action',
 ])
-<div>
+<div class="p-3">
     <form action="{{$action}}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')

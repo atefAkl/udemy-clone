@@ -568,4 +568,83 @@ return [
     // Success Messages
     'general_info_updated' => 'تم تحديث المعلومات العامة بنجاح',
     'promotion_info_updated' => 'تم تحديث معلومات الترويج بنجاح',
+
+    // Downloadable Files & Assignments
+    'downloadable_files' => 'ملفات قابلة للتحميل',
+    'assignments' => 'الواجبات',
+    'assignment' => 'واجب',
+    'add_assignment' => 'إضافة واجب',
+    'assignment_title' => 'عنوان الواجب',
+    'assignment_description' => 'وصف الواجب',
+    'due_days' => 'موعد التسليم (أيام)',
+    'max_score' => 'الدرجة القصوى',
+    'files' => 'ملفات',
+
+    // Quiz System
+    'quiz' => 'اختبار',
+    'create_quiz' => 'إنشاء اختبار',
+    'quiz_information' => 'معلومات الاختبار',
+    'quiz_title' => 'عنوان الاختبار',
+    'quiz_title_placeholder' => 'مثال: اختبار الفصل الأول',
+    'quiz_description_placeholder' => 'صف ما يغطيه هذا الاختبار...',
+    'quiz_type' => 'نوع الاختبار',
+    'practice_quiz' => 'اختبار تدريبي',
+    'graded_quiz' => 'اختبار محسوب بالدرجات',
+    'final_exam' => 'اختبار نهائي',
+    'pass_percentage' => 'نسبة النجاح',
+    'leave_empty_no_limit' => 'اتركه فارغاً لعدم وضع حد زمني',
+    'max_attempts' => 'الحد الأقصى للمحاولات',
+    'attempts_allowed' => 'محاولة مسموحة',
+    'randomize_questions' => 'ترتيب عشوائي للأسئلة',
+    'show_results_after_completion' => 'إظهار النتائج بعد الانتهاء',
+    'quiz_questions' => 'أسئلة الاختبار',
+    'no_questions_yet' => 'لم تتم إضافة أسئلة بعد. اضغط على زر أدناه لإضافة الأسئلة.',
+    'questions' => 'أسئلة',
+    'question' => 'سؤال',
+    'question_text' => 'نص السؤال',
+    'points' => 'النقاط',
+    'answer_options' => 'خيارات الإجابة',
+    'answer_option' => 'خيار الإجابة',
+    'add_answer' => 'إضافة إجابة',
+    'correct_answer' => 'الإجابة الصحيحة',
+    'enter_correct_answer' => 'أدخل الإجابة الصحيحة',
+    'case_insensitive' => 'غير حساس لحالة الأحرف',
+    'use_blank_placeholder' => 'استخدم علامة الفراغ',
+    'confirm_delete_question' => 'هل أنت متأكد من حذف هذا السؤال؟',
+    
+    // Question Types
+    'multiple_choice' => 'اختيار من متعدد',
+    'true_false' => 'صح/خطأ',
+    'fill_in_blank' => 'املأ الفراغ',
+    'true' => 'صح',
+    'false' => 'خطأ',
+
+    // Quiz Actions
+    'view_quiz' => 'عرض الاختبار',
+    'edit_quiz' => 'تعديل الاختبار',
+    'delete_quiz' => 'حذف الاختبار',
+    'delete_quiz_warning' => 'هل أنت متأكد من حذف الاختبار ":quiz"؟ سيتم حذف جميع الأسئلة والإجابات نهائياً.',
+
+    // Lesson Display
+    'lesson_type' => 'نوع الدرس',
+    'video_preview' => 'معاينة الفيديو',
+    'no_video_available' => 'لا يوجد فيديو متاح لهذا الدرس',
+
+    // Lesson Actions
+    'view_lesson' => 'عرض الدرس',
+    'edit_lesson' => 'تعديل الدرس',
+    'delete_lesson' => 'حذف الدرس',
+    'delete_lesson_warning' => 'هل أنت متأكد من حذف الدرس ":lesson"؟',
+    'no_lessons_yet' => 'لم يتم إضافة دروس بعد. انقر على "إضافة درس" للبدء.',
+    'delete_action_irreversible' => 'لا يمكن التراجع عن هذا الإجراء.',
+    'warning' => 'تحذير!',
+    'confirm_delete' => 'تأكيد الحذف',
+
+    // General
+    'yes' => 'نعم',
+    'no' => 'لا',
+    'quiz_statistics' => 'إحصائيات الاختبار',
+    'article_poster' => 'صورة المقال',
+    'no_poster_available' => 'لا توجد صورة متاحة لهذا المقال',
+
 ];

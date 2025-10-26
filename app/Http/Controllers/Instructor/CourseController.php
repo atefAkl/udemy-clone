@@ -223,6 +223,13 @@ class CourseController extends Controller
     {
         $this->authorize('update', $course);
 
+        // Load sections with lessons, quizzes, and their relationships
+        $course->load([
+            'sections.lessons.assignments', 
+            'sections.lessons.files',
+            'sections.quizzes.questions'
+        ]);
+        
         $categories = Category::where('is_active', true)->get();
         return view('instructor.courses.edit', compact('course', 'categories'));
     }

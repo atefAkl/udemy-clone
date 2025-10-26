@@ -246,6 +246,12 @@ Route::prefix('instructor')->name('instructor.')->middleware(['auth', 'role:inst
         Route::get('/lessons/upload-progress/{uploadKey}',          [LessonController::class, 'checkUploadProgress'])->name('lessons.upload.progress');
         Route::get('/{course}/{section}/lessons/{lesson}',          [LessonController::class, 'show'])->name('lessons.show');
         Route::get('/{course}/{section}/lessons/{lesson}/edit',     [LessonController::class, 'edit'])->name('lessons.edit');
+
+        // Quizzes Management
+        Route::post('/{section}/quizzes',                           [\App\Http\Controllers\Instructor\QuizController::class, 'store'])->name('quizzes.store');
+        Route::get('/quizzes/{quiz}',                               [\App\Http\Controllers\Instructor\QuizController::class, 'show'])->name('quizzes.show');
+        Route::put('/quizzes/{quiz}',                               [\App\Http\Controllers\Instructor\QuizController::class, 'update'])->name('quizzes.update');
+        Route::delete('/quizzes/{quiz}',                            [\App\Http\Controllers\Instructor\QuizController::class, 'destroy'])->name('quizzes.destroy');
         Route::put('/lessons/{lesson}',                             [LessonController::class, 'update'])->name('lessons.update');
         Route::delete('/lessons/{lesson}',                          [LessonController::class, 'destroy'])->name('lessons.destroy');
     });

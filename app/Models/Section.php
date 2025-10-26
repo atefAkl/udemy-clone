@@ -64,6 +64,14 @@ class Section extends Model
     }
 
     /**
+     * Get the quizzes for the section.
+     */
+    public function quizzes(): HasMany
+    {
+        return $this->hasMany(Quiz::class)->orderBy('sort_order');
+    }
+
+    /**
      * Get the section's formatted duration.
      */
     public function getFormattedDurationAttribute(): string

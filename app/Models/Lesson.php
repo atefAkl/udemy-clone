@@ -137,6 +137,22 @@ class Lesson extends Model
     }
 
     /**
+     * Get assignments for this lesson
+     */
+    public function assignments()
+    {
+        return $this->hasMany(LessonAssignment::class);
+    }
+
+    /**
+     * Get downloadable files for this lesson
+     */
+    public function files()
+    {
+        return $this->hasMany(LessonFile::class)->orderBy('sort_order');
+    }
+
+    /**
      * Check if lesson is free
      */
     public function isFree(): bool

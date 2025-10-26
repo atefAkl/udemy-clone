@@ -9,6 +9,7 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
+
     public function up(): void
     {
         Schema::create('lessons', function (Blueprint $table) {
@@ -25,6 +26,7 @@ return new class extends Migration
             $table->string('duration')->nullable();
             $table->string('video_url')->nullable();
             $table->string('video_file')->nullable();
+            $table->string('video_source')->inEnum(['upload', 'link'])->default('upload');
             $table->string('thumbnail')->nullable();
             $table->string('preview_video')->nullable();
             $table->string('lecture_file')->nullable();

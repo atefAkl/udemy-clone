@@ -47,7 +47,39 @@ class LessonController extends Controller
             // Create lesson
             $lesson = Lesson::create($lessonData);
 
-            return redirect()->back()->with('success', 'Video lesson created successfully');
+            // Handle lesson files (downloadable resources)
+            if ($request->hasFile('lesson_files')) {
+                foreach ($request->file('lesson_files') as $file) {
+                    $originalName = $file->getClientOriginalName();
+                    $fileName = time() . '_' . $originalName;
+                    $filePath = $file->store('lessons/files', 'public');
+                    
+                    $lesson->files()->create([
+                        'file_name' => $fileName,
+                        'original_name' => $originalName,
+                        'file_path' => $filePath,
+                        'file_size' => $file->getSize(),
+                        'file_type' => $file->getClientMimeType(),
+                        'sort_order' => $lesson->files()->count() + 1,
+                    ]);
+                }
+            }
+
+            // Handle assignments
+            if ($request->has('assignments')) {
+                foreach ($request->input('assignments') as $assignmentData) {
+                    if (!empty($assignmentData['title'])) {
+                        $lesson->assignments()->create([
+                            'title' => $assignmentData['title'],
+                            'description' => $assignmentData['description'] ?? null,
+                            'due_days' => $assignmentData['due_days'] ?? null,
+                            'max_score' => $assignmentData['max_score'] ?? 100,
+                        ]);
+                    }
+                }
+            }
+
+            return redirect()->back()->with('success', 'Video lesson created successfully with files and assignments');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Lesson creation failed: ' . $e->getMessage());
         }
@@ -94,7 +126,39 @@ class LessonController extends Controller
             // Create lesson
             $lesson = Lesson::create($lessonData);
 
-            return redirect()->back()->with('success', 'Article lesson created successfully');
+            // Handle lesson files (downloadable resources)
+            if ($request->hasFile('lesson_files')) {
+                foreach ($request->file('lesson_files') as $file) {
+                    $originalName = $file->getClientOriginalName();
+                    $fileName = time() . '_' . $originalName;
+                    $filePath = $file->store('lessons/files', 'public');
+                    
+                    $lesson->files()->create([
+                        'file_name' => $fileName,
+                        'original_name' => $originalName,
+                        'file_path' => $filePath,
+                        'file_size' => $file->getSize(),
+                        'file_type' => $file->getClientMimeType(),
+                        'sort_order' => $lesson->files()->count() + 1,
+                    ]);
+                }
+            }
+
+            // Handle assignments
+            if ($request->has('assignments')) {
+                foreach ($request->input('assignments') as $assignmentData) {
+                    if (!empty($assignmentData['title'])) {
+                        $lesson->assignments()->create([
+                            'title' => $assignmentData['title'],
+                            'description' => $assignmentData['description'] ?? null,
+                            'due_days' => $assignmentData['due_days'] ?? null,
+                            'max_score' => $assignmentData['max_score'] ?? 100,
+                        ]);
+                    }
+                }
+            }
+
+            return redirect()->back()->with('success', 'Article lesson created successfully with files and assignments');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Article creation failed: ' . $e->getMessage());
         }
@@ -206,5 +270,27 @@ class LessonController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Lesson deletion failed: ' . $e->getMessage());
         }
+    }
+
+    /**
+     * Display the lesson details
+     */
+    public function show($course, $section, Lesson $lesson)
+    {
+        // Load relationships
+        $lesson->load(['assignments', 'files', 'section', 'course']);
+
+        return view('instructor.lessons.show', compact('lesson'));
+    }
+
+    /**
+     * Show the form for editing the lesson
+     */
+    public function edit($course, $section, Lesson $lesson)
+    {
+        // Load relationships
+        $lesson->load(['assignments', 'files']);
+
+        return view('instructor.lessons.edit', compact('lesson'));
     }
 }

@@ -73,11 +73,6 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#assetsLessonModal" data-section-id="{{ $section->id }}">
-                                            <i class="fas fa-file-archive me-2 text-success"></i>{{ __('courses.add_assets_lesson') }}
-                                        </a>
-                                    </li>
-                                    <li>
                                         <hr class="dropdown-divider">
                                     </li>
                                     <li>
@@ -91,10 +86,19 @@
                         <div class="lessons-grid row g-3 mt-2">
                             @forelse($section->lessons as $lesson)
                             <div class="col-md-6 col-lg-4">
+                                @php
+                                $isVideo = $lesson->lesson_type === 'video';
+                                $headerIcon = $isVideo ? 'video' : 'book';
+                                $lessonIcon = $isVideo ? 'video' : 'book-open';
+                                $gradientColor = $isVideo
+                                ? '#667eea 0%, #764ba2 100%'
+                                : '#f093fb 0%, #f5576c 100%';
+                                $sourceIcon = $lesson->video_source === 'upload' ? 'upload' : 'link';
+                                @endphp
                                 <div class="card lesson-card shadow-sm h-100">
                                     <div class="card-header bg-white border-bottom">
                                         <h6 class="mb-0 text-truncate" title="{{ $lesson->title }}">
-                                            <i class="fas fa-{{ $lesson->lesson_type === 'video' ? 'video' : 'book' }} me-2 text-primary"></i>
+                                            <i class="fas fa-{{ $headerIcon }} me-2 text-primary"></i>
                                             {{ $lesson->title }}
                                         </h6>
                                     </div>
@@ -102,13 +106,11 @@
                                         <div class="row g-0">
                                             <!-- Video/Content Preview Section -->
                                             <div class="col-12">
-                                                <div class="lesson-preview position-relative" style="padding-top: 56.25%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-
-                                                    <div class="position-absolute top-50 start-50 translate-middle text-white">
-                                                        <i class="fas fa-video fa-3x opacity-75"></i>
-                                                        <p class="mt-2 small">{{ __('courses.'.$lesson->lesson_type) }}</p>
+                                                <div class="lesson-preview position-relative" style="padding-top: 56.25%; background: linear-gradient(135deg, {{ $gradientColor }});">
+                                                    <div class="position-absolute top-50 start-50 translate-middle text-center text-white">
+                                                        <i class="fas fa-{{ $lessonIcon }} fa-4x opacity-75 mb-2"></i>
+                                                        <p class="mb-0 fw-bold">{{ ucfirst($lesson->lesson_type) }}</p>
                                                     </div>
-
                                                 </div>
                                             </div>
 
@@ -130,32 +132,57 @@
                                                         </span>
                                                         @endif
                                                         <span class="badge bg-info text-white">
-                                                            <i class="fas fa-{{ $lesson->video_source === 'upload' ? 'upload' : 'link' }} me-1"></i>
+                                                            <i class="fas fa-{{ $sourceIcon }} me-1"></i>
                                                             {{ ucfirst($lesson->video_source ?? 'N/A') }}
                                                         </span>
                                                     </div>
+                                                    <!-- Assignments and Files Badges -->
+                                                    @if($lesson->assignments && $lesson->assignments->count() > 0)
+                                                    <div class="mt-2">
+                                                        <span class="badge bg-warning text-dark">
+                                                            <i class="fas fa-tasks me-1"></i>
+                                                            {{ $lesson->assignments->count() }} {{ __('courses.assignments') }}
+                                                        </span>
+                                                    </div>
+                                                    @endif
+                                                    @if($lesson->files && $lesson->files->count() > 0)
+                                                    <div class="mt-2">
+                                                        <span class="badge bg-success">
+                                                            <i class="fas fa-download me-1"></i>
+                                                            {{ $lesson->files->count() }} {{ __('courses.files') }}
+                                                        </span>
+                                                    </div>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="card-footer bg-white border-top">
                                         <div class="d-flex justify-content-between align-items-center gap-2">
-                                            <button type="button" class="btn btn-sm btn-outline-primary flex-fill"
-                                                title="{{ __('courses.view_lesson') }}">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                            <button type="button" class="btn btn-sm btn-outline-secondary flex-fill"
-                                                title="{{ __('courses.edit_lesson') }}">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button type="button" class="btn btn-sm btn-outline-danger flex-fill"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#deleteLessonModal"
-                                                data-lesson-id="{{ $lesson->id }}"
-                                                data-lesson-title="{{ $lesson->title }}"
-                                                title="{{ __('courses.delete_lesson') }}">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
+                                            <form action="{{ route('instructor.courses.lessons.destroy', $lesson->id) }}" method="post"
+                                                onsubmit="return confirm('Are you sure you want to delete this lesson?')">
+                                                @csrf
+                                                @method('delete')
+                                                <a href="{{ route('instructor.courses.lessons.show', ['course' => $lesson->course_id, 'section' => $lesson->section_id, 'lesson' => $lesson->id]) }}"
+                                                    class="btn btn-sm btn-outline-primary flex-fill"
+                                                    title="{{ __('courses.view_lesson') }}">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                                <button type="button" class="btn btn-sm btn-outline-secondary flex-fill"
+                                                    data-lesson_id="{{ $lesson->id }}"
+                                                    onclick="this.previousElementSibling.click()"
+                                                    title="{{ __('courses.edit_lesson') }}">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button type="submit" class="btn btn-sm btn-outline-danger flex-fill"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#deleteLessonModal"
+                                                    data-lesson-id="{{ $lesson->id }}"
+                                                    data-lesson-title="{{ $lesson->title }}"
+                                                    title="{{ __('courses.delete_lesson') }}">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
@@ -168,11 +195,106 @@
                                 </div>
                             </div>
                             @endforelse
+
+                            <!-- Quizzes Section -->
+                            @forelse($section->quizzes as $quiz)
+                            <div class="col-md-6 col-lg-4">
+                                <div class="card quiz-card shadow-sm h-100 border-success">
+                                    <div class="card-header bg-success bg-opacity-10 border-bottom border-success">
+                                        <h6 class="mb-0 text-truncate text-success" title="{{ $quiz->title }}">
+                                            <i class="fas fa-clipboard-question me-2"></i>
+                                            {{ $quiz->title }}
+                                        </h6>
+                                    </div>
+                                    <div class="card-body p-0">
+                                        <div class="row g-0">
+                                            <!-- Quiz Preview Section -->
+                                            <div class="col-12">
+                                                <div class="quiz-preview position-relative" style="padding-top: 56.25%; background: linear-gradient(135deg, #1cc88a 0%, #13855c 100%);">
+                                                    <div class="position-absolute top-50 start-50 translate-middle text-white text-center">
+                                                        <i class="fas fa-clipboard-list fa-3x opacity-75"></i>
+                                                        <p class="mt-2 small fw-bold">{{ __('courses.quiz') }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Quiz Details Section -->
+                                            <div class="col-12 p-3">
+                                                <div class="quiz-meta">
+                                                    <p class="text-muted small mb-2">
+                                                        {{ $quiz->description ?? __('courses.no_description') }}
+                                                    </p>
+
+                                                    <!-- Quiz Stats -->
+                                                    <div class="d-flex flex-wrap gap-2 mb-2">
+                                                        <span class="badge bg-success">
+                                                            <i class="fas fa-question-circle me-1"></i>
+                                                            {{ $quiz->questions->count() }} {{ __('courses.questions') }}
+                                                        </span>
+
+                                                        <span class="badge bg-primary">
+                                                            <i class="fas fa-star me-1"></i>
+                                                            {{ $quiz->totalPoints }} {{ __('courses.points') }}
+                                                        </span>
+
+                                                        @if($quiz->duration_minutes)
+                                                        <span class="badge bg-warning text-dark">
+                                                            <i class="far fa-clock me-1"></i>
+                                                            {{ $quiz->duration_minutes }} {{ __('courses.min') }}
+                                                        </span>
+                                                        @endif
+                                                    </div>
+
+                                                    <!-- Quiz Type & Pass Percentage -->
+                                                    <div class="d-flex flex-wrap gap-2">
+                                                        <span class="badge bg-info text-white">
+                                                            <i class="fas fa-graduation-cap me-1"></i>
+                                                            {{ __('courses.' . $quiz->quiz_type) }}
+                                                        </span>
+
+                                                        <span class="badge bg-secondary">
+                                                            <i class="fas fa-percent me-1"></i>
+                                                            {{ $quiz->pass_percentage }}% {{ __('courses.pass_percentage') }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer bg-white border-top border-success">
+                                        <div class="d-flex justify-content-between align-items-center gap-2">
+                                            <form action="{{ route('instructor.courses.quizzes.destroy', $quiz->id) }}" method="post"
+                                                onsubmit="return confirm('Are you sure you want to delete this quiz?')">
+                                                @csrf
+                                                @method('delete')
+                                                <a href="{{ route('instructor.courses.quizzes.show', $quiz->id) }}"
+                                                    class="btn btn-sm btn-outline-success flex-fill"
+                                                    title="{{ __('courses.view_quiz') }}">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                                <button type="button" class="btn btn-sm btn-outline-primary flex-fill"
+                                                    data-quiz_id="{{ $quiz->id }}"
+                                                    onclick="this.previousElementSibling.click()"
+                                                    title="{{ __('courses.edit_quiz') }}">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button type="submit" class="btn btn-sm btn-outline-danger flex-fill"
+
+                                                    data-quiz-id="{{ $quiz->id }}"
+                                                    data-quiz-title="{{ $quiz->title }}"
+                                                    title="{{ __('courses.delete_quiz') }}">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @empty
+                            @endforelse
                         </div>
                     </div>
                 </div>
-
-
             </div>
             @empty
             <p>No sections found</p>
@@ -352,6 +474,46 @@
                                 placeholder="https://example.com/image.jpg">
                             <small class="text-muted">{{ __('courses.poster_url_hint') }}</small>
                         </div>
+
+                        <hr class="my-3">
+
+                        <!-- Downloadable Files Section -->
+                        <div class="mb-3">
+                            <h6 class="mb-2">
+                                <i class="fas fa-download me-2 text-info"></i>{{ __('courses.downloadable_files') }}
+                                <small class="text-muted">({{ __('courses.optional') }})</small>
+                            </h6>
+                            <input type="file" class="form-control" id="article_lesson_files" name="lesson_files[]" multiple
+                                accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.zip,.rar,.txt,.csv">
+                            <small class="text-muted d-block mt-1">
+                                <i class="fas fa-info-circle me-1"></i>{{ __('courses.supported_file_types') }}:
+                                PDF, DOC, DOCX, PPT, PPTX, XLS, XLSX, ZIP, RAR, TXT, CSV
+                            </small>
+                            <small class="text-muted d-block">
+                                <i class="fas fa-exclamation-triangle me-1"></i>{{ __('courses.max_file_size_per_file') }}: 10MB
+                            </small>
+                            <!-- Files Preview -->
+                            <div id="article_files_preview" class="mt-2" style="display: none;">
+                                <div class="list-group" id="article_files_list"></div>
+                            </div>
+                        </div>
+
+                        <hr class="my-3">
+
+                        <!-- Assignments Section -->
+                        <div class="mb-3">
+                            <h6 class="mb-2">
+                                <i class="fas fa-tasks me-2 text-warning"></i>{{ __('courses.assignments') }}
+                                <small class="text-muted">({{ __('courses.optional') }})</small>
+                            </h6>
+                            <div id="article_assignments_container">
+                                <!-- Assignment items will be added here dynamically -->
+                            </div>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" id="article_add_assignment_btn">
+                                <i class="fas fa-plus me-1"></i>{{ __('courses.add_assignment') }}
+                            </button>
+                        </div>
+
                     </div>
                     <div class="modal-footer py-2">
                         <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">
@@ -367,98 +529,150 @@
     </div>
 </div>
 
-<!-- Add Presentation Lesson Modal (Placeholder) -->
-<div class="modal fade" id="presentationLessonModal" tabindex="-1">
-    <div class="modal-dialog">
+<!-- Add Quiz Modal -->
+<div class="modal fade" id="quizLessonModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"><i class="fas fa-file-powerpoint me-2"></i>{{ __('courses.presentation_lesson') }}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <p class="text-center text-muted">{{ __('courses.coming_soon') }}</p>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Add Assets Lesson Modal -->
-<div class="modal fade" id="assetsLessonModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <form id="assetsLessonForm" method="POST" enctype="multipart/form-data" action="{{ route('instructor.courses.lessons.store.assets', ['section' => 'section_id']) }}">
+            <form id="quizForm" method="POST" action="{{ route('instructor.courses.quizzes.store', ['section' => 'section_id']) }}">
                 @csrf
-                <input type="hidden" name="lesson_type" value="assets">
-                <input type="hidden" name="section_id" id="assets_section_id">
-                
-                <div class="modal-header py-2">
+                <input type="hidden" name="section_id" id="quiz_section_id">
+
+                <div class="modal-header bg-gradient-primary text-white py-2">
                     <h5 class="modal-title">
-                        <i class="fas fa-file-archive me-2"></i>{{ __('courses.add_assets_lesson') }}
+                        <i class="fas fa-clipboard-question me-2"></i>{{ __('courses.create_quiz') }}
                     </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
-                
-                <div class="modal-body">
-                    <!-- Title -->
-                    <div class="input-group mb-3">
-                        <label for="assets_lesson_title" class="input-group-text">{{ __('courses.title') }}</label>
-                        <input type="text" class="form-control" id="assets_lesson_title" name="title" required>
+
+                <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+                    <!-- Quiz Basic Information -->
+                    <div class="card mb-3 border-primary">
+                        <div class="card-header bg-primary bg-opacity-10">
+                            <h6 class="mb-0 text-primary">
+                                <i class="fas fa-info-circle me-2"></i>{{ __('courses.quiz_information') }}
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <!-- Quiz Title -->
+                            <div class="mb-3">
+                                <label for="quiz_title" class="form-label">{{ __('courses.quiz_title') }} <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="quiz_title" name="title" required
+                                    placeholder="{{ __('courses.quiz_title_placeholder') }}">
+                            </div>
+
+                            <!-- Quiz Description -->
+                            <div class="mb-3">
+                                <label for="quiz_description" class="form-label">{{ __('courses.description') }}</label>
+                                <textarea class="form-control" id="quiz_description" name="description" rows="3"
+                                    placeholder="{{ __('courses.quiz_description_placeholder') }}"></textarea>
+                            </div>
+
+                            <div class="row">
+                                <!-- Quiz Type -->
+                                <div class="col-md-4 mb-3">
+                                    <label for="quiz_type" class="form-label">{{ __('courses.quiz_type') }} <span class="text-danger">*</span></label>
+                                    <select class="form-select" id="quiz_type" name="quiz_type" required>
+                                        <option value="practice">{{ __('courses.practice_quiz') }}</option>
+                                        <option value="graded">{{ __('courses.graded_quiz') }}</option>
+                                        <option value="final">{{ __('courses.final_exam') }}</option>
+                                    </select>
+                                </div>
+
+                                <!-- Duration -->
+                                <div class="col-md-4 mb-3">
+                                    <label for="duration_minutes" class="form-label">{{ __('courses.duration_minutes') }}</label>
+                                    <input type="number" class="form-control" id="duration_minutes" name="duration_minutes"
+                                        min="5" max="180" placeholder="30">
+                                    <small class="text-muted">{{ __('courses.leave_empty_no_limit') }}</small>
+                                </div>
+
+                                <!-- Pass Percentage -->
+                                <div class="col-md-4 mb-3">
+                                    <label for="pass_percentage" class="form-label">{{ __('courses.pass_percentage') }}</label>
+                                    <input type="number" class="form-control" id="pass_percentage" name="pass_percentage"
+                                        min="0" max="100" value="70" placeholder="70">
+                                    <small class="text-muted">%</small>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <!-- Max Attempts -->
+                                <div class="col-md-4 mb-3">
+                                    <label for="max_attempts" class="form-label">{{ __('courses.max_attempts') }}</label>
+                                    <input type="number" class="form-control" id="max_attempts" name="max_attempts"
+                                        min="1" max="10" value="3">
+                                    <small class="text-muted">{{ __('courses.attempts_allowed') }}</small>
+                                </div>
+
+                                <!-- Randomize Questions -->
+                                <div class="col-md-4 mb-3">
+                                    <div class="form-check mt-4">
+                                        <input class="form-check-input" type="checkbox" id="randomize_questions"
+                                            name="randomize_questions" value="1">
+                                        <label class="form-check-label" for="randomize_questions">
+                                            {{ __('courses.randomize_questions') }}
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- Show Results -->
+                                <div class="col-md-4 mb-3">
+                                    <div class="form-check mt-4">
+                                        <input class="form-check-input" type="checkbox" id="show_results"
+                                            name="show_results" value="1" checked>
+                                        <label class="form-check-label" for="show_results">
+                                            {{ __('courses.show_results_after_completion') }}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    
-                    <!-- Description -->
-                    <div class="mb-3">
-                        <label for="assets_description" class="form-label">{{ __('courses.description') }}</label>
-                        <textarea name="description" id="assets_description" class="form-control" rows="3" 
-                            placeholder="{{ __('courses.assets_description_placeholder') }}"></textarea>
-                        <small class="text-muted">{{ __('courses.optional') }}</small>
-                    </div>
-                    
-                    <!-- Files Upload -->
-                    <div class="mb-3">
-                        <label for="assets_files" class="form-label">
-                            <i class="fas fa-upload me-1"></i>{{ __('courses.upload_files') }}
-                        </label>
-                        <input type="file" class="form-control" id="assets_files" name="assets_files[]" multiple required>
-                        <small class="text-muted d-block mt-1">
-                            <i class="fas fa-info-circle me-1"></i>{{ __('courses.supported_file_types') }}: 
-                            PDF, DOC, DOCX, PPT, PPTX, XLS, XLSX, ZIP, RAR, TXT, CSV
-                        </small>
-                        <small class="text-muted d-block">
-                            <i class="fas fa-exclamation-triangle me-1"></i>{{ __('courses.max_file_size_per_file') }}: 10MB
-                        </small>
-                    </div>
-                    
-                    <!-- Files Preview (will be populated by JS) -->
-                    <div id="assets_files_preview" class="mb-3" style="display: none;">
-                        <label class="form-label">{{ __('courses.selected_files') }}:</label>
-                        <div class="list-group" id="assets_files_list"></div>
+
+                    <!-- Questions Section -->
+                    <div class="card border-success">
+                        <div class="card-header bg-success bg-opacity-10">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h6 class="mb-0 text-success">
+                                    <i class="fas fa-question-circle me-2"></i>{{ __('courses.quiz_questions') }}
+                                </h6>
+                                <span class="badge bg-success" id="questions_count">0 {{ __('courses.questions') }}</span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="questions_container">
+                                <!-- Questions will be added here dynamically -->
+                                <div class="text-center text-muted py-4" id="no_questions_message">
+                                    <i class="fas fa-question-circle fa-3x mb-3 opacity-25"></i>
+                                    <p>{{ __('courses.no_questions_yet') }}</p>
+                                </div>
+                            </div>
+
+                            <!-- Add Question Buttons -->
+                            <div class="d-flex gap-2 flex-wrap mt-3">
+                                <button type="button" class="btn btn-outline-primary btn-sm" id="add_multiple_choice_btn">
+                                    <i class="fas fa-list-ul me-1"></i>{{ __('courses.multiple_choice') }}
+                                </button>
+                                <button type="button" class="btn btn-outline-info btn-sm" id="add_true_false_btn">
+                                    <i class="fas fa-check-double me-1"></i>{{ __('courses.true_false') }}
+                                </button>
+                                <button type="button" class="btn btn-outline-warning btn-sm" id="add_fill_blank_btn">
+                                    <i class="fas fa-edit me-1"></i>{{ __('courses.fill_in_blank') }}
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                
+
                 <div class="modal-footer py-2">
-                    <button type="button" class="btn btn-sm" data-bs-dismiss="modal">
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">
                         <i class="fas fa-times me-1"></i>{{ __('courses.cancel') }}
                     </button>
-                    <button type="submit" class="btn btn-sm">
-                        <i class="fas fa-save me-1"></i>{{ __('courses.add_lesson') }}
+                    <button type="submit" class="btn btn-sm btn-success">
+                        <i class="fas fa-save me-1"></i>{{ __('courses.create_quiz') }}
                     </button>
                 </div>
             </form>
-        </div>
-    </div>
-</div>
-
-<!-- Add Quiz Modal (Placeholder) -->
-<div class="modal fade" id="quizLessonModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"><i class="fas fa-clipboard-question me-2"></i>{{ __('courses.quiz') }}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <p class="text-center text-muted">{{ __('courses.coming_soon') }}</p>
-            </div>
         </div>
     </div>
 </div>
@@ -478,18 +692,18 @@
                         <span class="visually-hidden">Loading...</span>
                     </div>
                 </div>
-                
+
                 <div class="progress mb-3" style="height: 25px;">
-                    <div id="uploadProgressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-success" 
-                         role="progressbar" style="width: 0%">
+                    <div id="uploadProgressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+                        role="progressbar" style="width: 0%">
                         <span id="uploadProgressText">0%</span>
                     </div>
                 </div>
-                
+
                 <p class="text-center mb-2">
                     <span id="uploadStatusText">Preparing upload...</span>
                 </p>
-                
+
                 <p class="text-center text-muted mb-0">
                     <small id="uploadDetailsText">Please wait while we process your files.</small>
                 </p>
@@ -498,41 +712,6 @@
     </div>
 </div>
 
-<!-- Delete Lesson Modal -->
-<div class="modal fade" id="deleteLessonModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form id="deleteLessonForm" method="POST" data-action="{{route('instructor.courses.lessons.destroy', ['lesson' => 'lesson_id'])}}">
-                @csrf
-                @method('DELETE')
-                <div class="modal-header py-2 bg-danger text-white">
-                    <h5 class="modal-title">
-                        <i class="fas fa-exclamation-triangle me-2"></i>{{ __('courses.delete_lesson') }}
-                    </h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="alert alert-danger d-flex align-items-center" role="alert">
-                        <i class="fas fa-exclamation-circle fa-2x me-3"></i>
-                        <div>
-                            <h6 class="alert-heading mb-2">{{ __('courses.warning') }}</h6>
-                            <p class="mb-0" id="deleteLessonText"></p>
-                        </div>
-                    </div>
-                    <p class="text-muted mb-0 small">{{ __('courses.delete_action_irreversible') }}</p>
-                </div>
-                <div class="modal-footer py-2">
-                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">
-                        <i class="fas fa-times me-1"></i>{{ __('courses.cancel') }}
-                    </button>
-                    <button type="submit" class="btn btn-sm btn-danger">
-                        <i class="fas fa-trash me-1"></i>{{ __('courses.confirm_delete') }}
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 
 <!-- Add Video Lesson Modal -->
 <div class="modal fade" id="videoLessonModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="videoLessonModalLabel" aria-hidden="true">
@@ -582,6 +761,45 @@
                         <input type="url" class="form-control" id="video_url_input" name="video_url"
                             placeholder="https://youtube.com/watch?v=... or https://vimeo.com/...">
                         <small class="text-muted">{{ __('courses.supported_platforms') }}: YouTube, Vimeo</small>
+                    </div>
+
+                    <hr class="my-3">
+
+                    <!-- Downloadable Files Section -->
+                    <div class="mb-3">
+                        <h6 class="mb-2">
+                            <i class="fas fa-download me-2 text-info"></i>{{ __('courses.downloadable_files') }}
+                            <small class="text-muted">({{ __('courses.optional') }})</small>
+                        </h6>
+                        <input type="file" class="form-control" id="video_lesson_files" name="lesson_files[]" multiple
+                            accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.zip,.rar,.txt,.csv">
+                        <small class="text-muted d-block mt-1">
+                            <i class="fas fa-info-circle me-1"></i>{{ __('courses.supported_file_types') }}:
+                            PDF, DOC, DOCX, PPT, PPTX, XLS, XLSX, ZIP, RAR, TXT, CSV
+                        </small>
+                        <small class="text-muted d-block">
+                            <i class="fas fa-exclamation-triangle me-1"></i>{{ __('courses.max_file_size_per_file') }}: 10MB
+                        </small>
+                        <!-- Files Preview -->
+                        <div id="video_files_preview" class="mt-2" style="display: none;">
+                            <div class="list-group" id="video_files_list"></div>
+                        </div>
+                    </div>
+
+                    <hr class="my-3">
+
+                    <!-- Assignments Section -->
+                    <div class="mb-3">
+                        <h6 class="mb-2">
+                            <i class="fas fa-tasks me-2 text-warning"></i>{{ __('courses.assignments') }}
+                            <small class="text-muted">({{ __('courses.optional') }})</small>
+                        </h6>
+                        <div id="video_assignments_container">
+                            <!-- Assignment items will be added here dynamically -->
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" id="video_add_assignment_btn">
+                            <i class="fas fa-plus me-1"></i>{{ __('courses.add_assignment') }}
+                        </button>
                     </div>
 
                 </div>
@@ -804,58 +1022,40 @@
             });
         }
 
-        // Assets Lesson Modal
-        const assetsLessonModal = document.getElementById('assetsLessonModal');
-        if (assetsLessonModal) {
-            assetsLessonModal.addEventListener('show.bs.modal', function(event) {
+        // Delete Lesson Modal
+        const deleteLessonModal = document.getElementById('deleteLessonModal');
+        if (deleteLessonModal) {
+            deleteLessonModal.addEventListener('show.bs.modal', function(event) {
                 const button = event.relatedTarget;
-                const sectionId = button.getAttribute('data-section-id');
-                const form = assetsLessonModal.querySelector('#assetsLessonForm');
-                const action = form.getAttribute('action').replace('section_id', sectionId);
+                const lessonId = button.getAttribute('data-lesson-id');
+                const lessonTitle = button.getAttribute('data-lesson-title');
+
+                // Update form action - use correct route
+                const form = deleteLessonModal.querySelector('#deleteLessonForm');
+                form.action = `/instructor/courses/lessons/${lessonId}`;
+
+                // Update modal content
+                document.getElementById('deleteLessonText').textContent =
+                    `{{ __('courses.delete_lesson_warning') }}`.replace(':lesson', lessonTitle);
+            });
+        }
+
+        // Delete Quiz Modal
+        const deleteQuizModal = document.getElementById('deleteQuizModal');
+        if (deleteQuizModal) {
+            deleteQuizModal.addEventListener('show.bs.modal', function(event) {
+                const button = event.relatedTarget;
+                const quizId = button.getAttribute('data-quiz-id');
+                const quizTitle = button.getAttribute('data-quiz-title');
+
+                // Update form action
+                const form = deleteQuizModal.querySelector('#deleteQuizForm');
+                const action = form.getAttribute('data-action').replace('quiz_id', quizId);
                 form.action = action;
 
-                // Set section ID
-                document.getElementById('assets_section_id').value = sectionId;
-            });
-
-            // File input change event - show preview
-            const assetsFilesInput = document.getElementById('assets_files');
-            if (assetsFilesInput) {
-                assetsFilesInput.addEventListener('change', function(e) {
-                    const files = e.target.files;
-                    const preview = document.getElementById('assets_files_preview');
-                    const filesList = document.getElementById('assets_files_list');
-                    
-                    if (files.length > 0) {
-                        preview.style.display = 'block';
-                        filesList.innerHTML = '';
-                        
-                        Array.from(files).forEach((file, index) => {
-                            const fileSize = (file.size / (1024 * 1024)).toFixed(2); // MB
-                            const fileIcon = getFileIcon(file.name);
-                            
-                            const fileItem = document.createElement('div');
-                            fileItem.className = 'list-group-item d-flex justify-content-between align-items-center';
-                            fileItem.innerHTML = `
-                                <div>
-                                    <i class="${fileIcon} me-2"></i>
-                                    <strong>${file.name}</strong>
-                                    <small class="text-muted ms-2">(${fileSize} MB)</small>
-                                </div>
-                                <span class="badge bg-primary rounded-pill">${index + 1}</span>
-                            `;
-                            filesList.appendChild(fileItem);
-                        });
-                    } else {
-                        preview.style.display = 'none';
-                    }
-                });
-            }
-
-            // Reset form when modal closes
-            assetsLessonModal.addEventListener('hidden.bs.modal', function() {
-                document.getElementById('assetsLessonForm').reset();
-                document.getElementById('assets_files_preview').style.display = 'none';
+                // Update modal content
+                document.getElementById('deleteQuizText').textContent =
+                    `{{ __('courses.delete_quiz_warning') }}`.replace(':quiz', quizTitle);
             });
         }
 
@@ -878,23 +1078,406 @@
             return iconMap[ext] || 'fas fa-file text-muted';
         }
 
-        // Delete Lesson Modal
-        const deleteLessonModal = document.getElementById('deleteLessonModal');
-        if (deleteLessonModal) {
-            deleteLessonModal.addEventListener('show.bs.modal', function(event) {
-                const button = event.relatedTarget;
-                const lessonId = button.getAttribute('data-lesson-id');
-                const lessonTitle = button.getAttribute('data-lesson-title');
+        // Files preview for Video Lesson
+        const videoFilesInput = document.getElementById('video_lesson_files');
+        if (videoFilesInput) {
+            videoFilesInput.addEventListener('change', function(e) {
+                const files = e.target.files;
+                const preview = document.getElementById('video_files_preview');
+                const filesList = document.getElementById('video_files_list');
 
-                // Update form action
-                const form = deleteLessonModal.querySelector('#deleteLessonForm');
-                const action = form.getAttribute('data-action').replace('lesson_id', lessonId);
+                if (files.length > 0) {
+                    preview.style.display = 'block';
+                    filesList.innerHTML = '';
+
+                    Array.from(files).forEach((file, index) => {
+                        const fileSize = (file.size / (1024 * 1024)).toFixed(2);
+                        const fileIcon = getFileIcon(file.name);
+
+                        const fileItem = document.createElement('div');
+                        fileItem.className = 'list-group-item d-flex justify-content-between align-items-center';
+                        fileItem.innerHTML = `
+                            <div>
+                                <i class="${fileIcon} me-2"></i>
+                                <strong>${file.name}</strong>
+                                <small class="text-muted ms-2">(${fileSize} MB)</small>
+                            </div>
+                            <span class="badge bg-info rounded-pill">${index + 1}</span>
+                        `;
+                        filesList.appendChild(fileItem);
+                    });
+                } else {
+                    preview.style.display = 'none';
+                }
+            });
+        }
+
+        // Files preview for Article Lesson
+        const articleFilesInput = document.getElementById('article_lesson_files');
+        if (articleFilesInput) {
+            articleFilesInput.addEventListener('change', function(e) {
+                const files = e.target.files;
+                const preview = document.getElementById('article_files_preview');
+                const filesList = document.getElementById('article_files_list');
+
+                if (files.length > 0) {
+                    preview.style.display = 'block';
+                    filesList.innerHTML = '';
+
+                    Array.from(files).forEach((file, index) => {
+                        const fileSize = (file.size / (1024 * 1024)).toFixed(2);
+                        const fileIcon = getFileIcon(file.name);
+
+                        const fileItem = document.createElement('div');
+                        fileItem.className = 'list-group-item d-flex justify-content-between align-items-center';
+                        fileItem.innerHTML = `
+                            <div>
+                                <i class="${fileIcon} me-2"></i>
+                                <strong>${file.name}</strong>
+                                <small class="text-muted ms-2">(${fileSize} MB)</small>
+                            </div>
+                            <span class="badge bg-info rounded-pill">${index + 1}</span>
+                        `;
+                        filesList.appendChild(fileItem);
+                    });
+                } else {
+                    preview.style.display = 'none';
+                }
+            });
+        }
+
+        // Assignment counter for unique IDs
+        let videoAssignmentCounter = 0;
+        let articleAssignmentCounter = 0;
+
+        // Add assignment function for Video Lesson
+        const videoAddAssignmentBtn = document.getElementById('video_add_assignment_btn');
+        if (videoAddAssignmentBtn) {
+            videoAddAssignmentBtn.addEventListener('click', function() {
+                videoAssignmentCounter++;
+                const container = document.getElementById('video_assignments_container');
+                const assignmentHtml = `
+                    <div class="card mb-2 assignment-item" id="video_assignment_${videoAssignmentCounter}">
+                        <div class="card-body p-2">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <strong class="text-primary">{{ __('courses.assignment') }} ${videoAssignmentCounter}</strong>
+                                <button type="button" class="btn btn-sm btn-outline-danger" onclick="document.getElementById('video_assignment_${videoAssignmentCounter}').remove()">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <input type="text" class="form-control form-control-sm mb-1" name="assignments[${videoAssignmentCounter}][title]" placeholder="{{ __('courses.assignment_title') }}" required>
+                            <textarea class="form-control form-control-sm mb-1" name="assignments[${videoAssignmentCounter}][description]" rows="2" placeholder="{{ __('courses.assignment_description') }}"></textarea>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <input type="number" class="form-control form-control-sm" name="assignments[${videoAssignmentCounter}][due_days]" placeholder="{{ __('courses.due_days') }}" min="1">
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="number" class="form-control form-control-sm" name="assignments[${videoAssignmentCounter}][max_score]" placeholder="{{ __('courses.max_score') }}" value="100" min="1">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', assignmentHtml);
+            });
+        }
+
+        // Add assignment function for Article Lesson
+        const articleAddAssignmentBtn = document.getElementById('article_add_assignment_btn');
+        if (articleAddAssignmentBtn) {
+            articleAddAssignmentBtn.addEventListener('click', function() {
+                articleAssignmentCounter++;
+                const container = document.getElementById('article_assignments_container');
+                const assignmentHtml = `
+                    <div class="card mb-2 assignment-item" id="article_assignment_${articleAssignmentCounter}">
+                        <div class="card-body p-2">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <strong class="text-primary">{{ __('courses.assignment') }} ${articleAssignmentCounter}</strong>
+                                <button type="button" class="btn btn-sm btn-outline-danger" onclick="document.getElementById('article_assignment_${articleAssignmentCounter}').remove()">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <input type="text" class="form-control form-control-sm mb-1" name="assignments[${articleAssignmentCounter}][title]" placeholder="{{ __('courses.assignment_title') }}" required>
+                            <textarea class="form-control form-control-sm mb-1" name="assignments[${articleAssignmentCounter}][description]" rows="2" placeholder="{{ __('courses.assignment_description') }}"></textarea>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <input type="number" class="form-control form-control-sm" name="assignments[${articleAssignmentCounter}][due_days]" placeholder="{{ __('courses.due_days') }}" min="1">
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="number" class="form-control form-control-sm" name="assignments[${articleAssignmentCounter}][max_score]" placeholder="{{ __('courses.max_score') }}" value="100" min="1">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', assignmentHtml);
+            });
+        }
+
+        // ==========================================
+        // Quiz Modal JavaScript
+        // ==========================================
+
+        let questionCounter = 0;
+
+        // Initialize Quiz Modal
+        const quizModal = document.getElementById('quizLessonModal');
+        if (quizModal) {
+            quizModal.addEventListener('show.bs.modal', function(event) {
+                const button = event.relatedTarget;
+                const sectionId = button.getAttribute('data-section-id');
+                const form = quizModal.querySelector('#quizForm');
+                const action = form.getAttribute('action').replace('section_id', sectionId);
                 form.action = action;
 
-                // Update modal content
-                document.getElementById('deleteLessonText').textContent =
-                    `{{ __('courses.delete_lesson_warning') }}`.replace(':lesson', lessonTitle);
+                document.getElementById('quiz_section_id').value = sectionId;
             });
+
+            // Reset form when modal closes
+            quizModal.addEventListener('hidden.bs.modal', function() {
+                document.getElementById('quizForm').reset();
+                document.getElementById('questions_container').innerHTML = '<div class="text-center text-muted py-4" id="no_questions_message"><i class="fas fa-question-circle fa-3x mb-3 opacity-25"></i><p>{{ __('
+                courses.no_questions_yet ') }}</p></div>';
+                questionCounter = 0;
+                updateQuestionsCount();
+            });
+        }
+
+        // Add Multiple Choice Question
+        document.getElementById('add_multiple_choice_btn')?.addEventListener('click', function() {
+            addQuestion('multiple_choice');
+        });
+
+        // Add True/False Question
+        document.getElementById('add_true_false_btn')?.addEventListener('click', function() {
+            addQuestion('true_false');
+        });
+
+        // Add Fill in Blank Question
+        document.getElementById('add_fill_blank_btn')?.addEventListener('click', function() {
+            addQuestion('fill_blank');
+        });
+
+        function addQuestion(type) {
+            questionCounter++;
+            const container = document.getElementById('questions_container');
+            const noQuestionsMsg = document.getElementById('no_questions_message');
+            if (noQuestionsMsg) noQuestionsMsg.remove();
+
+            let questionHtml = '';
+
+            if (type === 'multiple_choice') {
+                questionHtml = createMultipleChoiceQuestion(questionCounter);
+            } else if (type === 'true_false') {
+                questionHtml = createTrueFalseQuestion(questionCounter);
+            } else if (type === 'fill_blank') {
+                questionHtml = createFillBlankQuestion(questionCounter);
+            }
+
+            container.insertAdjacentHTML('beforeend', questionHtml);
+            updateQuestionsCount();
+        }
+
+        function createMultipleChoiceQuestion(id) {
+            return `
+                <div class="card mb-3 question-card" id="question_${id}">
+                    <div class="card-header bg-primary bg-opacity-10">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <strong class="text-primary">
+                                <i class="fas fa-list-ul me-2"></i>{{ __('courses.question') }} ${id} - {{ __('courses.multiple_choice') }}
+                            </strong>
+                            <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeQuestion(${id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <input type="hidden" name="questions[${id}][type]" value="multiple_choice">
+                        
+                        <!-- Question Text -->
+                        <div class="mb-3">
+                            <label class="form-label">{{ __('courses.question_text') }} <span class="text-danger">*</span></label>
+                            <textarea class="form-control" name="questions[${id}][question_text]" rows="2" required></textarea>
+                        </div>
+
+                        <!-- Points -->
+                        <div class="mb-3">
+                            <label class="form-label">{{ __('courses.points') }}</label>
+                            <input type="number" class="form-control" name="questions[${id}][points]" value="1" min="1" style="width: 100px;">
+                        </div>
+
+                        <!-- Answers -->
+                        <label class="form-label">{{ __('courses.answer_options') }}</label>
+                        <div id="answers_${id}">
+                            ${createAnswerOption(id, 1, true)}
+                            ${createAnswerOption(id, 2, false)}
+                            ${createAnswerOption(id, 3, false)}
+                            ${createAnswerOption(id, 4, false)}
+                        </div>
+                        
+                        <button type="button" class="btn btn-sm btn-outline-secondary mt-2" onclick="addAnswer(${id})">
+                            <i class="fas fa-plus me-1"></i>{{ __('courses.add_answer') }}
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function createTrueFalseQuestion(id) {
+            return `
+                <div class="card mb-3 question-card" id="question_${id}">
+                    <div class="card-header bg-info bg-opacity-10">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <strong class="text-info">
+                                <i class="fas fa-check-double me-2"></i>{{ __('courses.question') }} ${id} - {{ __('courses.true_false') }}
+                            </strong>
+                            <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeQuestion(${id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <input type="hidden" name="questions[${id}][type]" value="true_false">
+                        
+                        <!-- Question Text -->
+                        <div class="mb-3">
+                            <label class="form-label">{{ __('courses.question_text') }} <span class="text-danger">*</span></label>
+                            <textarea class="form-control" name="questions[${id}][question_text]" rows="2" required></textarea>
+                        </div>
+
+                        <!-- Points -->
+                        <div class="mb-3">
+                            <label class="form-label">{{ __('courses.points') }}</label>
+                            <input type="number" class="form-control" name="questions[${id}][points]" value="1" min="1" style="width: 100px;">
+                        </div>
+
+                        <!-- Correct Answer -->
+                        <div class="mb-3">
+                            <label class="form-label">{{ __('courses.correct_answer') }} <span class="text-danger">*</span></label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="questions[${id}][correct_answer]" value="true" id="q${id}_true" required>
+                                <label class="form-check-label" for="q${id}_true">
+                                    {{ __('courses.true') }}
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="questions[${id}][correct_answer]" value="false" id="q${id}_false">
+                                <label class="form-check-label" for="q${id}_false">
+                                    {{ __('courses.false') }}
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function createFillBlankQuestion(id) {
+            return `
+                <div class="card mb-3 question-card" id="question_${id}">
+                    <div class="card-header bg-warning bg-opacity-10">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <strong class="text-warning">
+                                <i class="fas fa-edit me-2"></i>{{ __('courses.question') }} ${id} - {{ __('courses.fill_in_blank') }}
+                            </strong>
+                            <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeQuestion(${id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <input type="hidden" name="questions[${id}][type]" value="fill_blank">
+                        
+                        <!-- Question Text -->
+                        <div class="mb-3">
+                            <label class="form-label">{{ __('courses.question_text') }} <span class="text-danger">*</span></label>
+                            <textarea class="form-control" name="questions[${id}][question_text]" rows="2" required></textarea>
+                            <small class="text-muted">{{ __('courses.use_blank_placeholder') }}: _____</small>
+                        </div>
+
+                        <!-- Points -->
+                        <div class="mb-3">
+                            <label class="form-label">{{ __('courses.points') }}</label>
+                            <input type="number" class="form-control" name="questions[${id}][points]" value="1" min="1" style="width: 100px;">
+                        </div>
+
+                        <!-- Correct Answer -->
+                        <div class="mb-3">
+                            <label class="form-label">{{ __('courses.correct_answer') }} <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" name="questions[${id}][correct_answer]" required 
+                                placeholder="{{ __('courses.enter_correct_answer') }}">
+                            <small class="text-muted">{{ __('courses.case_insensitive') }}</small>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function createAnswerOption(questionId, answerId, isCorrect = false) {
+            return `
+                <div class="input-group mb-2 answer-option" id="q${questionId}_answer_${answerId}">
+                    <div class="input-group-text">
+                        <input class="form-check-input mt-0" type="radio" 
+                            name="questions[${questionId}][correct_answer]" 
+                            value="${answerId}" ${isCorrect ? 'checked' : ''} required>
+                    </div>
+                    <input type="text" class="form-control" 
+                        name="questions[${questionId}][answers][${answerId}]" 
+                        placeholder="{{ __('courses.answer_option') }} ${answerId}" required>
+                    <button type="button" class="btn btn-outline-danger btn-sm" 
+                        onclick="removeAnswer(${questionId}, ${answerId})" ${answerId <= 2 ? 'disabled' : ''}>
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+        }
+
+        function addAnswer(questionId) {
+            const answersContainer = document.getElementById(`answers_${questionId}`);
+            const answerCount = answersContainer.querySelectorAll('.answer-option').length + 1;
+            answersContainer.insertAdjacentHTML('beforeend', createAnswerOption(questionId, answerCount, false));
+        }
+
+        function removeAnswer(questionId, answerId) {
+            const answerElement = document.getElementById(`q${questionId}_answer_${answerId}`);
+            if (answerElement) answerElement.remove();
+        }
+
+        function removeQuestion(id) {
+            if (confirm('{{ __('
+                    courses.confirm_delete_question ') }}')) {
+                const questionElement = document.getElementById(`question_${id}`);
+                if (questionElement) questionElement.remove();
+                updateQuestionsCount();
+
+                // Show "no questions" message if no questions left
+                const container = document.getElementById('questions_container');
+                if (!container.querySelector('.question-card')) {
+                    container.innerHTML = '<div class="text-center text-muted py-4" id="no_questions_message"><i class="fas fa-question-circle fa-3x mb-3 opacity-25"></i><p>{{ __('
+                    courses.no_questions_yet ') }}</p></div>';
+                }
+            }
+        }
+
+        function updateQuestionsCount() {
+            const count = document.querySelectorAll('.question-card').length;
+            document.getElementById('questions_count').textContent = `${count} {{ __('courses.questions') }}`;
+        }
+
+        // Edit Lesson Function
+        function editLesson(lessonId) {
+            // TODO: Implement edit lesson modal or redirect to edit page
+            alert('Edit Lesson feature coming soon! Lesson ID: ' + lessonId);
+            // For now, you can redirect to edit page:
+            // window.location.href = `/instructor/courses/lessons/${lessonId}/edit`;
+        }
+
+        // Edit Quiz Function  
+        function editQuiz(quizId) {
+            // TODO: Implement edit quiz modal or redirect to edit page
+            alert('Edit Quiz feature coming soon! Quiz ID: ' + quizId);
+            // For now, you can redirect to edit page:
+            // window.location.href = `/instructor/courses/quizzes/${quizId}/edit`;
         }
 
         // Note: Progress tracking removed - using direct upload now

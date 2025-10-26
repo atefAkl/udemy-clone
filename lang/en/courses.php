@@ -685,4 +685,72 @@ return [
     'selected_files' => 'Selected Files',
     'optional' => 'Optional',
 
+    // Downloadable Files & Assignments
+    'downloadable_files' => 'Downloadable Files',
+    'assignments' => 'Assignments',
+    'assignment' => 'Assignment',
+    'add_assignment' => 'Add Assignment',
+    'assignment_title' => 'Assignment Title',
+    'assignment_description' => 'Assignment Description',
+    'due_days' => 'Due in (days)',
+    'max_score' => 'Maximum Score',
+    'files' => 'Files',
+
+    // Quiz System
+    'quiz' => 'Quiz',
+    'create_quiz' => 'Create Quiz',
+    'quiz_information' => 'Quiz Information',
+    'quiz_title' => 'Quiz Title',
+    'quiz_title_placeholder' => 'e.g., Chapter 1 Quiz',
+    'quiz_description_placeholder' => 'Describe what this quiz covers...',
+    'quiz_type' => 'Quiz Type',
+    'practice_quiz' => 'Practice Quiz',
+    'graded_quiz' => 'Graded Quiz',
+    'final_exam' => 'Final Exam',
+    'pass_percentage' => 'Pass Percentage',
+    'leave_empty_no_limit' => 'Leave empty for no time limit',
+    'max_attempts' => 'Maximum Attempts',
+    'attempts_allowed' => 'attempts allowed',
+    'randomize_questions' => 'Randomize Questions',
+    'show_results_after_completion' => 'Show Results After Completion',
+    'quiz_questions' => 'Quiz Questions',
+    'no_questions_yet' => 'No questions added yet. Click a button below to add questions.',
+    'questions' => 'Questions',
+    'question' => 'Question',
+    'question_text' => 'Question Text',
+    'points' => 'Points',
+    'answer_options' => 'Answer Options',
+    'answer_option' => 'Answer Option',
+    'add_answer' => 'Add Answer',
+    'correct_answer' => 'Correct Answer',
+    'enter_correct_answer' => 'Enter the correct answer',
+    'case_insensitive' => 'Case insensitive',
+    'use_blank_placeholder' => 'Use blank placeholder',
+    'confirm_delete_question' => 'Are you sure you want to delete this question?',
+    
+    // Question Types
+    'multiple_choice' => 'Multiple Choice',
+    'true_false' => 'True/False',
+    'fill_in_blank' => 'Fill in the Blank',
+    'true' => 'True',
+    'false' => 'False',
+
+    // Quiz Actions
+    'view_quiz' => 'View Quiz',
+    'edit_quiz' => 'Edit Quiz',
+    'delete_quiz' => 'Delete Quiz',
+    'delete_quiz_warning' => 'Are you sure you want to delete the quiz ":quiz"? All questions and answers will be permanently deleted.',
+
+    // Lesson Display
+    'lesson_type' => 'Lesson Type',
+    'video_preview' => 'Video Preview',
+    'no_video_available' => 'No video available for this lesson',
+
+    // General
+    'yes' => 'Yes',
+    'no' => 'No',
+    'quiz_statistics' => 'Quiz Statistics',
+    'article_poster' => 'Article Poster',
+    'no_poster_available' => 'No poster available for this article',
+
 ];

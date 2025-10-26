@@ -13,23 +13,23 @@
     #updateCourseForm ul.nav {
         list-style: none;
         border-radius: 1rem;
-        border: 1px solid #dee2e6;
-        background-color: #fff;
+        border: 1px solid var(--border-color);
+        background-color: var(--color-white);
         transition: all 0.3s ease-in-out;
         overflow: auto;
     }
 
     #updateCourseForm #form-sections:hover,
     #updateCourseForm ul.nav:hover {
-        box-shadow: 0 0 0.5rem 0.1rem rgba(0, 0, 0, 0.1);
+        box-shadow: 0 0 0.5rem 0.1rem var(--border-color);
     }
 
     #updateCourseForm .form-section .form-section-title,
     #updateCourseForm ul.nav h5 {
         padding: 1rem;
         text-align: center;
-        border-block-end: 1px solid #dee2e6;
-        background-color: #f9f9f9;
+        border-block-end: 1px solid var(--border-color);
+        background-color: var(--color-white);
     }
 
     #updateCourseForm ul.nav h5:first-child {
@@ -46,25 +46,29 @@
     }
 
     #updateCourseForm ul.nav li:hover {
-        background-color: #f1f1f1;
+        background-color: var(--main-color);
+        color: var(--color-white);
     }
 
     #updateCourseForm ul.nav li.active {
-        background-color: #c5705d;
-        color: #e9e2d5;
+        background-color: var(--main-color-dark);
+        color: var(--color-white);
         text-shadow: 1px 1px 1px #000;
 
     }
 
     #updateCourseForm #form-sections {
         border-radius: 1rem;
-        border: 1px solid #dee2e6;
-        background-color: #fff;
+        border: 1px solid var(--border-color);
+        background-color: var(--color-off-white);
         transition: all 0.3s ease-in-out;
         overflow: auto;
     }
 
     #updateCourseForm .form-section {
+        border-top-left-radius: 1rem;
+        border-top-right-radius: 1rem;
+        overflow: hidden;
         display: none;
     }
 
@@ -146,10 +150,10 @@
                             <x-curriculum-builder :courseId="$course->id" :sections="$course->sections" />
                         </div>
                     </div>
-                    <div id="generalInfo" class="form-section">
-                        <h4 class="form-section-title primary-gradient-bg">{{__('courses.general_info_title')}}</h4>
+                    <div id="generalInfo" class="card form-section">
+                        <h4 class="card-header form-section-title primary-gradient-bg">{{__('courses.general_info_title')}}</h4>
 
-                        <div class="p-3">
+                        <div class="card-body">
                             <!-- Validation Errors -->
                             @if ($errors->any())
                             <div class="alert alert-danger">
