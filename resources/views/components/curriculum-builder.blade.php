@@ -38,7 +38,7 @@
                 <div id="section-{{ $section->id }}" class="accordion-collapse collapse {{ $loop->first ? 'show' : '' }}" data-bs-parent="#curriculumAccordion">
                     <div class="accordion-body">
                         <div class="d-flex justify-content-end gap-2 align-items-center" role="group">
-                            <button type="button" class="btn btn-sm btn-outline-primary"
+                            <button type="button" class="btn btn-sm btn-outline-primary edit_section_btn"
                                 data-bs-toggle="modal" data-bs-target="#editSectionModal"
                                 data-section-id="{{ $section->id }}"
                                 data-section-title="{{ $section->title }}"
@@ -344,7 +344,7 @@
     <div class="modal fade" id="editSectionModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editSectionModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form method="POST" data-action="{{route('instructor.courses.sections.update', ['section' => 'section_id'])}}">
+                <form action="{{route('instructor.courses.sections.update', ['section' => 'section_id'])}}" method="POST" data-action="{{route('instructor.courses.sections.update', ['section' => 'section_id'])}}">
                     @csrf
                     @method('PUT')
                     <div class="modal-header py-2">
@@ -360,19 +360,19 @@
                         </div>
                         <div class="input-group mb-2">
                             <label for="edit-title" class="input-group-text">{{__('courses.title')}}</label>
-                            <input type="text" class="form-control" id="edit-title" name="title" value="{{ $section->title }}" required>
+                            <input type="text" class="form-control" id="edit-title" name="title" value="" required>
                         </div>
                         <div class="form-floating mb-2">
                             <textarea name="description" placeholder="{{__('courses.enter_short_description')}}" id="edit-description"
-                                class="form-control" style="height: 100px">{{ $section->description }}</textarea>
-                            <label for="edit-description}">{{__('courses.short_description')}}</label>
+                                class="form-control" style="height: 100px"></textarea>
+                            <label for="edit-description">{{__('courses.short_description')}}</label>
                         </div>
                     </div>
                     <div class="modal-footer py-2">
-                        <button type="button" class="btn btn-sm" data-bs-dismiss="modal">
+                        <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">
                             <i class="fas fa-times me-1"></i>{{ __('courses.cancel') }}
                         </button>
-                        <button type="submit" class="btn btn-sm">
+                        <button type="submit" class="btn btn-sm btn-primary">
                             <i class="fas fa-save me-1"></i>{{ __('courses.update') }}
                         </button>
                     </div>
@@ -677,40 +677,6 @@
     </div>
 </div>
 
-<!-- Upload Progress Modal -->
-<div class="modal fade" id="uploadProgressModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header bg-primary text-white py-2">
-                <h5 class="modal-title">
-                    <i class="fas fa-cloud-upload-alt me-2"></i>Uploading Files...
-                </h5>
-            </div>
-            <div class="modal-body">
-                <div class="text-center mb-3">
-                    <div class="spinner-border text-primary" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
-                </div>
-
-                <div class="progress mb-3" style="height: 25px;">
-                    <div id="uploadProgressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-success"
-                        role="progressbar" style="width: 0%">
-                        <span id="uploadProgressText">0%</span>
-                    </div>
-                </div>
-
-                <p class="text-center mb-2">
-                    <span id="uploadStatusText">Preparing upload...</span>
-                </p>
-
-                <p class="text-center text-muted mb-0">
-                    <small id="uploadDetailsText">Please wait while we process your files.</small>
-                </p>
-            </div>
-        </div>
-    </div>
-</div>
 
 
 <!-- Add Video Lesson Modal -->
@@ -817,29 +783,123 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Edit Section Modal
-        const editSectionModal = document.getElementById('editSectionModal');
-        if (editSectionModal) {
-            editSectionModal.addEventListener('show.bs.modal', function(event) {
-                const button = event.relatedTarget;
-                const sort_order = button.getAttribute('data-sort_order');
-                const sectionId = button.getAttribute('data-section-id');
-                const sectionTitle = button.getAttribute('data-section-title');
-                const sectionDescription = button.getAttribute('data-section-description');
+    // JavaScript Language Strings
+    const lang = {
+        question: '{{ __("courses.question") }}',
+        questions: '{{ __("courses.questions") }}',
+        multipleChoice: '{{ __("courses.multiple_choice") }}',
+        trueFalse: '{{ __("courses.true_false") }}',
+        fillInBlank: '{{ __("courses.fill_in_blank") }}',
+        questionText: '{{ __("courses.question_text") }}',
+        points: '{{ __("courses.points") }}',
+        answerOptions: '{{ __("courses.answer_options") }}',
+        addAnswer: '{{ __("courses.add_answer") }}',
+        correctAnswer: '{{ __("courses.correct_answer") }}',
+        true: '{{ __("courses.true") }}',
+        false: '{{ __("courses.false") }}',
+        useBlankPlaceholder: '{{ __("courses.use_blank_placeholder") }}',
+        enterCorrectAnswer: '{{ __("courses.enter_correct_answer") }}',
+        caseInsensitive: '{{ __("courses.case_insensitive") }}',
+        answerOption: '{{ __("courses.answer_option") }}',
+        confirmDeleteQuestion: '{{ __("courses.confirm_delete_question") }}',
+        noQuestionsYet: '{{ __("courses.no_questions_yet") }}',
+        deleteSectionWarning: '{{ __("courses.delete_section_warning", ["section" => ""]) }}',
+        sectionHasLessons: '{{ __("courses.section_has_lessons", ["count" => ""]) }}',
+        deleteLessonWarning: '{{ __("courses.delete_lesson_warning") }}',
+        deleteQuizWarning: '{{ __("courses.delete_quiz_warning") }}'
+    };
+
+    // Test if jQuery is loaded
+    if (typeof jQuery === 'undefined') {
+        console.error('jQuery is not loaded! Using vanilla JavaScript instead.');
+
+        // Fallback to vanilla JS
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Using vanilla JavaScript - Document ready');
+
+            // Edit Section Modal Handler
+            document.querySelectorAll('.edit_section_btn').forEach(function(button) {
+                button.addEventListener('click', function() {
+                    const sectionId = this.getAttribute('data-section-id');
+                    const sectionTitle = this.getAttribute('data-section-title');
+                    const sortOrder = this.getAttribute('data-sort_order');
+                    const sectionDescription = this.getAttribute('data-section-description');
+
+                    console.log('Edit button clicked - Data:', {
+                        sectionId,
+                        sectionTitle,
+                        sortOrder,
+                        sectionDescription
+                    });
+
+                    setTimeout(function() {
+                        const modal = document.getElementById('editSectionModal');
+                        const form = modal.querySelector('form');
+
+                        // Update form action
+                        const actionTemplate = form.getAttribute('data-action');
+                        const newAction = actionTemplate.replace('section_id', sectionId);
+                        form.setAttribute('action', newAction);
+
+                        // Fill fields
+                        document.getElementById('edit-title').value = sectionTitle || '';
+                        document.getElementById('edit-description').value = sectionDescription || '';
+                        document.getElementById('sort_order').value = sortOrder || '';
+
+                        console.log('Form populated with vanilla JS');
+                    }, 100);
+                });
+            });
+        });
+    } else {
+        console.log('jQuery detected - Using jQuery');
+
+        // Use jQuery for better Bootstrap modal compatibility
+        $(document).ready(function() {
+            console.log('jQuery Document ready - initializing modals');
+
+            // Edit Section Modal - Using jQuery
+            $('#editSectionModal').on('show.bs.modal', function(event) {
+                console.log('Edit Section Modal triggered');
+
+                const button = $(event.relatedTarget); // Button that triggered the modal
+
+                // Extract data from button attributes
+                const sectionId = button.data('section-id');
+                const sectionTitle = button.data('section-title');
+                const sortOrder = button.data('sort_order');
+                const sectionDescription = button.data('section-description');
+
+                console.log('Edit Section Data:', {
+                    sectionId: sectionId,
+                    sectionTitle: sectionTitle,
+                    sortOrder: sortOrder,
+                    sectionDescription: sectionDescription
+                });
+
+                const modal = $(this);
 
                 // Update form action
-                const form = editSectionModal.querySelector('form');
-                const action = form.getAttribute('data-action').replace('section_id', sectionId);
-                form.action = action;
+                const form = modal.find('form');
+                const actionTemplate = form.attr('data-action');
+                const newAction = actionTemplate.replace('section_id', sectionId);
+                form.attr('action', newAction);
+
+                console.log('Form action updated to:', newAction);
 
                 // Fill form fields
-                form.querySelector('#edit-title').value = sectionTitle || '';
-                form.querySelector('#edit-description').value = sectionDescription || '';
-                form.querySelector('#sort_order').value = sort_order || '';
-            });
-        }
+                modal.find('#edit-title').val(sectionTitle || '');
+                modal.find('#edit-description').val(sectionDescription || '');
+                modal.find('#sort_order').val(sortOrder || '');
 
+                console.log('Form fields populated successfully');
+            });
+
+        }); // End of jQuery $(document).ready()
+    } // End of jQuery detection
+
+    // Common code that runs regardless of jQuery
+    document.addEventListener('DOMContentLoaded', function() {
         // Delete Section Modal
         const deleteSectionModal = document.getElementById('deleteSectionModal');
         if (deleteSectionModal) {
@@ -856,14 +916,14 @@
 
                 // Update modal content
                 document.getElementById('deleteSectionText').textContent =
-                    `{{ __('courses.delete_section_warning', ['section' => '']) }}`.replace(':section', sectionTitle);
+                    lang.deleteSectionWarning.replace(':section', sectionTitle);
 
                 // Show/hide lessons count
                 const lessonsCountDiv = document.getElementById('deleteSectionLessonsCount');
                 if (lessonsCount > 0) {
                     lessonsCountDiv.style.display = 'block';
                     document.getElementById('lessonsCountText').textContent =
-                        `{{ __('courses.section_has_lessons', ['count' => '']) }}`.replace(':count', lessonsCount);
+                        lang.sectionHasLessons.replace(':count', lessonsCount);
                 } else {
                     lessonsCountDiv.style.display = 'none';
                 }
@@ -1036,7 +1096,7 @@
 
                 // Update modal content
                 document.getElementById('deleteLessonText').textContent =
-                    `{{ __('courses.delete_lesson_warning') }}`.replace(':lesson', lessonTitle);
+                    lang.deleteLessonWarning.replace(':lesson', lessonTitle);
             });
         }
 
@@ -1055,7 +1115,7 @@
 
                 // Update modal content
                 document.getElementById('deleteQuizText').textContent =
-                    `{{ __('courses.delete_quiz_warning') }}`.replace(':quiz', quizTitle);
+                    lang.deleteQuizWarning.replace(':quiz', quizTitle);
             });
         }
 
@@ -1236,8 +1296,7 @@
             // Reset form when modal closes
             quizModal.addEventListener('hidden.bs.modal', function() {
                 document.getElementById('quizForm').reset();
-                document.getElementById('questions_container').innerHTML = '<div class="text-center text-muted py-4" id="no_questions_message"><i class="fas fa-question-circle fa-3x mb-3 opacity-25"></i><p>{{ __('
-                courses.no_questions_yet ') }}</p></div>';
+                document.getElementById('questions_container').innerHTML = `<div class="text-center text-muted py-4" id="no_questions_message"><i class="fas fa-question-circle fa-3x mb-3 opacity-25"></i><p>${lang.noQuestionsYet}</p></div>`;
                 questionCounter = 0;
                 updateQuestionsCount();
             });
@@ -1284,7 +1343,7 @@
                     <div class="card-header bg-primary bg-opacity-10">
                         <div class="d-flex justify-content-between align-items-center">
                             <strong class="text-primary">
-                                <i class="fas fa-list-ul me-2"></i>{{ __('courses.question') }} ${id} - {{ __('courses.multiple_choice') }}
+                                <i class="fas fa-list-ul me-2"></i>${lang.question} ${id} - ${lang.multipleChoice}
                             </strong>
                             <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeQuestion(${id})">
                                 <i class="fas fa-trash"></i>
@@ -1296,18 +1355,18 @@
                         
                         <!-- Question Text -->
                         <div class="mb-3">
-                            <label class="form-label">{{ __('courses.question_text') }} <span class="text-danger">*</span></label>
+                            <label class="form-label">${lang.questionText} <span class="text-danger">*</span></label>
                             <textarea class="form-control" name="questions[${id}][question_text]" rows="2" required></textarea>
                         </div>
 
                         <!-- Points -->
                         <div class="mb-3">
-                            <label class="form-label">{{ __('courses.points') }}</label>
+                            <label class="form-label">${lang.points}</label>
                             <input type="number" class="form-control" name="questions[${id}][points]" value="1" min="1" style="width: 100px;">
                         </div>
 
                         <!-- Answers -->
-                        <label class="form-label">{{ __('courses.answer_options') }}</label>
+                        <label class="form-label">${lang.answerOptions}</label>
                         <div id="answers_${id}">
                             ${createAnswerOption(id, 1, true)}
                             ${createAnswerOption(id, 2, false)}
@@ -1316,7 +1375,7 @@
                         </div>
                         
                         <button type="button" class="btn btn-sm btn-outline-secondary mt-2" onclick="addAnswer(${id})">
-                            <i class="fas fa-plus me-1"></i>{{ __('courses.add_answer') }}
+                            <i class="fas fa-plus me-1"></i>${lang.addAnswer}
                         </button>
                     </div>
                 </div>
@@ -1329,7 +1388,7 @@
                     <div class="card-header bg-info bg-opacity-10">
                         <div class="d-flex justify-content-between align-items-center">
                             <strong class="text-info">
-                                <i class="fas fa-check-double me-2"></i>{{ __('courses.question') }} ${id} - {{ __('courses.true_false') }}
+                                <i class="fas fa-check-double me-2"></i>${lang.question} ${id} - ${lang.trueFalse}
                             </strong>
                             <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeQuestion(${id})">
                                 <i class="fas fa-trash"></i>
@@ -1341,29 +1400,29 @@
                         
                         <!-- Question Text -->
                         <div class="mb-3">
-                            <label class="form-label">{{ __('courses.question_text') }} <span class="text-danger">*</span></label>
+                            <label class="form-label">${lang.questionText} <span class="text-danger">*</span></label>
                             <textarea class="form-control" name="questions[${id}][question_text]" rows="2" required></textarea>
                         </div>
 
                         <!-- Points -->
                         <div class="mb-3">
-                            <label class="form-label">{{ __('courses.points') }}</label>
+                            <label class="form-label">${lang.points}</label>
                             <input type="number" class="form-control" name="questions[${id}][points]" value="1" min="1" style="width: 100px;">
                         </div>
 
                         <!-- Correct Answer -->
                         <div class="mb-3">
-                            <label class="form-label">{{ __('courses.correct_answer') }} <span class="text-danger">*</span></label>
+                            <label class="form-label">${lang.correctAnswer} <span class="text-danger">*</span></label>
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="questions[${id}][correct_answer]" value="true" id="q${id}_true" required>
                                 <label class="form-check-label" for="q${id}_true">
-                                    {{ __('courses.true') }}
+                                    ${lang.true}
                                 </label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="questions[${id}][correct_answer]" value="false" id="q${id}_false">
                                 <label class="form-check-label" for="q${id}_false">
-                                    {{ __('courses.false') }}
+                                    ${lang.false}
                                 </label>
                             </div>
                         </div>
@@ -1378,7 +1437,7 @@
                     <div class="card-header bg-warning bg-opacity-10">
                         <div class="d-flex justify-content-between align-items-center">
                             <strong class="text-warning">
-                                <i class="fas fa-edit me-2"></i>{{ __('courses.question') }} ${id} - {{ __('courses.fill_in_blank') }}
+                                <i class="fas fa-edit me-2"></i>${lang.question} ${id} - ${lang.fillInBlank}
                             </strong>
                             <button type="button" class="btn btn-sm btn-outline-danger" onclick="removeQuestion(${id})">
                                 <i class="fas fa-trash"></i>
@@ -1390,23 +1449,23 @@
                         
                         <!-- Question Text -->
                         <div class="mb-3">
-                            <label class="form-label">{{ __('courses.question_text') }} <span class="text-danger">*</span></label>
+                            <label class="form-label">${lang.questionText} <span class="text-danger">*</span></label>
                             <textarea class="form-control" name="questions[${id}][question_text]" rows="2" required></textarea>
-                            <small class="text-muted">{{ __('courses.use_blank_placeholder') }}: _____</small>
+                            <small class="text-muted">${lang.useBlankPlaceholder}: _____</small>
                         </div>
 
                         <!-- Points -->
                         <div class="mb-3">
-                            <label class="form-label">{{ __('courses.points') }}</label>
+                            <label class="form-label">${lang.points}</label>
                             <input type="number" class="form-control" name="questions[${id}][points]" value="1" min="1" style="width: 100px;">
                         </div>
 
                         <!-- Correct Answer -->
                         <div class="mb-3">
-                            <label class="form-label">{{ __('courses.correct_answer') }} <span class="text-danger">*</span></label>
+                            <label class="form-label">${lang.correctAnswer} <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" name="questions[${id}][correct_answer]" required 
-                                placeholder="{{ __('courses.enter_correct_answer') }}">
-                            <small class="text-muted">{{ __('courses.case_insensitive') }}</small>
+                                placeholder="${lang.enterCorrectAnswer}">
+                            <small class="text-muted">${lang.caseInsensitive}</small>
                         </div>
                     </div>
                 </div>
@@ -1423,7 +1482,7 @@
                     </div>
                     <input type="text" class="form-control" 
                         name="questions[${questionId}][answers][${answerId}]" 
-                        placeholder="{{ __('courses.answer_option') }} ${answerId}" required>
+                        placeholder="${lang.answerOption} ${answerId}" required>
                     <button type="button" class="btn btn-outline-danger btn-sm" 
                         onclick="removeAnswer(${questionId}, ${answerId})" ${answerId <= 2 ? 'disabled' : ''}>
                         <i class="fas fa-times"></i>
@@ -1444,8 +1503,7 @@
         }
 
         function removeQuestion(id) {
-            if (confirm('{{ __('
-                    courses.confirm_delete_question ') }}')) {
+            if (confirm(lang.confirmDeleteQuestion)) {
                 const questionElement = document.getElementById(`question_${id}`);
                 if (questionElement) questionElement.remove();
                 updateQuestionsCount();
@@ -1453,15 +1511,14 @@
                 // Show "no questions" message if no questions left
                 const container = document.getElementById('questions_container');
                 if (!container.querySelector('.question-card')) {
-                    container.innerHTML = '<div class="text-center text-muted py-4" id="no_questions_message"><i class="fas fa-question-circle fa-3x mb-3 opacity-25"></i><p>{{ __('
-                    courses.no_questions_yet ') }}</p></div>';
+                    container.innerHTML = `<div class="text-center text-muted py-4" id="no_questions_message"><i class="fas fa-question-circle fa-3x mb-3 opacity-25"></i><p>${lang.noQuestionsYet}</p></div>`;
                 }
             }
         }
 
         function updateQuestionsCount() {
             const count = document.querySelectorAll('.question-card').length;
-            document.getElementById('questions_count').textContent = `${count} {{ __('courses.questions') }}`;
+            document.getElementById('questions_count').textContent = `${count} ${lang.questions}`;
         }
 
         // Edit Lesson Function
