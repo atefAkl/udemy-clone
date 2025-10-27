@@ -6,6 +6,15 @@
 
 <div class="curriculum-builder">
 
+    <style>
+        .gradient_video {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .gradient_lecture {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+    </style>
     <!-- Render Validation errors Here -->
     @if ($errors->any())
     <div class="alert alert-danger">
@@ -90,9 +99,8 @@
                                 $isVideo = $lesson->lesson_type === 'video';
                                 $headerIcon = $isVideo ? 'video' : 'book';
                                 $lessonIcon = $isVideo ? 'video' : 'book-open';
-                                $gradientColor = $isVideo
-                                ? '#667eea 0%, #764ba2 100%'
-                                : '#f093fb 0%, #f5576c 100%';
+                                $gradientColor = $isVideo ? 'gradient_video' : 'gradient_lecture';
+
                                 $sourceIcon = $lesson->video_source === 'upload' ? 'upload' : 'link';
                                 @endphp
                                 <div class="card lesson-card shadow-sm h-100">
@@ -106,7 +114,7 @@
                                         <div class="row g-0">
                                             <!-- Video/Content Preview Section -->
                                             <div class="col-12">
-                                                <div class="lesson-preview position-relative" style="padding-top: 56.25%; background: linear-gradient(135deg, {{ $gradientColor }});">
+                                                <div class="lesson-preview position-relative {{$gradientColor}}">
                                                     <div class="position-absolute top-50 start-50 translate-middle text-center text-white">
                                                         <i class="fas fa-{{ $lessonIcon }} fa-4x opacity-75 mb-2"></i>
                                                         <p class="mb-0 fw-bold">{{ ucfirst($lesson->lesson_type) }}</p>
