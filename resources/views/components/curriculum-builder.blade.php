@@ -25,15 +25,15 @@
         </ul>
     </div>
     @endif
-    <div class="curriculum-header d-flex justify-content-between align-items-center mb-4">
-        <h4><i class="fas fa-book me-2"></i>{{ __('courses.build_curriculum') }}</h4>
-        <button type="button" class="btn btn-primary" id="addSectionBtn"
+    <div class="curriculum-header rounded d-flex justify-content-between mb-2 px-3 py-2 bg-white align-items-center border-3 border-bottom border-primary">
+        <h5><i class="fas fa-book"></i><span class="mx-3">{{ __('courses.build_curriculum') }}</span></h5>
+        <button type="button" class="btn btn-primary btn-sm my-1" id="addSectionBtn"
             data-bs-toggle="modal" data-bs-target="#createNewSection">
             <i class="fas fa-plus"></i> {{ __('courses.add_section') }}
         </button>
     </div>
 
-    <div class="curriculum-container" id="curriculumContainer" data-course-id="{{ $courseId }}">
+    <div class="curriculum-container mb-3" id="curriculumContainer" data-course-id="{{ $courseId }}">
         <div class="accordion" id="curriculumAccordion">
             @forelse($sections as $section)
             <div class="accordion-item">
@@ -95,29 +95,23 @@
                         <div class="lessons-grid row g-3 mt-2">
                             @forelse($section->lessons as $lesson)
                             <div class="col-md-6 col-lg-4">
-                                @php
-                                $isVideo = $lesson->lesson_type === 'video';
-                                $headerIcon = $isVideo ? 'video' : 'book';
-                                $lessonIcon = $isVideo ? 'video' : 'book-open';
-                                $gradientColor = $isVideo ? 'gradient_video' : 'gradient_lecture';
 
-                                $sourceIcon = $lesson->video_source === 'upload' ? 'upload' : 'link';
-                                @endphp
-                                <div class="card lesson-card shadow-sm h-100">
-                                    <div class="card-header bg-white border-bottom">
-                                        <h6 class="mb-0 text-truncate" title="{{ $lesson->title }}">
-                                            <i class="fas fa-{{ $headerIcon }} me-2 text-primary"></i>
-                                            {{ $lesson->title }}
+                                <div class="card quiz-card shadow-sm h-100">
+                                    <div class="card-header bg-primary border-bottom">
+                                        <h6 class="mb-0 text-truncate text-light" title="{{ $lesson->title }}">
+                                            <i class="fas me-2 text-light"></i>
+                                            ({{ $lesson->sort_order }}) - {{ $lesson->title }}
                                         </h6>
                                     </div>
+
                                     <div class="card-body p-0">
                                         <div class="row g-0">
                                             <!-- Video/Content Preview Section -->
                                             <div class="col-12">
-                                                <div class="lesson-preview position-relative {{$gradientColor}}">
-                                                    <div class="position-absolute top-50 start-50 translate-middle text-center text-white">
-                                                        <i class="fas fa-{{ $lessonIcon }} fa-4x opacity-75 mb-2"></i>
-                                                        <p class="mb-0 fw-bold">{{ ucfirst($lesson->lesson_type) }}</p>
+                                                <div class="lesson-preview lesson-type-preview" data-lesson_type="{{ $lesson->lesson_type }}" style="padding-top: 56.25%; background: linear-gradient(135deg, #1cc88a 0%, #13855c 100%);">
+                                                    <div class="position-absolute start-50 translate-middle text-white">
+                                                        <i class="fas fa-clipboard-list fa-3x opacity-75"></i>
+                                                        <p class="mt-2 small fw-bold">{{ ucfirst($lesson->lesson_type) }}</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -129,18 +123,15 @@
                                                         {{ $lesson->description ?? __('courses.no_description') }}
                                                     </p>
                                                     <div class="d-flex justify-content-between align-items-center mt-2">
-                                                        <span class="badge bg-light text-dark border">
-                                                            <i class="fas fa-sort-numeric-up me-1"></i>
-                                                            {{ __('courses.order') }}: {{ $lesson->sort_order }}
-                                                        </span>
-                                                        @if($lesson->lesson_type === 'video' && $lesson->duration)
+
+                                                        @if($lesson->lesson_type === 'video')
                                                         <span class="badge bg-primary">
                                                             <i class="far fa-clock me-1"></i>
                                                             {{ $lesson->duration }} {{ __('courses.min') }}
                                                         </span>
                                                         @endif
                                                         <span class="badge bg-info text-white">
-                                                            <i class="fas fa-{{ $sourceIcon }} me-1"></i>
+                                                            <i class="fas fa-{{ $lesson->video_source === 'upload' ? 'upload' : 'link' }} me-1"></i>
                                                             {{ ucfirst($lesson->video_source ?? 'N/A') }}
                                                         </span>
                                                     </div>
@@ -165,6 +156,7 @@
                                             </div>
                                         </div>
                                     </div>
+
                                     <div class="card-footer bg-white border-top">
                                         <div class="d-flex justify-content-between align-items-center gap-2">
                                             <form action="{{ route('instructor.courses.lessons.destroy', $lesson->id) }}" method="post"
@@ -203,15 +195,32 @@
                                 </div>
                             </div>
                             @endforelse
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    const lessonTypePreviews = document.querySelectorAll('.lesson-type-preview');
+                                    lessonTypePreviews.forEach(function(ltp) {
 
+                                        const lessonType = ltp.getAttribute('data-lesson_type');
+                                        const lessonTypeColor = lessonType == 'video' ? 'linear-gradient(135deg, black 0%, red 100%)' : 'linear-gradient(135deg, black 0%, green 100%)';
+                                        const lectureIcon = lessonType == 'video' ? 'fa-video' : 'fa-book-open';
+                                        ltp.style.backgroundImage = lessonTypeColor;
+                                        // Find the icon element inside ltp (descendant, not ancestor)
+                                        const iconElement = ltp.querySelector('i.fas');
+                                        if (iconElement) {
+                                            iconElement.classList.add(lectureIcon);
+                                        }
+
+                                    });
+                                });
+                            </script>
                             <!-- Quizzes Section -->
                             @forelse($section->quizzes as $quiz)
                             <div class="col-md-6 col-lg-4">
-                                <div class="card quiz-card shadow-sm h-100 border-success">
-                                    <div class="card-header bg-success bg-opacity-10 border-bottom border-success">
-                                        <h6 class="mb-0 text-truncate text-success" title="{{ $quiz->title }}">
-                                            <i class="fas fa-clipboard-question me-2"></i>
-                                            {{ $quiz->title }}
+                                <div class="card quiz-card shadow-sm h-100">
+                                    <div class="card-header bg-secondary">
+                                        <h6 class="mb-0 text-truncate text-light" title="{{ $quiz->title }}">
+                                            <i class="fas fa-clipboard-question text-light"></i> &nbsp;
+                                            ({{ $quiz->sort_order }}) - {{ $quiz->title }}
                                         </h6>
                                     </div>
                                     <div class="card-body p-0">
@@ -372,7 +381,7 @@
                         </div>
                         <div class="form-floating mb-2">
                             <textarea name="description" placeholder="{{__('courses.enter_short_description')}}" id="edit-description"
-                                class="form-control" style="height: 100px"></textarea>
+                                class="form-control" rows="5"></textarea>
                             <label for="edit-description">{{__('courses.short_description')}}</label>
                         </div>
                     </div>
@@ -552,87 +561,68 @@
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
 
-                <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+                <div class="modal-body  bg-white" style="max-height: 70vh; overflow-y: auto;">
+
+                    <h5 class="modal-title">
+                        <i class="fas fa-clipboard-question me-2"></i>{{ __('courses.quiz_information') }}
+                    </h5>
                     <!-- Quiz Basic Information -->
-                    <div class="card mb-3 border-primary">
-                        <div class="card-header bg-primary bg-opacity-10">
-                            <h6 class="mb-0 text-primary">
-                                <i class="fas fa-info-circle me-2"></i>{{ __('courses.quiz_information') }}
-                            </h6>
-                        </div>
-                        <div class="card-body">
-                            <!-- Quiz Title -->
-                            <div class="mb-3">
-                                <label for="quiz_title" class="form-label">{{ __('courses.quiz_title') }} <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="quiz_title" name="title" required
-                                    placeholder="{{ __('courses.quiz_title_placeholder') }}">
-                            </div>
+                    <div class="input-group mb-3">
+                        <label for="quiz_title" class="input-group-text">{{ __('courses.quiz_title') }} <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="quiz_title" name="title" required
+                            placeholder="{{ __('courses.quiz_title_placeholder') }}">
+                    </div>
 
-                            <!-- Quiz Description -->
-                            <div class="mb-3">
-                                <label for="quiz_description" class="form-label">{{ __('courses.description') }}</label>
-                                <textarea class="form-control" id="quiz_description" name="description" rows="3"
-                                    placeholder="{{ __('courses.quiz_description_placeholder') }}"></textarea>
-                            </div>
-
-                            <div class="row">
+                    <!-- Quiz Description -->
+                    <div class="form-floating mb-3">
+                        <textarea class="form-control" id="quiz_description" name="description" rows="3"
+                            placeholder="{{ __('courses.quiz_description_placeholder') }}"></textarea>
+                        <label for="quiz_description">{{ __('courses.description') }}</label>
+                    </div>
+                    <div class="row">
+                        <div class="col col-md-8">
+                            <div class="input-group mb-3">
                                 <!-- Quiz Type -->
-                                <div class="col-md-4 mb-3">
-                                    <label for="quiz_type" class="form-label">{{ __('courses.quiz_type') }} <span class="text-danger">*</span></label>
-                                    <select class="form-select" id="quiz_type" name="quiz_type" required>
-                                        <option value="practice">{{ __('courses.practice_quiz') }}</option>
-                                        <option value="graded">{{ __('courses.graded_quiz') }}</option>
-                                        <option value="final">{{ __('courses.final_exam') }}</option>
-                                    </select>
-                                </div>
 
-                                <!-- Duration -->
-                                <div class="col-md-4 mb-3">
-                                    <label for="duration_minutes" class="form-label">{{ __('courses.duration_minutes') }}</label>
-                                    <input type="number" class="form-control" id="duration_minutes" name="duration_minutes"
-                                        min="5" max="180" placeholder="30">
-                                    <small class="text-muted">{{ __('courses.leave_empty_no_limit') }}</small>
-                                </div>
+                                <label for="quiz_type" class="input-group-text">{{ __('courses.quiz_type') }} <span class="text-danger">*</span></label>
+                                <select class="form-select" id="quiz_type" name="quiz_type" required>
+                                    <option value="practice">{{ __('courses.practice_quiz') }}</option>
+                                    <option value="graded">{{ __('courses.graded_quiz') }}</option>
+                                    <option value="final">{{ __('courses.final_exam') }}</option>
+                                </select>
 
-                                <!-- Pass Percentage -->
-                                <div class="col-md-4 mb-3">
-                                    <label for="pass_percentage" class="form-label">{{ __('courses.pass_percentage') }}</label>
-                                    <input type="number" class="form-control" id="pass_percentage" name="pass_percentage"
-                                        min="0" max="100" value="70" placeholder="70">
-                                    <small class="text-muted">%</small>
-                                </div>
+                                <label for="duration_minutes" class="input-group-text">{{ __('courses.duration_minutes') }}</label>
+                                <input type="number" class="form-control" id="duration_minutes" name="duration_minutes"
+                                    min="5" max="180" placeholder="30">
+                                <label class="input-group-text" title="{{ __('courses.leave_empty_no_limit') }}"><i class="fa fa-info-circle"></i></label>
+
+
                             </div>
 
-                            <div class="row">
+                            <div class="input-group mb-3">
+                                <label for="pass_percentage" class="input-group-text">{{ __('courses.pass_percentage') }}</label>
+                                <input type="number" class="form-control" id="pass_percentage" name="pass_percentage"
+                                    min="0" max="100" value="70" placeholder="70">
+                                <label class="input-group-text">%</label>
                                 <!-- Max Attempts -->
-                                <div class="col-md-4 mb-3">
-                                    <label for="max_attempts" class="form-label">{{ __('courses.max_attempts') }}</label>
-                                    <input type="number" class="form-control" id="max_attempts" name="max_attempts"
-                                        min="1" max="10" value="3">
-                                    <small class="text-muted">{{ __('courses.attempts_allowed') }}</small>
-                                </div>
 
-                                <!-- Randomize Questions -->
-                                <div class="col-md-4 mb-3">
-                                    <div class="form-check mt-4">
-                                        <input class="form-check-input" type="checkbox" id="randomize_questions"
-                                            name="randomize_questions" value="1">
-                                        <label class="form-check-label" for="randomize_questions">
-                                            {{ __('courses.randomize_questions') }}
-                                        </label>
-                                    </div>
-                                </div>
+                                <label for="max_attempts" class="input-group-text">{{ __('courses.max_attempts') }}</label>
+                                <input type="number" class="form-control" id="max_attempts" name="max_attempts"
+                                    min="1" max="10" value="3">
+                                <label class="input-group-text">{{ __('courses.attempts_allowed') }}</label>
 
-                                <!-- Show Results -->
-                                <div class="col-md-4 mb-3">
-                                    <div class="form-check mt-4">
-                                        <input class="form-check-input" type="checkbox" id="show_results"
-                                            name="show_results" value="1" checked>
-                                        <label class="form-check-label" for="show_results">
-                                            {{ __('courses.show_results_after_completion') }}
-                                        </label>
-                                    </div>
-                                </div>
+                            </div>
+                        </div>
+                        <div class="col col-md-4">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" name="randomize_questions" value="1" type="checkbox" role="switch" id="randomize_questions" checked>
+                                <label class="form-check-label" for="randomize_questions">{{ __('courses.randomize_questions') }}</label>
+                            </div>
+
+                            <!-- Show Results -->
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" name="show_results" value="1" type="checkbox" role="switch" id="show_results" checked>
+                                <label class="form-check-label" for="show_results">{{ __('courses.show_results_after_completion') }}</label>
                             </div>
                         </div>
                     </div>
@@ -685,8 +675,6 @@
     </div>
 </div>
 
-
-
 <!-- Add Video Lesson Modal -->
 <div class="modal fade" id="videoLessonModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="videoLessonModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -735,6 +723,18 @@
                         <input type="url" class="form-control" id="video_url_input" name="video_url"
                             placeholder="https://youtube.com/watch?v=... or https://vimeo.com/...">
                         <small class="text-muted">{{ __('courses.supported_platforms') }}: YouTube, Vimeo</small>
+                    </div>
+
+                    <!-- Hidden duration field -->
+                    <input type="hidden" id="video_duration" name="duration">
+                    <!-- Duration display -->
+                    <div id="video_duration_display" class="mt-2" style="display: none;">
+                        <div class="alert alert-info mb-0 py-2">
+                            <i class="fas fa-clock me-2"></i>
+                            <strong>{{ __('courses.duration') }}:</strong>
+                            <span id="video_duration_text">0:00</span>
+                            <small class="text-muted ms-2">(<span id="video_duration_minutes">0</span> {{ __('courses.minutes') }})</small>
+                        </div>
                     </div>
 
                     <hr class="my-3">

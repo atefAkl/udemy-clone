@@ -1,0 +1,1 @@
+change tooltip color to white

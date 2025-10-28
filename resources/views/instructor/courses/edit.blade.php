@@ -144,7 +144,7 @@
                     <!-- Snap & Edit Videos -->
                     <div id="curriculum" class="form-section active">
                         <h4 class="form-section-title">{{__('courses.curriculum')}}</h4>
-                        <div class="p-3">
+                        <div class="px-3 ">
                             <section>
                                 <x-dismissable-note paragraph_text="{{__('courses.curriculum_paragraph')}}" btn_text="{{__('labels.dismiss')}}" />
                             </section>

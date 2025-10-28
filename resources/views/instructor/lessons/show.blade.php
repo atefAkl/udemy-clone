@@ -15,7 +15,7 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <h4 class="mb-0">
                             <i class="fas fa-{{ $lesson->lesson_type === 'video' ? 'video' : 'book' }} me-2"></i>
-                            {{ $lesson->title }}
+                            [ {{ $lesson->sort_order }} ] {{ $lesson->title }} ( {{ ucfirst($lesson->lesson_type) }} )
                         </h4>
                         <div>
                             <a href="{{ route('instructor.courses.edit', $lesson->course_id) }}" class="btn btn-sm btn-light">
@@ -25,49 +25,18 @@
                     </div>
                 </div>
 
-                <div class="card-body">
+                <div class="card-body bg-white">
                     <!-- Lesson Info -->
                     <div class="row mb-4">
                         <div class="col-md-6">
                             <h6 class="text-muted mb-3">{{ __('courses.basic_information') }}</h6>
-                            <table class="table table-sm">
-                                <tr>
-                                    <td class="fw-bold">{{ __('courses.lesson_type') }}:</td>
-                                    <td>
-                                        <span class="badge bg-info">
-                                            {{ ucfirst($lesson->lesson_type) }}
-                                        </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="fw-bold">{{ __('courses.description') }}:</td>
-                                    <td>{{ $lesson->description ?? __('courses.no_description') }}</td>
-                                </tr>
-                                @if($lesson->lesson_type === 'video')
-                                <tr>
-                                    <td class="fw-bold">{{ __('courses.video_source') }}:</td>
-                                    <td>
-                                        <span class="badge bg-{{ $lesson->video_source === 'upload' ? 'success' : 'primary' }}">
-                                            {{ ucfirst($lesson->video_source) }}
-                                        </span>
-                                    </td>
-                                </tr>
-                                @if($lesson->duration)
-                                <tr>
-                                    <td class="fw-bold">{{ __('courses.duration') }}:</td>
-                                    <td>{{ $lesson->duration }} {{ __('courses.min') }}</td>
-                                </tr>
-                                @endif
-                                @endif
-                                <tr>
-                                    <td class="fw-bold">{{ __('courses.order') }}:</td>
-                                    <td>{{ $lesson->sort_order }}</td>
-                                </tr>
-                            </table>
+                            <div>
+                                {{ $lesson->description ?? __('courses.no_description') }}
+                            </div>
                         </div>
 
                         <!-- Media Preview -->
-                        <div class="col-md-6">
+                        <div class="col-md-6 bg-white">
                             @if($lesson->lesson_type === 'video')
                             <h6 class="text-muted mb-3">
                                 <i class="fas fa-video me-2"></i>{{ __('courses.video_preview') }}
@@ -101,9 +70,9 @@
                                 <i class="fas fa-image me-2"></i>{{ __('courses.article_poster') }}
                             </h6>
 
-                            @if($lesson->thumbnail)
+                            @if($lesson->poster_file)
                             <div class="card shadow-sm overflow-hidden">
-                                <img src="{{ Storage::url($lesson->thumbnail) }}"
+                                <img src="{{ Storage::url($lesson->poster_file) }}"
                                     alt="{{ $lesson->title }}"
                                     class="w-100"
                                     style="object-fit: cover; max-height: 300px;">

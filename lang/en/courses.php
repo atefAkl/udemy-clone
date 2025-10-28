@@ -103,7 +103,6 @@ return [
     // Course Actions
     'save_as_draft' => 'Save as Draft',
     'create_and_publish' => 'Create and Publish',
-    'back_to_courses' => 'Back to Courses',
     'manage_your_courses' => 'Manage Your Courses',
     'search_courses' => 'Search Courses',
     'search_by_title' => 'Search by title',
@@ -119,7 +118,6 @@ return [
     'rating' => 'Rating',
     'no_rating' => 'No Rating',
     'average_rating' => 'Average Rating',
-    'total_enrollments' => 'Total Enrollments',
     'total_value' => 'Total Value',
     'created' => 'Created',
 
@@ -149,7 +147,6 @@ return [
 
     // Form Validation
     'courses.title_is_required' => 'Title is required',
-    'title_max_100_chars' => 'Maximum 100 characters',
     'subtitle_is_required' => 'Subtitle is required',
     'subtitle_max_32_chars' => 'Maximum 32 characters',
     'short_description_is_required' => 'Short description is required',
@@ -173,7 +170,6 @@ return [
     'promo_video_failed_to_upload' => 'The promo video failed to upload. Please try again.',
     'video_source_is_required' => 'Video source is required',
     'video_source_in' => 'Video source must be upload or link',
-    'title_max_100_chars' => 'Maximum 100 characters',
     'short_description_max_160_chars' => 'Maximum 160 characters',
     'description_max_500_chars' => 'Maximum 500 characters',
     'select_target_level' => 'Select target level',
@@ -211,11 +207,6 @@ return [
     'pending_approval' => 'Pending Approval',
     'manage_categories' => 'Manage Categories',
     'no_courses_message' => 'No courses match your search criteria.',
-    'category' => 'Category',
-    'all_categories' => 'All Categories',
-    'no_courses_found' => 'No Courses Found',
-    'total_courses' => 'Total Courses',
-    'published_courses' => 'Published Courses',
 
     // Side nav 
     'sidenav' => [
@@ -553,31 +544,6 @@ return [
     'media_library' => 'Media Library',
     'no_media_files' => 'No media files found in your library.',
 
-    // Intended Learners New
-    'what_will_students_learn' => 'What will students learn in your course?',
-    'learning_outcomes_description' => 'You must enter at least 4 learning objectives or outcomes that learners can expect to achieve after completing your course.',
-    'learning_outcomes_placeholder' => 'Example: Define the roles and responsibilities of a project manager',
-    'add_to_list' => 'Add to List',
-    'course_requirements' => 'What are the requirements or prerequisites for taking your course?',
-    'requirements_description' => 'List the required skills, experience, tools or equipment learners should have prior to taking your course. If there are no requirements, use this space as an opportunity to lower the barrier for beginners.',
-    'requirements_placeholder' => 'Example: No programming experience needed',
-    'target_audience' => 'Who is this course for?',
-    'target_audience_description' => 'Write a clear description of the intended learners for your course who will find your course content valuable. This will help you attract the right learners to your course.',
-    'target_audience_placeholder' => 'Example: Beginner web developers looking to learn React',
-
-    // Section Management
-    'add_section' => 'Add Section',
-    'add_new_section' => 'Add New Section',
-    'edit_section' => 'Edit Section',
-    'delete_section' => 'Delete Section',
-    'sort_order' => 'Order',
-    'update' => 'Update',
-    'confirm_delete' => 'Confirm Delete',
-    'warning' => 'Warning!',
-    'delete_section_warning' => 'Are you sure you want to delete the section ":section"?',
-    'section_has_lessons' => 'This section contains :count lesson(s) which will also be deleted!',
-    'delete_action_irreversible' => 'This action cannot be undone.',
-
     // Lesson Management
     'lesson' => 'Lesson',
     'add_lesson' => 'Add Lesson',
@@ -592,6 +558,7 @@ return [
     'max_video_size' => 'Maximum file size: 100MB',
     'supported_platforms' => 'Supported platforms',
     'duration_minutes' => 'Duration (minutes)',
+    'minutes' => 'minutes',
     'coming_soon' => 'Coming Soon...',
     'external_video' => 'External Video',
     'article' => 'Article',
@@ -603,67 +570,7 @@ return [
     'delete_lesson' => 'Delete Lesson',
     'delete_lesson_warning' => 'Are you sure you want to delete the lesson ":lesson"?',
     'no_lessons_yet' => 'No lessons have been added yet. Click "Add Lesson" to get started.',
-    
-    // Article Lesson
-    'add_article_lesson' => 'Add Article Lesson',
-    'article_body' => 'Article Content',
-    'auto_description_hint' => 'A preview will be auto-generated from the first 150 characters',
-    'poster_source' => 'Poster Image Source',
-    'upload_poster' => 'Upload Poster',
-    'poster_url' => 'Image URL',
-    'select_poster_file' => 'Select Poster Image',
-    'max_poster_size' => 'Maximum file size: 5MB',
-    'poster_url_hint' => 'Enter a direct link to the poster image',
-    'select_poster_url' => 'Enter Image URL',
 
-    // Assets Lesson
-    'add_assets_lesson' => 'Add Downloadable Resources',
-    'upload_files' => 'Upload Files',
-    'assets_description_placeholder' => 'Describe what students will learn from these resources...',
-    'supported_file_types' => 'Supported file types',
-    'max_file_size_per_file' => 'Maximum file size per file',
-    'selected_files' => 'Selected Files',
-    'optional' => 'Optional',
-
-    // Section Management
-    'add_section' => 'Add Section',
-    'add_new_section' => 'Add New Section',
-    'edit_section' => 'Edit Section',
-    'delete_section' => 'Delete Section',
-    'sort_order' => 'Order',
-    'update' => 'Update',
-    'confirm_delete' => 'Confirm Delete',
-    'warning' => 'Warning!',
-    'delete_section_warning' => 'Are you sure you want to delete the section ":section"?',
-    'section_has_lessons' => 'This section contains :count lesson(s) which will also be deleted!',
-    'delete_action_irreversible' => 'This action cannot be undone.',
-
-    // Lesson Management
-    'lesson' => 'Lesson',
-    'add_lesson' => 'Add Lesson',
-    'video_lesson' => 'Video',
-    'lecture_lesson' => 'Article/Text',
-    'presentation_lesson' => 'Presentation',
-    'quiz' => 'Quiz',
-    'add_video_lesson' => 'Add Video Lesson',
-    'video_source' => 'Video Source',
-    'upload_video' => 'Upload Video',
-    'select_video_file' => 'Select Video File',
-    'max_video_size' => 'Maximum file size: 100MB',
-    'supported_platforms' => 'Supported platforms',
-    'duration_minutes' => 'Duration (minutes)',
-    'coming_soon' => 'Coming Soon...',
-    'external_video' => 'External Video',
-    'article' => 'Article',
-    'no_description' => 'No description available',
-    'order' => 'Order',
-    'min' => 'min',
-    'view_lesson' => 'View Lesson',
-    'edit_lesson' => 'Edit Lesson',
-    'delete_lesson' => 'Delete Lesson',
-    'delete_lesson_warning' => 'Are you sure you want to delete the lesson ":lesson"?',
-    'no_lessons_yet' => 'No lessons have been added yet. Click "Add Lesson" to get started.',
-    
     // Article Lesson
     'add_article_lesson' => 'Add Article Lesson',
     'article_body' => 'Article Content',
@@ -697,7 +604,6 @@ return [
     'files' => 'Files',
 
     // Quiz System
-    'quiz' => 'Quiz',
     'create_quiz' => 'Create Quiz',
     'quiz_information' => 'Quiz Information',
     'quiz_title' => 'Quiz Title',
@@ -727,7 +633,7 @@ return [
     'case_insensitive' => 'Case insensitive',
     'use_blank_placeholder' => 'Use blank placeholder',
     'confirm_delete_question' => 'Are you sure you want to delete this question?',
-    
+
     // Question Types
     'multiple_choice' => 'Multiple Choice',
     'true_false' => 'True/False',
@@ -752,5 +658,4 @@ return [
     'quiz_statistics' => 'Quiz Statistics',
     'article_poster' => 'Article Poster',
     'no_poster_available' => 'No poster available for this article',
-
 ];

@@ -410,10 +410,29 @@
     font-weight: 600;
 }
 
+input:not([type=range]):not([type=checkbox]):not([type=radio]):not([type=file]):not([type=button]):not([type=submit]):not([type=reset]):not([type=image]),
+input,
+textarea,
+select,
+select option {
+    background-color: var(--color-off-white) !important;
+    font-weight: 600;
+    color: var(--main-color-dark);
+    font-size: 1rem;
+}
+
+
 .form-floating textarea+label,
 .form-floating input+label {
-    color: var(--main-color-dark);
-    font-weight: 600;
+    color: var(--main-color-dark) !important;
+    background-color: transparent !important;
+}
+
+.form-floating>.form-control-plaintext~label,
+.form-floating>.form-control:focus~label,
+.form-floating>.form-control:not(:placeholder-shown)~label,
+.form-floating>.form-select~label {
+    color: var(--color-off-white) !important;
 }
 
 .input-group button.input-group-text,
@@ -491,24 +510,6 @@
     padding: 1.5rem 0;
 }
 
-/* Widgets */
-.widgets .card {
-    border: none;
-    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
-    margin-bottom: 1.5rem;
-    border-radius: 0.35rem;
-}
-
-.widgets .card-header {
-    background-color: #f8f9fc;
-    border-bottom: 1px solid var(--border-color);
-    font-weight: 600;
-    padding: 1rem 1.25rem;
-}
-
-.widgets .card-body {
-    padding: 1.25rem;
-}
 
 /* Stats */
 .stat-item {
@@ -583,9 +584,7 @@
 
     .sidebar,
     .top-nav,
-    .page-header,
-    .widgets .card,
-    .widgets .card-header {
+    .page-header {
         background-color: #2d2d2d;
         color: #fff;
     }

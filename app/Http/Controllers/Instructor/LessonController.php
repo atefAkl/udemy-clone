@@ -26,6 +26,7 @@ class LessonController extends Controller
                 'title'             => $validated['title'],
                 'course_id'         => $section->course_id,
                 'description'       => $validated['description'] ?? null,
+                'duration'          => $request->input('duration'), // Video duration in minutes
                 'lesson_type'       => 'video',
                 'video_source'      => $validated['video_source'],
                 'sort_order'        => $section->lessons()->max('sort_order') + 1,
@@ -53,7 +54,7 @@ class LessonController extends Controller
                     $originalName = $file->getClientOriginalName();
                     $fileName = time() . '_' . $originalName;
                     $filePath = $file->store('lessons/files', 'public');
-                    
+
                     $lesson->files()->create([
                         'file_name' => $fileName,
                         'original_name' => $originalName,
@@ -89,7 +90,7 @@ class LessonController extends Controller
     {
         try {
             $validated = $request->validated();
-            
+
             // Auto-extract description from article body if not provided
             $description = $validated['description'] ?? null;
             if (empty($description)) {
@@ -97,7 +98,7 @@ class LessonController extends Controller
                 $plainText = strip_tags($validated['article_body']);
                 $description = \Illuminate\Support\Str::limit($plainText, 150, '...');
             }
-            
+
             // Prepare lesson data
             $lessonData = [
                 'section_id' => $section->id,
@@ -132,7 +133,7 @@ class LessonController extends Controller
                     $originalName = $file->getClientOriginalName();
                     $fileName = time() . '_' . $originalName;
                     $filePath = $file->store('lessons/files', 'public');
-                    
+
                     $lesson->files()->create([
                         'file_name' => $fileName,
                         'original_name' => $originalName,
@@ -168,7 +169,7 @@ class LessonController extends Controller
     {
         try {
             $validated = $request->validated();
-            
+
             // Prepare lesson data
             $lessonData = [
                 'section_id' => $section->id,
@@ -185,11 +186,11 @@ class LessonController extends Controller
             // Handle multiple file uploads - DIRECT UPLOAD
             if ($request->hasFile('assets_files')) {
                 $uploadedFiles = [];
-                
+
                 foreach ($request->file('assets_files') as $file) {
                     $originalName = $file->getClientOriginalName();
                     $path = $file->store('lessons/assets', 'public');
-                    
+
                     $uploadedFiles[] = [
                         'original_name' => $originalName,
                         'path' => $path,
@@ -197,12 +198,12 @@ class LessonController extends Controller
                         'mime_type' => $file->getMimeType(),
                     ];
                 }
-                
+
                 // Store files information as JSON
                 $lesson->update([
                     'lecture_file' => json_encode($uploadedFiles)
                 ]);
-                
+
                 return redirect()->back()->with('success', 'Assets lesson created successfully with ' . count($uploadedFiles) . ' file(s)');
             }
 
@@ -215,14 +216,14 @@ class LessonController extends Controller
     public function checkUploadProgress($uploadKey)
     {
         $progress = \Illuminate\Support\Facades\Cache::get($uploadKey);
-        
+
         if (!$progress) {
             return response()->json([
                 'status' => 'not_found',
                 'message' => 'Upload progress not found'
             ], 404);
         }
-        
+
         return response()->json($progress);
     }
 
